@@ -22,4 +22,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://www.avantamour.in/sitemap-index.xml
+Sitemap: https://avantamour.in/sitemap-index.xml

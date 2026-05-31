@@ -1,7 +1,7 @@
 export const BRAND = {
   name: 'Avant Amour',
-  domain: 'www.avantamour.in',
-  url: 'https://www.avantamour.in',
+  domain: 'avantamour.in',
+  url: 'https://avantamour.in',
   email: 'connect@avantamour.in',
   phone: '+91-9831397530',
   whatsapp: 'https://wa.me/919831397530',
