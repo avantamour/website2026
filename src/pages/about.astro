@@ -1,0 +1,90 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { BRAND } from '@lib/constants';
+
+const title = 'About Avant Amour';
+const description = `Founded by ${BRAND.founder.firstName} (QRCA member, ${BRAND.founder.yearsExperience} yrs). A founder-led qualitative research firm in India.`;
+---
+<PageLayout
+  title={title}
+  description={description}
+  eyebrow="About"
+  intro="Avant Amour is a founder-led qualitative research firm. Every engagement is designed and led personally by Arrpita, drawing on a vetted network of senior specialists when a project calls for them — senior attention from first call to debrief, never a junior fronting the work."
+  breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
+  jsonLdType="about"
+>
+  <!-- PLACEHOLDER: to be replaced with final copy -->
+
+  <section class="not-prose grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-14">
+    <div class="md:col-span-4">
+      <figure class="border border-border bg-cream overflow-hidden max-w-sm md:max-w-none mx-auto md:mx-0">
+        <img
+          src="/arrpita.jpg"
+          alt="Arrpita Ghosh Hajra, founder of Avant Amour"
+          width="600"
+          height="900"
+          loading="lazy"
+          decoding="async"
+          class="block w-full aspect-[2/3] object-cover"
+        />
+        <figcaption class="p-6">
+          <p class="eyebrow text-teal">Founder</p>
+          <p class="mt-2 font-display text-h2 text-ink leading-tight">{BRAND.founder.fullName}</p>
+          <p class="text-small text-ink-soft">{BRAND.founder.title}</p>
+        </figcaption>
+      </figure>
+      <p class="mt-4 text-small text-ink-soft max-w-sm md:max-w-none mx-auto md:mx-0">
+        <a href={BRAND.founder.linkedin} rel="noopener noreferrer" target="_blank">Connect on LinkedIn →</a>
+      </p>
+    </div>
+    <div class="md:col-span-8 prose-aa">
+      <h2>Meet Arrpita</h2>
+      <p>
+        Arrpita has spent fifteen years asking customers to show, not tell. Before Avant Amour, she led qualitative research projects for Zee5, Rapido, Adobe, and USV — work that taught her how decisions actually get made in Indian homes, autos, and small businesses, and how rarely those decisions match what a survey will report.
+      </p>
+      <p>
+        She started Avant Amour because the questions D2C founders ask are not the questions large agencies are set up to answer. A founder needs a researcher who will sit with their customer for three hours, write a sharp two-page note by Friday, and join the Monday standup to defend the recommendation. That is the firm.
+      </p>
+      <p>
+        She is a member of the <strong>QRCA</strong> (the global association for qualitative research consultants) and writes regularly about ethnography on LinkedIn.
+      </p>
+    </div>
+  </section>
+
+  <h2>Why Avant Amour</h2>
+  <p>
+    Large agencies are optimised for large clients. The methods, the timelines, the layers of account management, the slide decks — all of it was built for a buyer who needs to justify the spend internally, not for a founder who needs to make a product decision by next quarter.
+  </p>
+  <p>
+    Avant Amour is the opposite shape. Arrpita leads every project end-to-end and brings in senior specialists — experienced ethnographers, qualitative market researchers, academic experts, and design researchers — when a study's scale or subject calls for them. What you never get is a layer of juniors transcribing your customer's voice notes and missing the half-laugh that contained the actual answer. The deliverable is a point of view, not a report. The work is fast and senior throughout because the people doing it are the people you hired.
+  </p>
+
+  <h2>Credentials</h2>
+  <ul>
+    <li><strong>QRCA member</strong> — Qualitative Research Consultants Association</li>
+    <li><strong>{BRAND.founder.yearsExperience} years</strong> in qualitative research, with a focus on Indian consumers</li>
+    <li><strong>Prior research:</strong> {BRAND.founder.priorWork.join(', ')}</li>
+    <li>
+      <strong>ISO/IEC 27001:2022 certified</strong> — Information Security Management
+      System covering all client research data, recordings, and transcripts.
+      Certificate no. QCC/9724/0126, issued by EAS (IAF-accredited),
+      valid through January 2029.
+    </li>
+    <li>
+      <strong>ISO 9001:2015 certified</strong> — Quality Management System covering market
+      research, product research, and research consulting services.
+      Certificate no. QCC/8560/0126, issued by EAS (IAF-accredited),
+      valid through January 2029.
+    </li>
+  </ul>
+
+  <h2>Who does the work</h2>
+  <p>
+    Avant Amour is built around Arrpita, not a roster of account managers — but a founder-led firm is not a one-person constraint on what we can take on. For larger or multi-city studies, Arrpita assembles a small, hand-picked team from a standing network of senior collaborators: field ethnographers, qualitative market researchers, academic specialists, and design researchers she has worked with for years. Every one of them is senior. Every one is briefed and overseen by Arrpita. And the point of view that reaches you is always hers to stand behind. You get the reach of a team with the accountability of a principal.
+  </p>
+
+  <h2>Working together</h2>
+  <p>
+    Most engagements run four to eight weeks. We start with a thirty-minute call to make sure ethnography is the right method for your question. If it is not, we will say so and point you to who can help. If it is, we will scope the project in one page and start within ten days.
+  </p>
+</PageLayout>

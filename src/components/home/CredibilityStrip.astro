@@ -1,0 +1,31 @@
+---
+import Container from '@components/ui/Container.astro';
+
+const priorWork = [
+  { name: 'ZEE5', src: '/logos/zee5.png' },
+  { name: 'Rapido', src: '/logos/rapido.png' },
+  { name: 'Adobe', src: '/logos/adobe.png' },
+  { name: 'USV', src: '/logos/usv.png' },
+];
+---
+<section class="bg-paper border-y border-border py-6">
+  <Container class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+    <span class="eyebrow text-ink-soft shrink-0">Prior research</span>
+    <span aria-hidden="true" class="text-ink-soft">·</span>
+    <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 m-0 p-0 list-none">
+      {priorWork.map((b) => (
+        <li>
+          <img src={b.src} alt={b.name} class="prior-logo h-8 md:h-10 w-auto" loading="lazy" decoding="async" />
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>
+<!-- The named brands are Arrpita's prior research engagements, not current Avant Amour clients. Keep the "Prior research" label. -->
+<style>
+  .prior-logo {
+    opacity: 0.85;
+    transition: opacity 150ms ease;
+  }
+  .prior-logo:hover { opacity: 1; }
+</style>

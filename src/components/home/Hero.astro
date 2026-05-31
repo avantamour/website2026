@@ -1,0 +1,46 @@
+---
+import Container from '@components/ui/Container.astro';
+import Button from '@components/ui/Button.astro';
+import { BRAND } from '@lib/constants';
+---
+<section class="bg-cream pt-16 pb-20 md:pt-24 md:pb-28" aria-labelledby="hero-h1">
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <div class="lg:col-span-7">
+        <p class="eyebrow mb-4">Founder-led · Based in India</p>
+        <h1 id="hero-h1" class="font-display font-medium text-hero md:text-[4rem] leading-[1.05] tracking-tightest text-ink">
+          {BRAND.h1}
+        </h1>
+        <p class="mt-6 max-w-prose text-body text-ink-soft">
+          {BRAND.subLine}
+        </p>
+        <div class="mt-10 flex flex-wrap items-center gap-6">
+          <Button href="/contact" variant="primary">Talk to Arrpita →</Button>
+          <Button href="/methodology" variant="secondary">See how we work</Button>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-5 hidden lg:block" aria-hidden="true">
+        <div class="relative">
+          <p class="eyebrow text-ink-soft mb-3">The signature</p>
+          <p class="font-display font-medium text-[5rem] xl:text-[6.5rem] leading-[0.95] tracking-tightest text-ink">
+            Ethno-<br /><span class="signature-underline">graphy</span><span class="text-yellow ml-1">.</span>
+          </p>
+          <p class="mt-10 text-small text-ink-soft max-w-xs">
+            Observation in real settings. Diaries from real days. Interviews where decisions actually happen.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .signature-underline {
+    text-decoration: underline;
+    text-decoration-color: #1A9FA5;
+    text-decoration-thickness: 4px;
+    text-underline-offset: 0.32em;
+    text-decoration-skip-ink: auto;
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+interface Props {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  intro?: string;
+  breadcrumbs?: { label: string; href?: string }[];
+  jsonLdType?: 'website' | 'about' | 'service' | 'article' | 'case-study' | 'glossary';
+  jsonLdProps?: Record<string, unknown>;
+  faqs?: FAQItem[];
+}
+const { title, description, eyebrow, intro, breadcrumbs, jsonLdType = 'website', jsonLdProps, faqs } = Astro.props;
+---
+<BaseLayout title={title} description={description} jsonLdType={jsonLdType} jsonLdProps={jsonLdProps} faqs={faqs}>
+  <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
+    <Container>
+      {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+      {eyebrow && <p class="eyebrow text-teal mt-6">{eyebrow}</p>}
+      <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-4xl">
+        {title}
+      </h1>
+      {intro && <p class="mt-6 text-body text-ink-soft max-w-prose">{intro}</p>}
+    </Container>
+  </section>
+  <section class="bg-paper pt-8 md:pt-12 pb-12 md:pb-20">
+    <Container>
+      <article class="prose-aa">
+        <slot />
+      </article>
+    </Container>
+  </section>
+</BaseLayout>

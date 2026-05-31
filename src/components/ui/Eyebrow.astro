@@ -1,0 +1,11 @@
+---
+interface Props {
+  withDot?: boolean;
+  class?: string;
+}
+const { withDot = true, class: className = '' } = Astro.props;
+---
+<div class:list={['eyebrow-rule', className]}>
+  <span class="eyebrow"><slot /></span>
+  {withDot && <span class="dot" aria-hidden="true"></span>}
+</div>

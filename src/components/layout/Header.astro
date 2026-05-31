@@ -1,0 +1,22 @@
+---
+import Container from '@components/ui/Container.astro';
+import Navigation from './Navigation.astro';
+import { BRAND } from '@lib/constants';
+---
+<header class="bg-cream border-b border-border/60">
+  <Container class="flex items-center justify-between py-4 md:py-5">
+    <a href="/" class="flex items-center gap-3 no-underline" aria-label={`${BRAND.name} home`}>
+      <img
+        src="/logo-mark.png"
+        alt="Avant Amour"
+        width="385"
+        height="400"
+        class="h-10 w-auto shrink-0"
+        loading="eager"
+        decoding="async"
+      />
+      <span class="font-display text-h3 text-ink leading-none">{BRAND.name}</span>
+    </a>
+    <Navigation />
+  </Container>
+</header>

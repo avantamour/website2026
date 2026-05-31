@@ -1,0 +1,38 @@
+---
+import { NAV } from '@lib/constants';
+const pathname = Astro.url.pathname.replace(/\/$/, '');
+---
+<nav aria-label="Primary" class="hidden md:block">
+  <ul class="flex items-center gap-7 text-small">
+    {NAV.map((item) => {
+      const active = pathname === item.href || pathname.startsWith(item.href + '/');
+      return (
+        <li>
+          <a
+            href={item.href}
+            class:list={[
+              'no-underline text-ink hover:text-teal transition-colors',
+              active ? 'text-teal' : '',
+            ]}
+            aria-current={active ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<details class="md:hidden relative">
+  <summary class="list-none cursor-pointer text-small font-medium text-ink select-none px-2 py-1 border border-border" aria-label="Open menu">
+    Menu
+  </summary>
+  <ul class="absolute right-0 mt-2 w-56 bg-paper border border-border z-50 py-2">
+    {NAV.map((item) => (
+      <li>
+        <a href={item.href} class="block px-4 py-2 no-underline text-ink hover:bg-cream">{item.label}</a>
+      </li>
+    ))}
+  </ul>
+</details>

@@ -1,0 +1,73 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('glossary', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const byCategory = entries.reduce<Record<string, typeof entries>>((acc, e) => {
+  const k = e.data.category;
+  (acc[k] ||= []).push(e);
+  return acc;
+}, {});
+
+const categoryLabel: Record<string, string> = {
+  method: 'Methods',
+  concept: 'Concepts',
+  role: 'Roles',
+  deliverable: 'Deliverables',
+  other: 'Other',
+};
+---
+<BaseLayout
+  title="Glossary of qualitative research"
+  description="A working glossary of qualitative and ethnographic research terms — ethnography, in-depth interviews, diary studies, personas, and more — written for D2C and digital-first teams in India."
+>
+  <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
+    <Container>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]} />
+      <p class="eyebrow text-teal mt-6">Glossary</p>
+      <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
+        A working glossary of qualitative research.
+      </h1>
+      <p class="mt-6 text-body text-ink-soft max-w-prose">
+        Plain-English definitions of the methods, concepts, and deliverables we use. Written to be useful, not to be padded.
+      </p>
+    </Container>
+  </section>
+
+  <section class="bg-paper py-12 md:py-20">
+    <Container>
+      <h2 class="font-display font-medium text-h1 leading-tight text-ink mb-6">A–Z</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
+        {entries.map((e) => (
+          <li>
+            <a href={`/glossary/${e.slug}`} class="text-body text-ink hover:text-teal no-underline">
+              {e.data.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h2 class="mt-16 font-display font-medium text-h1 leading-tight text-ink mb-6">By category</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        {Object.entries(byCategory).map(([cat, list]) => (
+          <div>
+            <p class="eyebrow text-teal mb-3">{categoryLabel[cat] ?? cat}</p>
+            <ul class="space-y-2">
+              {list.map((e) => (
+                <li>
+                  <a href={`/glossary/${e.slug}`} class="text-body text-ink hover:text-teal no-underline">
+                    {e.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

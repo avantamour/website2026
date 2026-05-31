@@ -1,0 +1,20 @@
+---
+interface Props {
+  href?: string;
+  class?: string;
+  as?: string;
+}
+const { href, class: className = '', as: Tag = 'article' } = Astro.props;
+const inner = (
+  <slot />
+);
+---
+{href ? (
+  <a href={href} class:list={['block group no-underline border border-border bg-paper p-6 md:p-8 transition-colors hover:border-teal', className]}>
+    <slot />
+  </a>
+) : (
+  <Tag class:list={['border border-border bg-paper p-6 md:p-8', className]}>
+    <slot />
+  </Tag>
+)}

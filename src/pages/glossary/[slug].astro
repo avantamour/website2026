@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import GlossaryLayout from '@layouts/GlossaryLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('glossary', ({ data }) => !data.draft);
+  return entries.map((entry) => {
+    const related = entries.filter((e) => entry.data.relatedTerms.includes(e.slug));
+    return { params: { slug: entry.slug }, props: { entry, related } };
+  });
+}
+
+const { entry, related } = Astro.props;
+---
+<GlossaryLayout entry={entry} related={related} />

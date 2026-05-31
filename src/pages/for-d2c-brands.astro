@@ -1,0 +1,76 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import FAQ from '@components/content/FAQ.astro';
+
+// PLACEHOLDER: FAQ to be edited by Arrpita
+const faqs = [
+  {
+    question: "What does a project cost?",
+    answer: "Engagements are priced by scope, not by the hour. Most projects fall between a few lakhs and a small number of tens of lakhs. The first call always includes a rough budget band.",
+  },
+  {
+    question: "How long until we have findings?",
+    answer: "Four to eight weeks for most ethnography or diary projects. Diagnostic sprints can deliver in two weeks. The scoping conversation gives you an exact timeline.",
+  },
+  {
+    question: "How many customers will you talk to?",
+    answer: "Eight to twelve for most projects, occasionally up to fifteen. Saturation — not statistical sampling — drives the number. Qualitative work plateaus quickly.",
+  },
+  {
+    question: "Do you sign NDAs?",
+    answer: "Yes. Mutual NDAs at scoping; project-specific confidentiality terms in the engagement letter. Case studies are anonymised even after the engagement ends.",
+  },
+  {
+    question: "Who owns the research data?",
+    answer: "You do. Raw materials — transcripts, voice notes, field notes — are handed over at the end of the engagement. We retain anonymised excerpts only with written permission.",
+  },
+];
+---
+<PageLayout
+  title="Customer research for D2C brands who've outgrown guesswork."
+  description="Ethnographic and qualitative research, run by a senior researcher, for Indian D2C and digital-first brands. Built for the founder who needs to ship by next quarter."
+  eyebrow="For D2C founders"
+  intro="There comes a point when analytics stop being enough. Cohort drop-offs and funnel charts can tell you what happened. They cannot tell you why. This page is for the founder standing at that wall."
+  breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'For D2C Brands' }]}
+  faqs={faqs}
+>
+  <!-- PLACEHOLDER: to be replaced with final copy -->
+
+  <p>
+    You've shipped the product. The dashboards are wired up. Mixpanel and a SQL query can answer most questions inside the funnel. But the questions outside the funnel — the ones that change your roadmap, your pricing, your packaging copy — those need a different instrument.
+  </p>
+  <p>
+    Ethnography is that instrument. We sit with your customer. We watch the decision get made. We listen for the half-second pause that tells us where the friction actually is. Then we write you a short, sharp report you can act on next sprint.
+  </p>
+
+  <h2>Questions we routinely answer</h2>
+  <ul>
+    <li>Which customer segment do we double down on next quarter — and which do we deprioritise?</li>
+    <li>Why does our repeat rate fall off a cliff between order two and order three?</li>
+    <li>What is the actual job our category is being hired to do — and is our messaging aligned with it?</li>
+    <li>Where in the product does the customer hesitate, and what are they hesitating about?</li>
+    <li>How do customers in tier-2 and tier-3 cities use our app differently from metro customers?</li>
+    <li>Is our packaging doing what we hope it is doing on the shelf and in the unboxing video?</li>
+    <li>Why are customers churning? In their words, not in our reason-code dropdown.</li>
+    <li>Should we launch the new variant, the new SKU, or the new format first?</li>
+  </ul>
+
+  <h2>How this is different from agency research</h2>
+  <p>
+    Most agency research is built for buyers at large companies — multi-stage approvals, methodologies that span months, decks that are designed to justify themselves. That model doesn't fit a D2C founder who needs to make a decision by the end of the quarter.
+  </p>
+  <p>
+    Avant Amour is built the opposite way. One senior researcher (the founder) runs the project end-to-end. Engagements are four to eight weeks, scoped on a one-pager. The output is a point of view, not a slide template. You can ask follow-up questions on WhatsApp for thirty days after delivery.
+  </p>
+
+  <h2>Engagement models</h2>
+  <p>
+    Project-based for a specific question (most common). Embedded research retainer for brands running continuous research alongside product. Diagnostic sprints for a narrow, time-boxed question — typically a two-week run. <!-- PLACEHOLDER: Arrpita to add pricing bands. -->
+  </p>
+
+  <FAQ faqs={faqs} />
+
+  <p class="mt-12">
+    <a href="/contact" class="inline-flex items-center bg-teal text-cream px-6 py-3 no-underline">Tell us about the question →</a>
+  </p>
+</PageLayout>

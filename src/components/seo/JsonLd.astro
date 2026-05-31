@@ -1,0 +1,200 @@
+---
+import { BRAND } from '@lib/constants';
+import { absoluteUrl } from '@lib/utils';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+interface Props {
+  type?: 'website' | 'about' | 'service' | 'article' | 'case-study' | 'glossary';
+  // type-specific fields
+  serviceName?: string;
+  serviceDescription?: string;
+  articleHeadline?: string;
+  articleDescription?: string;
+  articleDatePublished?: string;
+  articleDateModified?: string;
+  articleImage?: string;
+  caseStudyIndustry?: string;
+  termName?: string;
+  termDescription?: string;
+  faqs?: FAQItem[];
+}
+
+const props = Astro.props;
+const url = absoluteUrl(Astro.url.pathname, BRAND.url);
+
+const officeLocations = [
+  {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Delhi',
+      addressRegion: 'DL',
+      addressCountry: 'IN',
+    },
+  },
+  {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Kolkata',
+      addressRegion: 'WB',
+      addressCountry: 'IN',
+    },
+  },
+];
+
+const primaryAddress = {
+  '@type': 'PostalAddress',
+  addressLocality: 'Delhi',
+  addressRegion: 'DL',
+  addressCountry: 'IN',
+};
+
+const hasCredential = [
+  {
+    '@type': 'EducationalOccupationalCredential',
+    name: 'ISO/IEC 27001:2022 — Information Security Management System',
+    credentialCategory: 'certification',
+    recognizedBy: {
+      '@type': 'Organization',
+      name: 'EAS (Empowering Assurance Systems)',
+    },
+    identifier: 'QCC/9724/0126',
+    validThrough: '2029-01-28',
+  },
+  {
+    '@type': 'EducationalOccupationalCredential',
+    name: 'ISO 9001:2015 — Quality Management System',
+    credentialCategory: 'certification',
+    recognizedBy: {
+      '@type': 'Organization',
+      name: 'EAS (Empowering Assurance Systems)',
+    },
+    identifier: 'QCC/8560/0126',
+    validThrough: '2029-01-28',
+  },
+];
+
+const organization = {
+  '@type': 'Organization',
+  '@id': `${BRAND.url}#organization`,
+  name: BRAND.name,
+  url: BRAND.url,
+  logo: absoluteUrl('/logo.png', BRAND.url),
+  email: BRAND.email,
+  telephone: BRAND.phone,
+  description: BRAND.defaultDescription,
+  sameAs: [BRAND.social.linkedin, BRAND.founder.linkedin],
+  founder: {
+    '@type': 'Person',
+    name: BRAND.founder.fullName,
+    jobTitle: BRAND.founder.title,
+    sameAs: [BRAND.founder.linkedin],
+  },
+  address: primaryAddress,
+  areaServed: { '@type': 'Country', name: 'India' },
+  location: officeLocations,
+  hasCredential,
+};
+
+const localBusiness = {
+  '@type': 'ProfessionalService',
+  '@id': `${BRAND.url}#local-business`,
+  name: BRAND.name,
+  url: BRAND.url,
+  email: BRAND.email,
+  telephone: BRAND.phone,
+  areaServed: { '@type': 'Country', name: 'India' },
+  address: primaryAddress,
+  location: officeLocations,
+};
+
+const blocks: object[] = [organization, localBusiness];
+
+if (props.type === 'website') {
+  blocks.push({
+    '@type': 'WebSite',
+    '@id': `${BRAND.url}#website`,
+    url: BRAND.url,
+    name: BRAND.name,
+    description: BRAND.defaultDescription,
+    publisher: { '@id': `${BRAND.url}#organization` },
+  });
+}
+
+if (props.type === 'about') {
+  blocks.push({
+    '@type': 'Person',
+    name: BRAND.founder.fullName,
+    jobTitle: BRAND.founder.title,
+    image: absoluteUrl('/arrpita.jpg', BRAND.url),
+    worksFor: { '@id': `${BRAND.url}#organization` },
+    memberOf: { '@type': 'Organization', name: 'QRCA (Qualitative Research Consultants Association)' },
+    sameAs: [BRAND.founder.linkedin],
+    description: `Founder of ${BRAND.name}. ${BRAND.founder.yearsExperience}+ years in qualitative research. Prior research: ${BRAND.founder.priorWork.join(', ')}.`,
+  });
+}
+
+if (props.type === 'service' && props.serviceName) {
+  blocks.push({
+    '@type': 'Service',
+    name: props.serviceName,
+    serviceType: props.serviceName,
+    description: props.serviceDescription,
+    provider: { '@id': `${BRAND.url}#organization` },
+    areaServed: { '@type': 'Country', name: 'India' },
+    url,
+  });
+}
+
+if ((props.type === 'article' || props.type === 'case-study') && props.articleHeadline) {
+  blocks.push({
+    '@type': 'Article',
+    headline: props.articleHeadline,
+    description: props.articleDescription,
+    datePublished: props.articleDatePublished,
+    dateModified: props.articleDateModified ?? props.articleDatePublished,
+    author: {
+      '@type': 'Person',
+      name: BRAND.founder.firstName,
+      url: BRAND.founder.linkedin,
+    },
+    publisher: { '@id': `${BRAND.url}#organization` },
+    image: props.articleImage ? absoluteUrl(props.articleImage, BRAND.url) : absoluteUrl('/og-default.jpg', BRAND.url),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    ...(props.type === 'case-study' ? { articleSection: 'Case Study' } : {}),
+    ...(props.caseStudyIndustry ? { about: props.caseStudyIndustry } : {}),
+  });
+}
+
+if (props.type === 'glossary' && props.termName) {
+  blocks.push({
+    '@type': 'DefinedTerm',
+    name: props.termName,
+    description: props.termDescription,
+    inDefinedTermSet: `${BRAND.url}/glossary`,
+    url,
+  });
+}
+
+if (props.faqs && props.faqs.length > 0) {
+  blocks.push({
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: props.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  });
+}
+
+const ld = { '@context': 'https://schema.org', '@graph': blocks };
+---
+<script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />

@@ -1,0 +1,17 @@
+---
+import Container from '@components/ui/Container.astro';
+import Button from '@components/ui/Button.astro';
+import { BRAND } from '@lib/constants';
+---
+<section class="bg-cream py-20 md:py-32 border-t border-border">
+  <Container class="text-center">
+    <p class="eyebrow text-teal">The work</p>
+    <p class="mt-6 font-display font-medium text-[2rem] md:text-[3.5rem] leading-[1.1] tracking-tightest text-ink max-w-4xl mx-auto">
+      What consumers <em class="not-italic"><span class="yellow-underline">actually do</span></em>. Not just what they say.
+    </p>
+    <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+      <Button href="/contact" variant="primary">Start a conversation →</Button>
+      <p class="text-small text-ink-soft">or email <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></p>
+    </div>
+  </Container>
+</section>

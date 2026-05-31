@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/home/Hero.astro';
+import CredibilityStrip from '@components/home/CredibilityStrip.astro';
+import ServicesGrid from '@components/home/ServicesGrid.astro';
+import WhoWeWorkWith from '@components/home/WhoWeWorkWith.astro';
+import HowWeWork from '@components/home/HowWeWork.astro';
+import FeaturedInsights from '@components/home/FeaturedInsights.astro';
+import ContactCTA from '@components/home/ContactCTA.astro';
+import { BRAND } from '@lib/constants';
+---
+<BaseLayout
+  title={BRAND.name}
+  description={BRAND.defaultDescription}
+  jsonLdType="website"
+>
+  <Hero />
+  <CredibilityStrip />
+  <ServicesGrid />
+  <WhoWeWorkWith />
+  <HowWeWork />
+  <FeaturedInsights />
+  <ContactCTA />
+</BaseLayout>

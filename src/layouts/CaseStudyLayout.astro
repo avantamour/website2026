@@ -1,0 +1,72 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'case-studies'>;
+}
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+const published = d.publishDate ? d.publishDate.toISOString() : undefined;
+---
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  ogType="article"
+  ogImage={d.ogImage}
+  publishedTime={published}
+  jsonLdType="case-study"
+  jsonLdProps={{
+    articleHeadline: d.title,
+    articleDescription: d.description,
+    articleDatePublished: published,
+    articleImage: d.ogImage,
+    caseStudyIndustry: d.industry,
+  }}
+>
+  <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
+    <Container>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Case Studies', href: '/case-studies' },
+        { label: d.title },
+      ]} />
+      <p class="eyebrow text-teal mt-6">Case study · {d.industry}</p>
+      <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-4xl">
+        {d.title}
+      </h1>
+      <p class="mt-6 text-body text-ink-soft max-w-prose">{d.description}</p>
+      <p class="mt-6 inline-flex items-center gap-3 border border-teal px-4 py-2 text-eyebrow uppercase tracking-eyebrow text-teal">
+        <span aria-hidden="true">↑</span>{d.metric}
+      </p>
+    </Container>
+  </section>
+
+  <section class="bg-paper pt-8 md:pt-12 pb-12 md:pb-20">
+    <Container>
+      <article class="prose-aa">
+        <Content />
+      </article>
+    </Container>
+  </section>
+
+  {d.services.length > 0 && (
+    <section class="bg-cream py-12 border-t border-border">
+      <Container>
+        <p class="eyebrow text-ink-soft">Methods used</p>
+        <ul class="mt-4 flex flex-wrap gap-3">
+          {d.services.map((s) => (
+            <li>
+              <a href={`/services/${s}`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal hover:text-cream">
+                {s.replace(/-/g, ' ')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  )}
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'glossary'>;
+  related?: CollectionEntry<'glossary'>[];
+}
+const { entry, related = [] } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+---
+<BaseLayout
+  title={`${d.title} — definition`}
+  description={d.description}
+  jsonLdType="glossary"
+  jsonLdProps={{ termName: d.title, termDescription: d.description }}
+>
+  <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
+    <Container>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Glossary', href: '/glossary' },
+        { label: d.title },
+      ]} />
+      <p class="eyebrow text-teal mt-6">Glossary · {d.category}</p>
+      <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink">
+        {d.title}
+      </h1>
+      <p class="mt-6 text-body text-ink-soft max-w-prose">{d.description}</p>
+    </Container>
+  </section>
+
+  <section class="bg-paper pt-8 md:pt-12 pb-12 md:pb-20">
+    <Container>
+      <article class="prose-aa">
+        <Content />
+      </article>
+
+      {related.length > 0 && (
+        <aside class="mt-14 border-t border-border pt-8">
+          <p class="eyebrow text-ink-soft mb-4">Related terms</p>
+          <ul class="flex flex-wrap gap-3">
+            {related.map((r) => (
+              <li>
+                <a href={`/glossary/${r.slug}`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal hover:text-cream">
+                  {r.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+    </Container>
+  </section>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import Container from '@components/ui/Container.astro';
+import Section from '@components/ui/Section.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+
+const services = [
+  {
+    slug: 'ethnography',
+    name: 'Ethnography',
+    blurb:
+      'We sit with people in their kitchens, autos, and clinics — the rooms where your product is actually used. You see decisions get made, not just remembered.',
+    featured: true,
+  },
+  {
+    slug: 'in-depth-interviews',
+    name: 'In-Depth Interviews',
+    blurb:
+      'Ninety unhurried minutes with one customer. Useful when you need to map a specific decision, an objection, or the gap between intent and behaviour.',
+    featured: false,
+  },
+  {
+    slug: 'whatsapp-diary-studies',
+    name: 'WhatsApp Diary Studies',
+    blurb:
+      'Two weeks of voice notes, photos, and screenshots from customers, on the platform they already live in. Captures the long tail of context that a one-hour interview cannot.',
+    featured: false,
+  },
+];
+---
+<Section background="cream" id="services">
+  <Container>
+    <Eyebrow>What we do</Eyebrow>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
+      {services.map((s) => (
+        <a
+          href={`/services/${s.slug}`}
+          class:list={[
+            'no-underline group block border border-border bg-paper p-8 md:p-10 transition-colors hover:border-teal',
+            s.featured ? 'md:col-span-12 lg:col-span-6' : 'md:col-span-6 lg:col-span-3',
+          ]}
+        >
+          <p class="eyebrow text-teal mb-3">{s.featured ? 'Primary method' : 'Method'}</p>
+          <h3 class:list={['font-display font-medium leading-[1.1] text-ink', s.featured ? 'text-[2rem] md:text-[2.5rem]' : 'text-h2']}>
+            {s.name}
+          </h3>
+          <p class:list={['mt-4 text-ink-soft', s.featured ? 'text-body' : 'text-small']}>
+            {s.blurb}
+          </p>
+          <p class="mt-6 text-small font-medium text-teal underline underline-offset-4">Learn more →</p>
+        </a>
+      ))}
+    </div>
+  </Container>
+</Section>

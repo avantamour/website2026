@@ -1,0 +1,13 @@
+---
+interface Props {
+  background?: 'cream' | 'paper';
+  class?: string;
+  id?: string;
+  as?: string;
+}
+const { background = 'cream', class: className = '', id, as: Tag = 'section' } = Astro.props;
+const bg = background === 'paper' ? 'bg-paper' : 'bg-cream';
+---
+<Tag id={id} class:list={[bg, 'py-16 md:py-24', className]}>
+  <slot />
+</Tag>

@@ -1,0 +1,39 @@
+---
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+
+import { BRAND } from '@lib/constants';
+import { absoluteUrl } from '@lib/utils';
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    item: c.href ? absoluteUrl(c.href, BRAND.url) : undefined,
+  })),
+};
+---
+<nav aria-label="Breadcrumb" class="text-small text-ink-soft">
+  <ol class="flex flex-wrap items-center gap-2">
+    {items.map((c, i) => (
+      <li class="flex items-center gap-2">
+        {c.href && i < items.length - 1 ? (
+          <a href={c.href} class="text-ink-soft hover:text-teal no-underline">{c.label}</a>
+        ) : (
+          <span aria-current="page" class="text-ink">{c.label}</span>
+        )}
+        {i < items.length - 1 && <span aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />

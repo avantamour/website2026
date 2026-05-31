@@ -1,0 +1,28 @@
+---
+import Container from '@components/ui/Container.astro';
+import Section from '@components/ui/Section.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+---
+<Section background="paper">
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-5">
+        <Eyebrow>Who we work with</Eyebrow>
+        <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink">
+          For D2C and digital-first founders who've <span class="yellow-underline">outgrown guesswork</span>.
+        </h2>
+      </div>
+      <div class="lg:col-span-7">
+        <p class="text-body text-ink-soft max-w-prose">
+          Analytics tell you what dropped, what converted, what churned. They cannot tell you why a customer in Indore felt your packaging was "too clinical," or why your repeat rate craters in the second month after a perfectly fine first delivery. Ethnography sits in that gap.
+        </p>
+        <ul class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-body">
+          <li class="flex gap-3"><span aria-hidden="true" class="text-teal mt-1">→</span><span>Which customer segment to double down on next</span></li>
+          <li class="flex gap-3"><span aria-hidden="true" class="text-teal mt-1">→</span><span>What messaging actually resonates — and what is filler</span></li>
+          <li class="flex gap-3"><span aria-hidden="true" class="text-teal mt-1">→</span><span>Where the product quietly falls short of expectations</span></li>
+          <li class="flex gap-3"><span aria-hidden="true" class="text-teal mt-1">→</span><span>Why customers leave, in their words, not your funnel's</span></li>
+        </ul>
+      </div>
+    </div>
+  </Container>
+</Section>

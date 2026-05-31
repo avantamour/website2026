@@ -1,0 +1,101 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import FAQ from '@components/content/FAQ.astro';
+import Tag from '@components/ui/Tag.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'services'>;
+}
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const d = entry.data;
+
+const allCaseStudies = await getCollection('case-studies', ({ data }) => !data.draft);
+const relatedCaseStudies = allCaseStudies.filter((c) =>
+  (c.data.services ?? []).includes(entry.slug),
+);
+
+const allServices = await getCollection('services', ({ data }) => !data.draft);
+const servicesMap = new Map(allServices.map((s) => [s.slug, s]));
+const relatedServices = (d.relatedServices ?? [])
+  .map((slug) => servicesMap.get(slug))
+  .filter((s): s is CollectionEntry<'services'> => Boolean(s) && s!.slug !== entry.slug);
+---
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  jsonLdType="service"
+  jsonLdProps={{ serviceName: d.title, serviceDescription: d.description }}
+  faqs={d.faqs}
+>
+  <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
+    <Container>
+      <Breadcrumbs items={[
+        { label: 'Home', href: '/' },
+        { label: 'Services', href: '/services' },
+        { label: d.title },
+      ]} />
+      <p class="eyebrow text-teal mt-6">Service</p>
+      <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
+        {d.title}
+      </h1>
+      <p class="mt-6 text-body text-ink-soft max-w-prose">{d.description}</p>
+    </Container>
+  </section>
+
+  <section class="bg-paper pt-8 md:pt-12 pb-12 md:pb-20">
+    <Container>
+      <article class="prose-aa">
+        <Content />
+      </article>
+      <FAQ faqs={d.faqs} />
+
+      {relatedCaseStudies.length > 0 && (
+        <aside class="mt-14 md:mt-20 border-t border-border pt-8 md:pt-10" aria-labelledby="related-cases-heading">
+          <Eyebrow>From the field</Eyebrow>
+          <h2 id="related-cases-heading" class="font-display font-medium text-h2 md:text-[1.75rem] leading-snug text-ink mb-6">
+            Related case studies
+          </h2>
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {relatedCaseStudies.map((c) => (
+              <li>
+                <a href={`/case-studies/${c.slug}`} class="block border border-border bg-paper p-6 no-underline hover:border-teal transition-colors h-full">
+                  <p class="eyebrow text-teal">{c.data.industry}</p>
+                  <h3 class="mt-3 font-display font-medium text-h3 text-ink leading-snug">{c.data.title}</h3>
+                  <p class="mt-4 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal border border-teal/40 px-3 py-1">
+                    <span aria-hidden="true">↑</span>{c.data.metric}
+                  </p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+
+      {relatedServices.length > 0 && (
+        <aside class="mt-14 md:mt-20 border-t border-border pt-8 md:pt-10" aria-labelledby="related-services-heading">
+          <Eyebrow>Also see</Eyebrow>
+          <h2 id="related-services-heading" class="font-display font-medium text-h2 md:text-[1.75rem] leading-snug text-ink mb-5">
+            Related services
+          </h2>
+          <ul class="flex flex-wrap gap-3">
+            {relatedServices.map((s) => (
+              <li><Tag href={`/services/${s.slug}`}>{s.data.title}</Tag></li>
+            ))}
+          </ul>
+        </aside>
+      )}
+    </Container>
+  </section>
+
+  <section class="bg-cream py-12 md:py-16 border-t border-border">
+    <Container class="text-center">
+      <p class="font-display text-h1 md:text-[2rem] text-ink max-w-2xl mx-auto">Wondering if this is right for your question?</p>
+      <a href="/contact" class="mt-6 inline-flex items-center bg-teal text-cream px-6 py-3 no-underline font-medium">Talk to Arrpita →</a>
+    </Container>
+  </section>
+</BaseLayout>
