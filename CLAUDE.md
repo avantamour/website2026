@@ -109,6 +109,18 @@ The visible FAQ accordion and the `FAQPage` structured data come from a single s
 - `BaseLayout` accepts a `faqs?` prop and forwards it to `JsonLd`. When non-empty, `JsonLd` pushes a `FAQPage` node (with `mainEntity` of `Question` / `acceptedAnswer`) into `@graph` regardless of page type.
 - `ServiceLayout` and `InsightsLayout` already wire `entry.data.faqs` through both the visible `<FAQ>` and the `BaseLayout faqs={…}` prop. For a one-off page (e.g. `for-d2c-brands.astro`), define a `faqs` const, render `<FAQ faqs={faqs} />`, and pass `faqs={faqs}` through `PageLayout`.
 
+## Analytics & consent
+
+GA4 with Consent Mode v2 default-deny is wired through `BaseLayout.astro` as of **June 2026**. This is the chosen analytics approach — there is no longer a plan to swap in a cookieless tool. Both the loader and the banner ship on every page because they live in `BaseLayout`, which all routes pass through.
+
+- **Measurement ID** is `G-R9K61CYZV3`, hardcoded in **two** places inside the BaseLayout `<head>` snippet: the `<script async src="https://www.googletagmanager.com/gtag/js?id=…">` loader and the `gtag('config', '…', { anonymize_ip: true })` call. If it ever changes, update both — there is no constant for it.
+- **Default consent state**: `ad_storage`, `ad_user_data`, `ad_personalization`, and `analytics_storage` all default to `'denied'`; `functionality_storage` and `security_storage` are `'granted'`; `wait_for_update: 500` gives the saved-decision replay time to land before the first hit fires. This default-deny posture is itself behind the stop-and-ask gate — do not loosen it without explicit approval.
+- **Persistence**: the visitor's choice is stored in `localStorage` under the key `aa_consent` as a JSON object of the same four ad/analytics fields. On every page load the head snippet reads the key and replays it via `gtag('consent', 'update', …)`, so returning visitors are not re-prompted and analytics_storage is not silently flipped back off.
+- **Banner** lives at the end of `<body>` (after `<WhatsAppButton />`), `id="consent-banner"`, `role="dialog"`, `aria-live="polite"`, hidden by default (`class="hidden …"`) and un-hidden by an inline IIFE only when `localStorage.getItem('aa_consent')` is empty. The Accept and Decline buttons both write to `localStorage`, call `gtag('consent', 'update', …)`, and re-hide the banner. The script is `<script is:inline>` — no client framework, no bundling, consistent with the "no client JS unless vanilla" rule.
+- **Banner styling** is Tailwind-only (no inline styles, no `<style>` block): `fixed inset-x-0 bottom-0 z-50 bg-cream border-t border-border` for the bar, `bg-teal text-paper hover:bg-teal-600` for Accept, `bg-paper border border-border text-ink hover:bg-cream` for Decline. The teal-as-accept choice respects the "yellow is a highlight, never a CTA" palette rule.
+
+Adding a second analytics or tracking tool (Meta Pixel, LinkedIn Insight Tag, Hotjar, Clarity, etc.) is still a stop-and-ask. So is loosening the default-deny posture or moving the loader anywhere other than `BaseLayout`.
+
 ## Placeholder convention
 
 Every block of stand-in copy is wrapped in an HTML comment:
@@ -156,7 +168,7 @@ Defined in `tsconfig.json`. Use them in imports — do not write relative paths 
 These are inherited from the founding brief. Do not do any of them without explicit user approval:
 
 - Adding a CMS, admin UI, or any backend
-- Adding analytics (a cookieless option will be added later — do not pre-empt)
+- Adding any second analytics or tracking tool (Meta Pixel, LinkedIn Insight Tag, Hotjar, Clarity, etc.), or changing the default-deny consent posture of the existing GA4 setup (see "Analytics & consent")
 - Adding any third-party widget (chat, popup, social proof). The site-wide WhatsApp FAB is the one approved exception — adding *another* chat/popup/social-proof widget still needs the gate.
 - Changing the colour palette, typography, or any locked positioning copy
 - Adding pages or routes not in the original brief structure

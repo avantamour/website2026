@@ -61,6 +61,27 @@ const {
     />
     <JsonLd type={jsonLdType} faqs={faqs} {...jsonLdProps} />
     <slot name="head" />
+
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-R9K61CYZV3"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        wait_for_update: 500,
+      });
+      try {
+        var saved = localStorage.getItem('aa_consent');
+        if (saved) gtag('consent', 'update', JSON.parse(saved));
+      } catch (e) {}
+      gtag('js', new Date());
+      gtag('config', 'G-R9K61CYZV3', { anonymize_ip: true });
+    </script>
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -70,5 +91,67 @@ const {
     </main>
     <Footer />
     <WhatsAppButton />
+
+    <div
+      id="consent-banner"
+      role="dialog"
+      aria-label="Cookie consent"
+      aria-live="polite"
+      class="hidden fixed inset-x-0 bottom-0 z-50 bg-cream border-t border-border"
+    >
+      <div class="mx-auto max-w-container px-6 py-4 md:px-8 md:py-5 flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+        <p class="text-small text-ink-soft flex-1 m-0">
+          We use analytics cookies to understand how the site is used and improve it. You can accept or decline at any time.
+        </p>
+        <div class="flex gap-3 shrink-0">
+          <button
+            id="consent-decline"
+            type="button"
+            class="px-4 py-2 text-small font-medium border border-border bg-paper text-ink hover:bg-cream transition-colors"
+          >
+            Decline
+          </button>
+          <button
+            id="consent-accept"
+            type="button"
+            class="px-4 py-2 text-small font-medium bg-teal text-paper hover:bg-teal-600 transition-colors"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function () {
+        var KEY = 'aa_consent';
+        var banner = document.getElementById('consent-banner');
+        var accept = document.getElementById('consent-accept');
+        var decline = document.getElementById('consent-decline');
+        if (!banner || !accept || !decline) return;
+
+        var hasDecision = false;
+        try { hasDecision = !!localStorage.getItem(KEY); } catch (e) {}
+        if (!hasDecision) banner.classList.remove('hidden');
+
+        function setConsent(granted) {
+          var value = granted ? 'granted' : 'denied';
+          var consent = {
+            ad_storage: value,
+            ad_user_data: value,
+            ad_personalization: value,
+            analytics_storage: value,
+          };
+          try { localStorage.setItem(KEY, JSON.stringify(consent)); } catch (e) {}
+          if (typeof window.gtag === 'function') {
+            window.gtag('consent', 'update', consent);
+          }
+          banner.classList.add('hidden');
+        }
+
+        accept.addEventListener('click', function () { setConsent(true); });
+        decline.addEventListener('click', function () { setConsent(false); });
+      })();
+    </script>
   </body>
 </html>
