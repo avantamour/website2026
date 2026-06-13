@@ -24,7 +24,17 @@ import { BRAND } from '@lib/constants';
   <section id="contact-section" class="bg-paper py-12 md:py-20">
     <Container>
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <form id="contact-form" data-email={BRAND.email} class="lg:col-span-7 space-y-6" novalidate>
+        <form
+          id="contact-form"
+          name="contact"
+          method="POST"
+          action="/thank-you/"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="lg:col-span-7 space-y-6"
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p hidden><label>Don't fill this out: <input name="bot-field" /></label></p>
           <div>
             <label for="name" class="block text-small font-medium mb-2">Your name</label>
             <input id="name" name="name" type="text" required class="w-full border border-border bg-cream px-4 py-3 text-body focus:outline-none focus:border-teal" autocomplete="name" />
@@ -45,7 +55,7 @@ import { BRAND } from '@lib/constants';
             Send →
           </button>
           <p class="text-small text-ink-soft">
-            Submitting opens your email client. We don't store form data on the site.
+            We use your details only to respond to your enquiry. We don't share them, and we delete enquiry data once it's no longer needed.
           </p>
         </form>
 
@@ -87,33 +97,13 @@ import { BRAND } from '@lib/constants';
 
   <script is:inline>
     (function () {
-      var form = document.getElementById('contact-form');
-      if (!form) return;
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var fd = new FormData(form);
-        var subject = encodeURIComponent('Project enquiry — ' + (fd.get('company') || fd.get('name') || ''));
-        var lines = [
-          'Name: ' + (fd.get('name') || ''),
-          'Email: ' + (fd.get('email') || ''),
-          'Company: ' + (fd.get('company') || ''),
-          '',
-          (fd.get('message') || ''),
-        ];
-        var body = encodeURIComponent(lines.join('\n'));
-        var email = form.dataset.email;
-        if (typeof gtag === 'function') gtag('event', 'generate_lead', { method: 'mailto' });
-        window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
-      });
-
       var section = document.getElementById('contact-section');
-      if (section) {
-        section.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
-          a.addEventListener('click', function () {
-            if (typeof gtag === 'function') gtag('event', 'contact_email');
-          });
+      if (!section) return;
+      section.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+        a.addEventListener('click', function () {
+          if (typeof gtag === 'function') gtag('event', 'contact_email');
         });
-      }
+      });
     })();
   </script>
 </BaseLayout>

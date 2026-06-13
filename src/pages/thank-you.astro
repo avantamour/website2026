@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+---
+<BaseLayout
+  title="Thank you"
+  description="Thanks for getting in touch — we'll reply within one business day."
+  noindex={true}
+>
+  <section class="bg-cream pt-12 md:pt-16 pb-16 md:pb-24 border-b border-border">
+    <Container>
+      <p class="eyebrow text-teal">Message sent</p>
+      <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
+        Thanks — we'll reply within <span class="yellow-underline">one business day</span>.
+      </h1>
+      <p class="mt-6 text-body text-ink-soft max-w-prose">
+        Your enquiry is on its way. If it's urgent, you can also reach us on WhatsApp using the button in the corner.
+      </p>
+      <p class="mt-8">
+        <a href="/" class="inline-flex items-center bg-teal text-cream px-6 py-3 font-medium hover:bg-teal-600 no-underline">
+          ← Back home
+        </a>
+      </p>
+    </Container>
+  </section>
+
+  <script is:inline>
+    if (typeof gtag === 'function') gtag('event', 'generate_lead', { method: 'form' });
+  </script>
+</BaseLayout>
