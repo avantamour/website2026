@@ -82,4 +82,7 @@ export const FOOTER_LINKS = {
     { label: 'Insights', href: '/insights' },
     { label: 'Contact', href: '/contact' },
   ],
+  legal: [
+    { label: 'Privacy Policy', href: '/privacy' },
+  ],
 } as const;

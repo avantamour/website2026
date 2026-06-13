@@ -64,7 +64,10 @@ const year = new Date().getFullYear();
 
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-small text-ink-soft">
       <p>© {year} {BRAND.name}. {BRAND.audience}.</p>
-      <p>
+      <p class="flex items-center gap-4">
+        {FOOTER_LINKS.legal.map((l) => (
+          <a href={l.href} class="text-ink hover:text-teal no-underline">{l.label}</a>
+        ))}
         <a href={BRAND.founder.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a>
       </p>
     </div>
