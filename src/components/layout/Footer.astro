@@ -70,3 +70,14 @@ const year = new Date().getFullYear();
     </div>
   </Container>
 </footer>
+<script is:inline>
+  (function () {
+    var footer = document.querySelector('footer');
+    if (!footer) return;
+    footer.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (typeof gtag === 'function') gtag('event', 'contact_email');
+      });
+    });
+  })();
+</script>

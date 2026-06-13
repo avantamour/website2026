@@ -39,7 +39,7 @@ All positioning text lives in `src/lib/constants.ts` as the `BRAND` object. Comp
 
 If you ever update one, double-check you're not silently swapping the other.
 
-**Mailto duplication gotcha.** The contact form's submit handler in `src/pages/contact.astro` is a `<script is:inline>` block, and Astro does *not* interpolate Astro variables into inline scripts by default. The email is therefore hardcoded a second time inside that script. Every other `mailto:` link on the site reads `BRAND.email` directly, but if you change the email you must also update the literal inside the inline script (or refactor it to use a `data-email` attribute on the form / Astro's `define:vars` directive).
+**Inline-script variable interpolation gotcha.** Astro does *not* interpolate Astro variables into `<script is:inline>` blocks — anything an inline script needs from `BRAND` (or any other Astro-side value) has to be passed in through the DOM, not referenced directly. The contact form's submit handler in `src/pages/contact.astro` is one such inline block. It used to hardcode the email a second time, but now the address is set once via `data-email={BRAND.email}` on the `<form>` and read back in the script as `form.dataset.email`, so it stays in sync with `BRAND.email` automatically — no second literal to maintain. This `data-*` attribute pattern is the approved workaround for the interpolation constraint; reach for it (or Astro's `define:vars` directive) in any new inline script rather than duplicating a constant.
 
 **Founder name** lives in `BRAND.founder` as two deliberately separate fields:
 

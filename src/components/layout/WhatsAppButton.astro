@@ -5,6 +5,7 @@ import { BRAND } from '@lib/constants';
   href={BRAND.whatsapp}
   target="_blank"
   rel="noopener noreferrer"
+  id="wa-fab"
   class="wa-fab"
   aria-label="Chat with Avant Amour on WhatsApp"
   title="Chat on WhatsApp"
@@ -42,3 +43,12 @@ import { BRAND } from '@lib/constants';
     .wa-fab { animation: none; }
   }
 </style>
+<script is:inline>
+  (function () {
+    var fab = document.getElementById('wa-fab');
+    if (!fab) return;
+    fab.addEventListener('click', function () {
+      if (typeof gtag === 'function') gtag('event', 'contact_whatsapp');
+    });
+  })();
+</script>
