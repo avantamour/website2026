@@ -1,8 +1,19 @@
 ---
 import { BRAND } from '@lib/constants';
+
+/**
+ * Pre-filled opener. A blank chat puts the first line on the visitor and tells
+ * Arrpita nothing about where they came from; the page path is appended by the
+ * inline script below (Astro cannot interpolate into `is:inline`, so the base
+ * text is passed through a data attribute — the pattern CLAUDE.md prescribes).
+ */
+const waOpener = `Hi ${BRAND.founder.firstName}, I'm on the Avant Amour website and I have a research question.`;
+const waHref = `${BRAND.whatsapp}?text=${encodeURIComponent(waOpener)}`;
 ---
 <a
-  href={BRAND.whatsapp}
+  href={waHref}
+  data-wa-base={BRAND.whatsapp}
+  data-wa-text={waOpener}
   target="_blank"
   rel="noopener noreferrer"
   id="wa-fab"
@@ -28,6 +39,12 @@ import { BRAND } from '@lib/constants';
   @media (max-width: 640px) {
     .wa-fab { right: 1rem; bottom: 1rem; width: 3.5rem; height: 3.5rem; }
   }
+  /* Lift clear of the consent banner while it is showing, so the button never
+     covers the Accept control. Class is toggled by the banner script in BaseLayout. */
+  :global(html.has-consent-banner) .wa-fab { bottom: 7.5rem; }
+  @media (max-width: 640px) {
+    :global(html.has-consent-banner) .wa-fab { bottom: 10.5rem; }
+  }
   @media (prefers-reduced-motion: reduce) {
     .wa-fab { transition: none; } .wa-fab:hover { transform: none; }
   }
@@ -47,8 +64,14 @@ import { BRAND } from '@lib/constants';
   (function () {
     var fab = document.getElementById('wa-fab');
     if (!fab) return;
-    fab.addEventListener('click', function () {
-      if (typeof gtag === 'function') gtag('event', 'contact_whatsapp');
-    });
+    // Append the page path so Arrpita can see which page prompted the message.
+    // The analytics event is handled by the delegated listener in BaseLayout.
+    var base = fab.getAttribute('data-wa-base');
+    var text = fab.getAttribute('data-wa-text') || '';
+    if (base) {
+      var path = window.location.pathname;
+      var suffix = path && path !== '/' ? ' (from ' + path + ')' : '';
+      fab.setAttribute('href', base + '?text=' + encodeURIComponent(text + suffix));
+    }
   })();
 </script>

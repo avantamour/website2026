@@ -22,7 +22,7 @@ const services = [
     slug: 'whatsapp-diary-studies',
     name: 'WhatsApp Diary Studies',
     blurb:
-      'Two weeks of voice notes, photos, and screenshots from customers, on the platform they already live in. Captures the long tail of context that a one-hour interview cannot.',
+      'Five to ten days of voice notes, photos, and screenshots from customers, on the platform they already live in. Captures the long tail of context that a one-hour interview cannot.',
     featured: false,
   },
 ];
@@ -33,7 +33,7 @@ const services = [
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
       {services.map((s) => (
         <a
-          href={`/services/${s.slug}`}
+          href={`/services/${s.slug}/`}
           class:list={[
             'no-underline group block border border-border bg-paper p-8 md:p-10 transition-colors hover:border-teal',
             s.featured ? 'md:col-span-12 lg:col-span-6' : 'md:col-span-6 lg:col-span-3',

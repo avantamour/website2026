@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import EnquiryCTA from '@components/content/EnquiryCTA.astro';
 import { getCollection } from 'astro:content';
 import { formatDate, readingTime } from '@lib/utils';
 
@@ -30,7 +31,7 @@ const posts = (await getCollection('insights', ({ data }) => !data.draft))
       <ul class="divide-y divide-border">
         {posts.map((p) => (
           <li class="py-8 first:pt-0">
-            <a href={`/insights/${p.slug}`} class="block no-underline group">
+            <a href={`/insights/${p.slug}/`} class="block no-underline group">
               <p class="text-small text-ink-soft">
                 {formatDate(p.data.publishDate)} · {readingTime(p.body)} min read
               </p>
@@ -44,4 +45,6 @@ const posts = (await getCollection('insights', ({ data }) => !data.draft))
       </ul>
     </Container>
   </section>
+
+  <EnquiryCTA question="Working on a question like these?" />
 </BaseLayout>

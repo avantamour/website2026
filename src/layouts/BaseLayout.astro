@@ -146,7 +146,13 @@ const {
 
         var hasDecision = false;
         try { hasDecision = !!localStorage.getItem(KEY); } catch (e) {}
-        if (!hasDecision) banner.classList.remove('hidden');
+        // The class lets the WhatsApp button lift clear of the banner; without it
+        // the button covers the Accept control on 1280px-wide laptops, so a click
+        // aimed at consent opens WhatsApp instead.
+        if (!hasDecision) {
+          banner.classList.remove('hidden');
+          document.documentElement.classList.add('has-consent-banner');
+        }
 
         function setConsent(granted) {
           var value = granted ? 'granted' : 'denied';
@@ -161,10 +167,36 @@ const {
             window.gtag('consent', 'update', consent);
           }
           banner.classList.add('hidden');
+          document.documentElement.classList.remove('has-consent-banner');
         }
 
         accept.addEventListener('click', function () { setConsent(true); });
         decline.addEventListener('click', function () { setConsent(false); });
+      })();
+    </script>
+
+    <!--
+      One delegated listener for every lead-intent click on the site. Replaces the
+      three per-page scripts that existed before (footer, contact page, WhatsApp
+      button), which between them missed the contact-page WhatsApp link, every
+      tel: link and the homepage mailto. `location` records which page produced
+      the click, so GA4 can answer "which page sends enquiries".
+    -->
+    <script is:inline>
+      (function () {
+        document.addEventListener('click', function (e) {
+          var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+          if (!a) return;
+          var href = a.getAttribute('href') || '';
+          var name = null;
+          if (href.indexOf('mailto:') === 0) name = 'contact_email';
+          else if (href.indexOf('tel:') === 0) name = 'contact_phone';
+          else if (href.indexOf('wa.me') !== -1 || href.indexOf('api.whatsapp.com') !== -1) name = 'contact_whatsapp';
+          if (!name) return;
+          if (typeof gtag === 'function') {
+            gtag('event', name, { location: window.location.pathname });
+          }
+        });
       })();
     </script>
   </body>
