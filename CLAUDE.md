@@ -155,6 +155,7 @@ Defined in `tsconfig.json`. Use them in imports — do not write relative paths 
 
 - Palette is fixed: teal `#1A9FA5`, yellow `#FBAA19`, cream `#FBF8F3`, paper `#FFFFFF`, ink `#0F1419` / `#3A4348`, border `#E8E2D5`. All in `tailwind.config.mjs` and CSS variables in `src/styles/global.css`.
 - Yellow is a highlight, never a CTA. One yellow element per section, maximum.
+- **Solid buttons use `bg-teal-700` (`#105F63`), not `bg-teal`.** Cream on the base teal `#1A9FA5` measures **3.03:1**, below the WCAG AA minimum of 4.5:1 for normal text — Lighthouse flagged it from launch. `teal-700` gives 6.98:1; `teal-600` was rejected because it lands on exactly 4.50 and any font-weight change would fail again. Hover deepens to `teal-900`. The base teal `#1A9FA5` is unchanged everywhere else — links, eyebrows, rules, borders, focus rings and the theme-color meta — so the palette itself is untouched; only the solid fill behind light text moved. Applied 12 Sep 2026 with the owner's approval. The same rule covers the tag pills' `hover:bg-teal-700`.
 - No shadows on cards — use `border border-border` (a 1px warm-grey border).
 - No gradients. The only exception is the 10% teal overlay applied to imagery via `.image-overlay` in `global.css`.
 - Section rhythm: alternate `<Section background="cream">` and `<Section background="paper">`. Padding is `py-16 md:py-24`.

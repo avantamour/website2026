@@ -61,7 +61,7 @@ const published = d.publishDate ? d.publishDate.toISOString() : undefined;
         <ul class="mt-4 flex flex-wrap gap-3">
           {d.services.map((s) => (
             <li>
-              <a href={`/services/${s}/`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal hover:text-cream">
+              <a href={`/services/${s}/`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal-700 hover:text-cream">
                 {s.replace(/-/g, ' ')}
               </a>
             </li>
