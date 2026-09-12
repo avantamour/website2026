@@ -62,7 +62,7 @@ const {
     <JsonLd type={jsonLdType} faqs={faqs} {...jsonLdProps} />
     <slot name="head" />
 
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-R9K61CYZV3"></script>
+    {/* Consent Mode v2 defaults. This block must stay FIRST: every Google tag below (GTM and gtag.js) reads these defaults from dataLayer before it fires anything. */}
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -79,8 +79,22 @@ const {
         var saved = localStorage.getItem('aa_consent');
         if (saved) gtag('consent', 'update', JSON.parse(saved));
       } catch (e) {}
+    </script>
+
+    {/* Google Tag Manager (GTM-NRT6QM3S) carries the Google Ads conversion and remarketing tags. GA4 is NOT configured inside GTM; it is fired by gtag.js below. Google's <noscript> iframe is deliberately omitted because it cannot honour Consent Mode. See CLAUDE.md, "Analytics & consent". */}
+    <script is:inline>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-NRT6QM3S');
+    </script>
+
+    {/* GA4 (G-0GNHHLGV51). The ID lives here and in the config call below. */}
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-0GNHHLGV51"></script>
+    <script is:inline>
       gtag('js', new Date());
-      gtag('config', 'G-R9K61CYZV3', { anonymize_ip: true });
+      gtag('config', 'G-0GNHHLGV51', { anonymize_ip: true });
     </script>
   </head>
   <body>
@@ -101,7 +115,7 @@ const {
     >
       <div class="mx-auto max-w-container px-6 py-4 md:px-8 md:py-5 flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
         <p class="text-small text-ink-soft flex-1 m-0">
-          We use analytics cookies to understand how the site is used and improve it. You can accept or decline at any time.
+          We use cookies for analytics and to measure our advertising, so we can understand and improve the site. Accept or decline at any time.
         </p>
         <div class="flex gap-3 shrink-0">
           <button
