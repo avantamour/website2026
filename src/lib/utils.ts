@@ -28,7 +28,15 @@ export function absoluteUrl(path: string, site: string): string {
   return `${base}${rel}`;
 }
 
+/**
+ * Truncate on a word boundary. The previous version cut mid-word, which is how
+ * every Google snippet and LinkedIn share of the home page ended in
+ * "…ethnographic resear" until September 2026.
+ */
 export function truncate(text: string, max = 160): string {
   if (text.length <= max) return text;
-  return text.slice(0, max - 1).trimEnd() + '…';
+  const slice = text.slice(0, max - 1);
+  const lastSpace = slice.lastIndexOf(' ');
+  const cut = lastSpace > max * 0.6 ? slice.slice(0, lastSpace) : slice;
+  return cut.replace(/[\s,;:.\-—–]+$/, '') + '…';
 }

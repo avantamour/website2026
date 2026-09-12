@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import EnquiryCTA from '@components/content/EnquiryCTA.astro';
 
 interface FAQItem {
   question: string;
@@ -16,8 +17,22 @@ interface Props {
   jsonLdType?: 'website' | 'about' | 'service' | 'article' | 'case-study' | 'glossary';
   jsonLdProps?: Record<string, unknown>;
   faqs?: FAQItem[];
+  /** Set false on legal pages, where an enquiry pitch is the wrong note. */
+  cta?: boolean;
+  ctaQuestion?: string;
 }
-const { title, description, eyebrow, intro, breadcrumbs, jsonLdType = 'website', jsonLdProps, faqs } = Astro.props;
+const {
+  title,
+  description,
+  eyebrow,
+  intro,
+  breadcrumbs,
+  jsonLdType = 'website',
+  jsonLdProps,
+  faqs,
+  cta = true,
+  ctaQuestion,
+} = Astro.props;
 ---
 <BaseLayout title={title} description={description} jsonLdType={jsonLdType} jsonLdProps={jsonLdProps} faqs={faqs}>
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
@@ -37,4 +52,6 @@ const { title, description, eyebrow, intro, breadcrumbs, jsonLdType = 'website',
       </article>
     </Container>
   </section>
+
+  {cta && <EnquiryCTA question={ctaQuestion} />}
 </BaseLayout>

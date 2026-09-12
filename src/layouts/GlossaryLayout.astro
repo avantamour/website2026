@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import EnquiryCTA from '@components/content/EnquiryCTA.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -22,7 +23,7 @@ const d = entry.data;
     <Container>
       <Breadcrumbs items={[
         { label: 'Home', href: '/' },
-        { label: 'Glossary', href: '/glossary' },
+        { label: 'Glossary', href: '/glossary/' },
         { label: d.title },
       ]} />
       <p class="eyebrow text-teal mt-6">Glossary · {d.category}</p>
@@ -45,7 +46,7 @@ const d = entry.data;
           <ul class="flex flex-wrap gap-3">
             {related.map((r) => (
               <li>
-                <a href={`/glossary/${r.slug}`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal hover:text-cream">
+                <a href={`/glossary/${r.slug}/`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal-700 hover:text-cream">
                   {r.data.title}
                 </a>
               </li>
@@ -55,4 +56,6 @@ const d = entry.data;
       )}
     </Container>
   </section>
+
+  <EnquiryCTA question="Need this run with your own customers?" />
 </BaseLayout>

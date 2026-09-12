@@ -1,0 +1,33 @@
+---
+import Container from '@components/ui/Container.astro';
+import { BRAND } from '@lib/constants';
+
+/**
+ * The closing ask. Rendered at the foot of every content layout so a reader who
+ * arrived from search — which is how most of them arrive — is never left without
+ * a next step. Until Sep 2026 only service pages carried a CTA; 45 of 53 pages
+ * ended without one.
+ *
+ * `question` is the one line above the button and should match the page type:
+ * a case study asks something different from a glossary term.
+ */
+interface Props {
+  question?: string;
+  class?: string;
+}
+const { question = 'Wondering if this is right for your question?', class: className = '' } = Astro.props;
+---
+<section class:list={['bg-cream py-12 md:py-16 border-t border-border', className]}>
+  <Container class="text-center">
+    <p class="font-display text-h1 md:text-[2rem] text-ink max-w-2xl mx-auto">{question}</p>
+    <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/contact/" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 no-underline font-medium hover:bg-teal-900 transition-colors">
+        Talk to {BRAND.founder.firstName} →
+      </a>
+      <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" class="text-small text-ink-soft hover:text-teal">
+        or message on WhatsApp
+      </a>
+    </div>
+    <p class="mt-5 text-small text-ink-soft">We reply within {BRAND.replyWithin}.</p>
+  </Container>
+</section>

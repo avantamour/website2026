@@ -7,6 +7,26 @@ export const BRAND = {
   whatsapp: 'https://wa.me/919831397530',
   locations: ['Delhi', 'Kolkata'] as const,
 
+  /**
+   * How quickly we promise to reply. Chosen by Arrpita on 12 Sep 2026.
+   * Used on the contact page (before submitting) and the thank-you page (after),
+   * which previously contradicted each other. Never hardcode this string.
+   */
+  replyWithin: 'one working day',
+
+  /**
+   * Canonical engagement facts, in Arrpita's own words (content worksheet, 26 May 2026).
+   * Every page, FAQ answer and FAQPage JSON-LD block must derive from these — the site
+   * previously gave two-to-three-times different answers depending on where you landed.
+   */
+  engagement: {
+    typicalDuration: 'two to three weeks',
+    typicalSample: 'around 30 participants',
+    diaryLength: 'five to ten days',
+    diarySample: '50 customers',
+    multiCity: '100 in-home ethnographies across 13 cities over eight weeks',
+  },
+
   h1: 'Ethnographic consumer research for D2C and digital-first brands',
   subLine:
     'Founder-led ethnography for Indian D2C brands. What consumers actually do — not just what they say.',
@@ -25,8 +45,10 @@ export const BRAND = {
   audience: 'D2C and digital-first brands in India',
   methodSignature: 'Ethnography',
 
+  // Kept under 155 characters so Google and LinkedIn never truncate it mid-word,
+  // and ending with the locked tagline verbatim.
   defaultDescription:
-    'Avant Amour is a founder-led qualitative research firm in India. We help D2C and digital-first brands understand consumer behaviour through ethnographic research — in-home, mobile, and WhatsApp diary studies.',
+    'Founder-led ethnographic research firm in Delhi and Kolkata, for D2C brands in India. What consumers actually do. Not just what they say.',
 
   social: {
     linkedin: 'https://www.linkedin.com/company/avantamour/',
@@ -60,29 +82,33 @@ export const COLORS = {
   border: '#E8E2D5',
 } as const;
 
+// Hrefs carry a trailing slash because Netlify 301-redirects the slash-less form.
+// Without it every internal click costs a redirect hop and Google files the
+// slash-less URL under "page with redirect" (45 of them as of Sep 2026).
 export const NAV = [
-  { label: 'Services', href: '/services' },
-  { label: 'For D2C Brands', href: '/for-d2c-brands' },
-  { label: 'Methodology', href: '/methodology' },
-  { label: 'Case Studies', href: '/case-studies' },
-  { label: 'Insights', href: '/insights' },
-  { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services/' },
+  { label: 'For D2C Brands', href: '/for-d2c-brands/' },
+  { label: 'Methodology', href: '/methodology/' },
+  { label: 'Case Studies', href: '/case-studies/' },
+  { label: 'Insights', href: '/insights/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Contact', href: '/contact/' },
 ] as const;
 
 export const FOOTER_LINKS = {
   explore: [
-    { label: 'Services', href: '/services' },
-    { label: 'Case Studies', href: '/case-studies' },
-    { label: 'Methodology', href: '/methodology' },
-    { label: 'Glossary', href: '/glossary' },
+    { label: 'Services', href: '/services/' },
+    { label: 'Case Studies', href: '/case-studies/' },
+    { label: 'Methodology', href: '/methodology/' },
+    { label: 'Glossary', href: '/glossary/' },
   ],
   company: [
-    { label: 'About', href: '/about' },
-    { label: 'For D2C Brands', href: '/for-d2c-brands' },
-    { label: 'Insights', href: '/insights' },
-    { label: 'Contact', href: '/contact' },
+    { label: 'About', href: '/about/' },
+    { label: 'For D2C Brands', href: '/for-d2c-brands/' },
+    { label: 'Insights', href: '/insights/' },
+    { label: 'Contact', href: '/contact/' },
   ],
   legal: [
-    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Privacy Policy', href: '/privacy/' },
   ],
 } as const;

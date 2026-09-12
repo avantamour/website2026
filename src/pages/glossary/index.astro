@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
+import EnquiryCTA from '@components/content/EnquiryCTA.astro';
 import { getCollection } from 'astro:content';
 
 const entries = (await getCollection('glossary', ({ data }) => !data.draft))
@@ -44,7 +45,7 @@ const categoryLabel: Record<string, string> = {
       <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
         {entries.map((e) => (
           <li>
-            <a href={`/glossary/${e.slug}`} class="text-body text-ink hover:text-teal no-underline">
+            <a href={`/glossary/${e.slug}/`} class="text-body text-ink hover:text-teal no-underline">
               {e.data.title}
             </a>
           </li>
@@ -59,7 +60,7 @@ const categoryLabel: Record<string, string> = {
             <ul class="space-y-2">
               {list.map((e) => (
                 <li>
-                  <a href={`/glossary/${e.slug}`} class="text-body text-ink hover:text-teal no-underline">
+                  <a href={`/glossary/${e.slug}/`} class="text-body text-ink hover:text-teal no-underline">
                     {e.data.title}
                   </a>
                 </li>
@@ -70,4 +71,6 @@ const categoryLabel: Record<string, string> = {
       </div>
     </Container>
   </section>
+
+  <EnquiryCTA question="Need one of these run with your own customers?" />
 </BaseLayout>

@@ -1,17 +1,27 @@
 ---
 import { NAV } from '@lib/constants';
 const pathname = Astro.url.pathname.replace(/\/$/, '');
+// NAV hrefs carry a trailing slash; strip it here so the active-state comparison
+// works whichever form the browser is showing.
+const normalise = (href: string) => href.replace(/\/$/, '');
+// The header CTA button only appears at xl (1280px+) — below that there is not
+// enough room for the logo lockup, six labels and a button without the wordmark
+// being squeezed into the nav. So Contact stays in the desktop list and hides
+// itself at xl, where the button takes over. Measured at 1024: 945px available,
+// 848px used with Contact and no button; at 1280: 1136px available, 1022px used
+// with the button and no Contact link.
 ---
-<nav aria-label="Primary" class="hidden md:block">
-  <ul class="flex items-center gap-7 text-small">
+<nav aria-label="Primary" class="hidden lg:block">
+  <ul class="flex items-center gap-5 xl:gap-7 text-small">
     {NAV.map((item) => {
-      const active = pathname === item.href || pathname.startsWith(item.href + '/');
+      const href = normalise(item.href);
+      const active = pathname === href || pathname.startsWith(href + '/');
       return (
-        <li>
+        <li class:list={[item.href === '/contact/' ? 'xl:hidden' : '']}>
           <a
             href={item.href}
             class:list={[
-              'no-underline text-ink hover:text-teal transition-colors',
+              'no-underline text-ink hover:text-teal transition-colors whitespace-nowrap',
               active ? 'text-teal' : '',
             ]}
             aria-current={active ? 'page' : undefined}
@@ -24,7 +34,7 @@ const pathname = Astro.url.pathname.replace(/\/$/, '');
   </ul>
 </nav>
 
-<details class="md:hidden relative">
+<details class="lg:hidden relative">
   <summary class="list-none cursor-pointer text-small font-medium text-ink select-none px-2 py-1 border border-border" aria-label="Open menu">
     Menu
   </summary>

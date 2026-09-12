@@ -1,8 +1,8 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
 import FAQ from '@components/content/FAQ.astro';
+import { BRAND } from '@lib/constants';
 
-// PLACEHOLDER: FAQ to be edited by Arrpita
 const faqs = [
   {
     question: "What does a project cost?",
@@ -10,11 +10,11 @@ const faqs = [
   },
   {
     question: "How long until we have findings?",
-    answer: "Four to eight weeks for most ethnography or diary projects. Diagnostic sprints can deliver in two weeks. The scoping conversation gives you an exact timeline.",
+    answer: `Most projects run ${BRAND.engagement.typicalDuration}. A multi-city study — ${BRAND.engagement.multiCity}, for instance — takes longer. A WhatsApp diary study runs ${BRAND.engagement.diaryLength}. The scoping conversation gives you an exact timeline.`,
   },
   {
     question: "How many customers will you talk to?",
-    answer: "Eight to twelve for most projects, occasionally up to fifteen. Saturation — not statistical sampling — drives the number. Qualitative work plateaus quickly.",
+    answer: `${BRAND.engagement.typicalSample[0].toUpperCase() + BRAND.engagement.typicalSample.slice(1)} for most projects, though it depends on the research question — a WhatsApp diary study might run with ${BRAND.engagement.diarySample}. Saturation, not statistical sampling, drives the number.`,
   },
   {
     question: "Do you sign NDAs?",
@@ -33,9 +33,8 @@ const faqs = [
   intro="There comes a point when analytics stop being enough. Cohort drop-offs and funnel charts can tell you what happened. They cannot tell you why. This page is for the founder standing at that wall."
   breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'For D2C Brands' }]}
   faqs={faqs}
+  ctaQuestion="Tell us about the question keeping you up at night."
 >
-  <!-- PLACEHOLDER: to be replaced with final copy -->
-
   <p>
     You've shipped the product. The dashboards are wired up. Mixpanel and a SQL query can answer most questions inside the funnel. But the questions outside the funnel — the ones that change your roadmap, your pricing, your packaging copy — those need a different instrument.
   </p>
@@ -60,17 +59,14 @@ const faqs = [
     Most agency research is built for buyers at large companies — multi-stage approvals, methodologies that span months, decks that are designed to justify themselves. That model doesn't fit a D2C founder who needs to make a decision by the end of the quarter.
   </p>
   <p>
-    Avant Amour is built the opposite way. One senior researcher (the founder) runs the project end-to-end. Engagements are four to eight weeks, scoped on a one-pager. The output is a point of view, not a slide template. You can ask follow-up questions on WhatsApp for thirty days after delivery.
+    Avant Amour is built the opposite way. One senior researcher (the founder) runs the project end-to-end. Engagements are {BRAND.engagement.typicalDuration} for a focused study, longer for multi-city fieldwork, scoped on a one-pager. The output is a point of view, not a slide template. You can ask follow-up questions on WhatsApp for thirty days after delivery.
   </p>
 
   <h2>Engagement models</h2>
   <p>
-    Project-based for a specific question (most common). Embedded research retainer for brands running continuous research alongside product. Diagnostic sprints for a narrow, time-boxed question — typically a two-week run. <!-- PLACEHOLDER: Arrpita to add pricing bands. -->
+    Project-based for a specific question (most common). Embedded research retainer for brands running continuous research alongside product. Diagnostic sprints for a narrow, time-boxed question. <!-- PLACEHOLDER: Arrpita to add pricing bands. -->
   </p>
 
   <FAQ faqs={faqs} />
 
-  <p class="mt-12">
-    <a href="/contact" class="inline-flex items-center bg-teal text-cream px-6 py-3 no-underline">Tell us about the question →</a>
-  </p>
 </PageLayout>

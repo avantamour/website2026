@@ -1,0 +1,11 @@
+# Netlify redirects. Both of these were live 404s drawing search impressions
+# (Search Console, Sep 2026): /contactus is a mistyped contact URL people and
+# crawlers reach for, and /blog is the pre-launch path from before the section
+# was renamed to /insights.
+
+/contactus      /contact/     301
+/contact-us     /contact/     301
+/blog           /insights/    301
+# Old post slugs do not map one-to-one onto the current insights slugs, so send
+# them all to the index rather than to a URL that would 404 after a second hop.
+/blog/*         /insights/    301

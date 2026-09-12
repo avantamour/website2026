@@ -5,7 +5,7 @@ import { BRAND } from '@lib/constants';
 ---
 <header class="bg-cream border-b border-border/60">
   <Container class="flex items-center justify-between py-4 md:py-5">
-    <a href="/" class="flex items-center gap-3 no-underline" aria-label={`${BRAND.name} home`}>
+    <a href="/" class="flex items-center gap-3 no-underline shrink-0" aria-label={`${BRAND.name} home`}>
       <img
         src="/logo-mark.png"
         alt="Avant Amour"
@@ -15,8 +15,16 @@ import { BRAND } from '@lib/constants';
         loading="eager"
         decoding="async"
       />
-      <span class="font-display text-h3 text-ink leading-none">{BRAND.name}</span>
+      <span class="font-display text-h3 text-ink leading-none whitespace-nowrap">{BRAND.name}</span>
     </a>
-    <Navigation />
+    <div class="flex items-center gap-6">
+      <Navigation />
+      <a
+        href="/contact/"
+        class="hidden xl:inline-flex items-center bg-teal-700 text-cream px-4 py-2 text-small font-medium no-underline hover:bg-teal-900 transition-colors shrink-0 whitespace-nowrap"
+      >
+        Talk to {BRAND.founder.firstName} →
+      </a>
+    </div>
   </Container>
 </header>

@@ -11,10 +11,9 @@ const description = `Founded by ${BRAND.founder.firstName} (QRCA member, ${BRAND
   eyebrow="About"
   intro="Avant Amour is a founder-led qualitative research firm. Every engagement is designed and led personally by Arrpita, drawing on a vetted network of senior specialists when a project calls for them — senior attention from first call to debrief, never a junior fronting the work."
   breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
+  ctaQuestion="Want to talk a question through with Arrpita?"
   jsonLdType="about"
 >
-  <!-- PLACEHOLDER: to be replaced with final copy -->
-
   <section class="not-prose grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-14">
     <div class="md:col-span-4">
       <figure class="border border-border bg-cream overflow-hidden max-w-sm md:max-w-none mx-auto md:mx-0">
@@ -85,6 +84,6 @@ const description = `Founded by ${BRAND.founder.firstName} (QRCA member, ${BRAND
 
   <h2>Working together</h2>
   <p>
-    Most engagements run four to eight weeks. We start with a thirty-minute call to make sure ethnography is the right method for your question. If it is not, we will say so and point you to who can help. If it is, we will scope the project in one page and start within ten days.
+    Most engagements run {BRAND.engagement.typicalDuration}. We start with a thirty-minute call to make sure ethnography is the right method for your question. If it is not, we will say so and point you to who can help. If it is, we will scope the project in one page and start within ten days.
   </p>
 </PageLayout>

@@ -1,30 +1,59 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
+import { BRAND } from '@lib/constants';
 ---
 <BaseLayout
   title="Thank you"
-  description="Thanks for getting in touch — we'll reply within one business day."
+  description={`Thanks for getting in touch — we'll reply within ${BRAND.replyWithin}.`}
   noindex={true}
 >
   <section class="bg-cream pt-12 md:pt-16 pb-16 md:pb-24 border-b border-border">
     <Container>
       <p class="eyebrow text-teal">Message sent</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
-        Thanks — we'll reply within <span class="yellow-underline">one business day</span>.
+        Thanks — we'll reply within <span class="yellow-underline">{BRAND.replyWithin}</span>.
       </h1>
       <p class="mt-6 text-body text-ink-soft max-w-prose">
-        Your enquiry is on its way. If it's urgent, you can also reach us on WhatsApp using the button in the corner.
+        Your enquiry is on its way to {BRAND.email}. If it's urgent, message {BRAND.founder.firstName} on WhatsApp using the button in the corner.
+      </p>
+      <p class="mt-4 text-small text-ink-soft max-w-prose">
+        If you don't hear from us, check your spam folder and add {BRAND.email} to your contacts.
       </p>
       <p class="mt-8">
-        <a href="/" class="inline-flex items-center bg-teal text-cream px-6 py-3 font-medium hover:bg-teal-600 no-underline">
+        <a href="/" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium hover:bg-teal-900 no-underline">
           ← Back home
         </a>
       </p>
     </Container>
   </section>
 
+  {/*
+    generate_lead fires only after a genuine submission. The page returns 200 on a
+    bare GET, so an unguarded event counted refreshes, back-button returns, bookmarks
+    and any bot that executes JS — inflating the only conversion number we have.
+    Netlify posts the form and redirects here, so the referrer is the contact page.
+  */}
   <script is:inline>
-    if (typeof gtag === 'function') gtag('event', 'generate_lead', { method: 'form' });
+    (function () {
+      try {
+        // A referrer survives a reload — it is stored on the history entry, not
+        // recomputed — so the referrer test alone would still count refreshes and
+        // back-button returns. Only a fresh navigation counts.
+        var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+        if (nav && nav.type !== 'navigate') return;
+
+        var ref = document.referrer || '';
+        if (!ref) return;
+        var url = new URL(ref);
+        if (url.origin !== window.location.origin) return;
+        if (!/^\/contact\/?$/.test(url.pathname)) return;
+      } catch (e) {
+        return;
+      }
+      if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', { method: 'form' });
+      }
+    })();
   </script>
 </BaseLayout>
