@@ -8,7 +8,7 @@ Founder-led qualitative research firm in India. Marketing site at https://avanta
 - **Tailwind CSS 3**
 - **MDX** for content collections
 - **TypeScript** strict
-- **Cloudflare Pages** (build output: `dist/`)
+- **Netlify** (build output: `dist/`)
 
 ## Locked positioning
 
@@ -28,7 +28,7 @@ npm run check    # typecheck (astro check)
 
 - `src/content/services/*.mdx` — service definitions
 - `src/content/case-studies/*.mdx` — anonymised engagements
-- `src/content/blog/*.mdx` — essays in Arpita's voice
+- `src/content/insights/*.mdx` — essays in Arrpita's voice
 - `src/content/glossary/*.mdx` — definition-first entries (heavily citable by LLMs)
 
 Mark all placeholder copy with `<!-- PLACEHOLDER: to be replaced with final copy -->`.
@@ -51,10 +51,10 @@ Mark all placeholder copy with `<!-- PLACEHOLDER: to be replaced with final copy
 
 ## Deploy
 
-Cloudflare Pages, connected to GitHub.
+Netlify, connected to GitHub (`avantamour/website2026`; builds from `main`).
 
 - Build command: `npm run build`
 - Output: `dist/`
-- Custom domain: `avantamour.in` (configure DNS after first successful build)
+- Custom domain: `avantamour.in` (live; `www` 301s to the apex)
 
-No Cloudflare Functions, KV, or D1 for v1. Static only.
+No serverless functions for v1. Static only; the contact form uses Netlify Forms.
