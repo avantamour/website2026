@@ -4,6 +4,14 @@ import { absoluteUrl, truncate } from '@lib/utils';
 
 interface Props {
   title: string;
+  /**
+   * Optional search title, used VERBATIM as <title>, og:title and twitter:title
+   * (no " | Avant Amour" suffix is appended). Lets a page carry the words a
+   * buyer searches without changing its visible H1 — several H1s are locked by
+   * the founding brief. Baseline #4 found pages ranking in the top three with
+   * zero clicks under brand-only or bare-noun titles.
+   */
+  seoTitle?: string;
   description?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
@@ -14,6 +22,7 @@ interface Props {
 
 const {
   title,
+  seoTitle,
   description = BRAND.defaultDescription,
   ogImage = '/og-default.jpg',
   ogType = 'website',
@@ -22,7 +31,7 @@ const {
   modifiedTime,
 } = Astro.props;
 
-const pageTitle = title === BRAND.name ? BRAND.name : `${title} | ${BRAND.name}`;
+const pageTitle = seoTitle ?? (title === BRAND.name ? BRAND.name : `${title} | ${BRAND.name}`);
 const desc = truncate(description, 160);
 const canonical = absoluteUrl(Astro.url.pathname, BRAND.url);
 const ogImageUrl = absoluteUrl(ogImage, BRAND.url);

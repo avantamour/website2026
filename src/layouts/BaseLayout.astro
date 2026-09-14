@@ -12,6 +12,8 @@ interface FAQItem {
 }
 interface Props {
   title: string;
+  /** Verbatim <title> override — see SEO.astro. */
+  seoTitle?: string;
   description?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
@@ -25,6 +27,7 @@ interface Props {
 
 const {
   title,
+  seoTitle,
   description,
   ogImage,
   ogType,
@@ -52,6 +55,7 @@ const {
 
     <SEO
       title={title}
+      seoTitle={seoTitle}
       description={description}
       ogImage={ogImage}
       ogType={ogType}

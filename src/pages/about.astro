@@ -3,10 +3,12 @@ import PageLayout from '@layouts/PageLayout.astro';
 import { BRAND } from '@lib/constants';
 
 const title = 'About Avant Amour';
-const description = `Founded by ${BRAND.founder.firstName} (QRCA member, ${BRAND.founder.yearsExperience} yrs). A founder-led qualitative research firm in India.`;
+const seoTitle = `${BRAND.founder.fullName}, Qualitative Researcher | ${BRAND.name}`;
+const description = `Avant Amour is founded and led by ${BRAND.founder.fullName} — ${BRAND.founder.yearsExperience} years in qualitative research, QRCA member, working from Delhi and Kolkata.`;
 ---
 <PageLayout
   title={title}
+  seoTitle={seoTitle}
   description={description}
   eyebrow="About"
   intro="Avant Amour is a founder-led qualitative research firm. Every engagement is designed and led personally by Arrpita, drawing on a vetted network of senior specialists when a project calls for them — senior attention from first call to debrief, never a junior fronting the work."
