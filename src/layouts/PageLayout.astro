@@ -10,6 +10,8 @@ interface FAQItem {
 }
 interface Props {
   title: string;
+  /** Verbatim <title> override — see SEO.astro. The visible H1 still uses `title`. */
+  seoTitle?: string;
   description?: string;
   eyebrow?: string;
   intro?: string;
@@ -23,6 +25,7 @@ interface Props {
 }
 const {
   title,
+  seoTitle,
   description,
   eyebrow,
   intro,
@@ -34,7 +37,7 @@ const {
   ctaQuestion,
 } = Astro.props;
 ---
-<BaseLayout title={title} description={description} jsonLdType={jsonLdType} jsonLdProps={jsonLdProps} faqs={faqs}>
+<BaseLayout title={title} seoTitle={seoTitle} description={description} jsonLdType={jsonLdType} jsonLdProps={jsonLdProps} faqs={faqs}>
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
     <Container>
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}

@@ -2,6 +2,8 @@ import { defineCollection, z } from 'astro:content';
 
 const base = z.object({
   title: z.string(),
+  // Verbatim <title> for search results; the visible H1 keeps `title`. See SEO.astro.
+  seoTitle: z.string().optional(),
   description: z.string(),
   publishDate: z.coerce.date().optional(),
   updatedDate: z.coerce.date().optional(),

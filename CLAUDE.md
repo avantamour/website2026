@@ -100,6 +100,8 @@ Every page route renders through `BaseLayout.astro`, which slots in `SEO.astro` 
 
 `Breadcrumbs.astro` emits both the visual nav and a `BreadcrumbList` JSON-LD block. Use it on every non-homepage route.
 
+**Search titles are separate from visible headlines.** `title` drives the H1, breadcrumbs and `Article`/`Service` JSON-LD; the optional `seoTitle` is used **verbatim** as `<title>`, `og:title` and `twitter:title` — no ` | Avant Amour` suffix is appended, so include it yourself where wanted. It is accepted by `BaseLayout`, `PageLayout`, every content layout, and as a frontmatter field in the shared base schema (`src/content/config.ts`). Introduced 14 Sep 2026 because SEO baseline #4 found pages ranking in the top three with zero clicks under brand-only or bare-noun titles ("Avant Amour", "Services", "About Avant Amour | Avant Amour"), and several H1s are locked by the founding brief so they could not simply be rewritten. Keep search titles to ~60 characters and meta descriptions under 155 — `truncate()` cuts longer ones on a word boundary, but a cut description still ends in "…" in the results page. Title wording targets the keyword workbook (Dropbox, `Avant_Amour_Keyword_Research.xlsx`), which is the source of truth for query targets.
+
 ## FAQ system
 
 The visible FAQ accordion and the `FAQPage` structured data come from a single source so they cannot drift apart.
