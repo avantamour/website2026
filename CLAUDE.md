@@ -56,7 +56,7 @@ Spelling: **double `r`** ("Arrpita"). The single-`r` "Arpita" is a real, recurri
 
 Swapping the photo means replacing the file at the same path; the asset URL is hardcoded as `/arrpita.jpg` in both consumers.
 
-**Testimonials** live in `BRAND.testimonials` and render through `src/components/content/Testimonials.astro` on the homepage (just before `ContactCTA`), `/for-d2c-brands/` (the paid-search landing page) and `/about/`. They are LinkedIn recommendations of Arrpita, so three rules hold: (1) quotes are **verbatim** apart from correcting "Arpita" → "Arrpita" and obvious typos, and a trailing "…" marks where the recommendation continues — never finish a sentence nobody has seen; (2) the block is framed around **Arrpita** ("What people who've worked with Arrpita say") and each `relationship` describes the tie to her, because recommendations can predate Avant Amour — the same prior-work rule as the Voice rules below; (3) **no `Review` or `AggregateRating` JSON-LD** — Google treats a business's reviews of itself on its own site as self-serving and ineligible for review snippets. Keep to a few placements; two quotes repeated on every page read as thin. Farida Hussain is CMO of USV — a named prior-research client — while the health & nutrition case study is anonymised, so her quote must never appear on that case study page (together they would name the brand behind the 30% result).
+**Testimonials** live in `BRAND.testimonials` and render through `src/components/content/Testimonials.astro` on the homepage (just before `ContactCTA`), `/for-d2c-brands/` (the paid-search landing page) and `/about/`. They are LinkedIn recommendations of Arrpita, so three rules hold: (1) quotes are **verbatim as supplied by the owner** (the full text came in "Website content_Sept 15.docx", 15 Sep 2026), correcting only "Arpita" → "Arrpita" and obvious typos — never complete, embellish or tidy a quote, and mark any cut with "…"; (2) the block is framed around **Arrpita** ("What people who've worked with Arrpita say") and each `relationship` describes the tie to her, because recommendations can predate Avant Amour — the same prior-work rule as the Voice rules below; (3) **no `Review` or `AggregateRating` JSON-LD** — Google treats a business's reviews of itself on its own site as self-serving and ineligible for review snippets. Keep to a few placements; two quotes repeated on every page read as thin. Farida Hussain is CMO of USV — a named prior-research client — while the health & nutrition case study is anonymised, so her quote must never appear on that case study page or on the case-studies index (together they would name the brand behind the 30% result).
 
 `NAV` and `FOOTER_LINKS` are also in `constants.ts`. Adding a route to the site means adding it here too.
 
@@ -68,7 +68,7 @@ Five collections defined in `src/content/config.ts`:
 |---|---|---|
 | `services` | `src/content/services/*.mdx` | `methodologyType`, `relatedServices` (service slugs), `order`, `summary` |
 | `insights` | `src/content/insights/*.mdx` | `publishDate` (required), `author`, `tags`, `glossaryRefs` (glossary slugs), `relatedPosts` (insights slugs) |
-| `case-studies` | `src/content/case-studies/*.mdx` | `industry`, `metric`, `services` (service slugs) |
+| `case-studies` | `src/content/case-studies/*.mdx` | `industry`, `metric?` (an outcome, shown with ↑), `scope?` (what was studied, for work with no outcome number — shown without the arrow), `services` (service slugs), `summary?` |
 | `glossary` | `src/content/glossary/*.mdx` | `category`, `relatedTerms` (glossary slugs) |
 | `pages` | `src/content/pages/*.mdx` (reserved; directory not yet created) | (base only) |
 
@@ -87,6 +87,8 @@ Spec rules to maintain in content:
 - Every insights post: ≥2 entries in `glossaryRefs`.
 - Every service: ≥1 case study tagged with this service in its `services` array.
 - Every case study: list every service used in its `services` array.
+
+**Images in content** live under `src/assets/<collection>/<topic>/` (lowercase paths) and render through `src/components/content/Figure.astro`, imported in the MDX file. `astro:assets` resizes them to WebP at build, so drop in originals rather than hand-optimising. Pass `photo` for photographs (adds the 10% teal `.image-overlay`) and `zoom` for text-dense diagrams (adds an "Open full size" link). A diagram that arrives as a broken or unreadable image can be rebuilt in markup instead — see `SymbolicCapitalFunnel.astro`. Do not publish third-party maps or images that carry another site's watermark or copyright line, or photos of identifiable children without documented consent.
 
 **Glossary categories are dual-edged.** The enum values (`'method' | 'concept' | 'role' | 'deliverable' | 'other'`) live in the Zod schema in `src/content/config.ts`, but their visible labels for the "By category" block (`Methods`, `Concepts`, `Roles`, `Deliverables`, `Other`) live in a separate `categoryLabel` map inside `src/pages/glossary/index.astro`. Adding a new category requires editing both files — if you forget the label map, the index page falls back to rendering the raw enum key.
 

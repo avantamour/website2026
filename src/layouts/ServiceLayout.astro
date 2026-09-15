@@ -68,9 +68,11 @@ const relatedServices = (d.relatedServices ?? [])
                 <a href={`/case-studies/${c.slug}/`} class="block border border-border bg-paper p-6 no-underline hover:border-teal transition-colors h-full">
                   <p class="eyebrow text-teal-700">{c.data.industry}</p>
                   <h3 class="mt-3 font-display font-medium text-h3 text-ink leading-snug">{c.data.title}</h3>
-                  <p class="mt-4 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
-                    <span aria-hidden="true">↑</span>{c.data.metric}
-                  </p>
+                  {(c.data.metric || c.data.scope) && (
+                    <p class="mt-4 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
+                      {c.data.metric && <span aria-hidden="true">↑</span>}{c.data.metric ?? c.data.scope}
+                    </p>
+                  )}
                 </a>
               </li>
             ))}

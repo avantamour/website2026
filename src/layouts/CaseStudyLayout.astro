@@ -41,9 +41,11 @@ const published = d.publishDate ? d.publishDate.toISOString() : undefined;
         {d.title}
       </h1>
       <p class="mt-6 text-body text-ink-soft max-w-prose">{d.description}</p>
-      <p class="mt-6 inline-flex items-center gap-3 border border-teal px-4 py-2 text-eyebrow uppercase tracking-eyebrow text-teal-700">
-        <span aria-hidden="true">↑</span>{d.metric}
-      </p>
+      {(d.metric || d.scope) && (
+        <p class="mt-6 inline-flex items-center gap-3 border border-teal px-4 py-2 text-eyebrow uppercase tracking-eyebrow text-teal-700">
+          {d.metric && <span aria-hidden="true">↑</span>}{d.metric ?? d.scope}
+        </p>
+      )}
     </Container>
   </section>
 

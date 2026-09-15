@@ -215,6 +215,19 @@
     text-decoration-color: var(--color-teal);
   }
 
+  /* Figures in content — see src/components/content/Figure.astro. */
+  .aa-figure {
+    margin-block: 2rem;
+    margin-inline: auto;
+  }
+
+  .aa-figure figcaption {
+    margin-top: 0.625rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-ink-soft);
+  }
+
   .yellow-underline {
     background-image: linear-gradient(transparent 65%, rgba(251, 170, 25, 0.45) 65%);
     background-repeat: no-repeat;

@@ -12,7 +12,7 @@ const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
 <BaseLayout
   title="Case Studies"
   seoTitle="Qualitative Research Case Studies, India | Avant Amour"
-  description="Anonymised qualitative research case studies — D2C, healthcare, and digital-first brands across India."
+  description="Ethnographic and qualitative research case studies from India — consumer health, household money, urban wellbeing and rural livelihoods."
 >
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
     <Container>
@@ -22,7 +22,7 @@ const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
         What the work looks like, anonymised.
       </h1>
       <p class="mt-6 text-body text-ink-soft max-w-prose">
-        Every engagement is confidential. Each case study describes the question, the method, and the outcome — without naming the brand. Where the work predates Avant Amour, it is {BRAND.founder.firstName}'s prior research.
+        Every engagement is confidential. Each case study describes the question, the method, and what we found — without naming the client. Where the work predates Avant Amour, it is {BRAND.founder.firstName}'s prior research.
       </p>
     </Container>
   </section>
@@ -36,9 +36,11 @@ const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
               <p class="eyebrow text-teal-700">{s.data.industry}</p>
               <h2 class="mt-3 font-display font-medium text-h2 leading-[1.15] text-ink">{s.data.title}</h2>
               <p class="mt-3 text-body text-ink-soft">{s.data.description}</p>
-              <p class="mt-6 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
-                <span aria-hidden="true">↑</span>{s.data.metric}
-              </p>
+              {(s.data.metric || s.data.scope) && (
+                <p class="mt-6 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
+                  {s.data.metric && <span aria-hidden="true">↑</span>}{s.data.metric ?? s.data.scope}
+                </p>
+              )}
             </a>
           </li>
         ))}
