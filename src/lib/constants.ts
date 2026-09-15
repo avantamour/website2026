@@ -47,14 +47,17 @@ export const BRAND = {
    * Verbatim except: "Arpita" → "Arrpita" (her name's correct spelling) and
    * "than" → "then". "…" marks where the recommendation continues on LinkedIn —
    * never complete a sentence we have not seen. Both may predate Avant Amour, so
-   * `relationship` describes the tie to Arrpita, never to the firm.
+   * `relationship` says who they are or how they know Arrpita — never a tie to the firm.
+   * Farida Hussain is CMO of USV (owner, 15 Sep 2026), one of Arrpita's named prior
+   * research clients. The health & nutrition case study is deliberately anonymised,
+   * so never place her quote on that page or name USV there.
    */
   testimonials: [
     {
       quote:
         'Arrpita was given a research project on ethnography and she has delivered the insights in the most scientific manner. Her ability to take the project to conclusion, understand the domain, understand behaviours and then connect the dots…',
       name: 'Farida Hussain',
-      relationship: 'Client',
+      relationship: 'Chief Marketing Officer, USV',
       year: 2025,
     },
     {
