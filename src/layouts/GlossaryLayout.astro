@@ -27,7 +27,7 @@ const d = entry.data;
         { label: 'Glossary', href: '/glossary/' },
         { label: d.title },
       ]} />
-      <p class="eyebrow text-teal mt-6">Glossary · {d.category}</p>
+      <p class="eyebrow text-teal-700 mt-6">Glossary · {d.category}</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink">
         {d.title}
       </h1>
@@ -47,7 +47,7 @@ const d = entry.data;
           <ul class="flex flex-wrap gap-3">
             {related.map((r) => (
               <li>
-                <a href={`/glossary/${r.slug}/`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal-700 hover:text-cream">
+                <a href={`/glossary/${r.slug}/`} class="inline-flex items-center text-small text-teal-700 border border-teal/40 px-3 py-1 no-underline hover:bg-teal-700 hover:text-cream">
                   {r.data.title}
                 </a>
               </li>

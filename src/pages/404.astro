@@ -6,7 +6,7 @@ import { NAV } from '@lib/constants';
 <BaseLayout title="404 — Page not found" description="The page you were looking for does not exist." noindex={true}>
   <section class="bg-cream py-24 md:py-32 border-b border-border">
     <Container class="text-center">
-      <p class="eyebrow text-teal">404</p>
+      <p class="eyebrow text-teal-700">404</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl mx-auto">
         We could not find that page.
       </h1>
@@ -17,7 +17,7 @@ import { NAV } from '@lib/constants';
       <ul class="mt-10 flex flex-wrap items-center justify-center gap-3 text-small">
         {NAV.map((n) => (
           <li>
-            <a href={n.href} class="inline-flex items-center border border-border bg-paper px-4 py-2 text-ink hover:border-teal hover:text-teal no-underline">
+            <a href={n.href} class="inline-flex items-center border border-border bg-paper px-4 py-2 text-ink hover:border-teal hover:text-teal-700 no-underline">
               {n.label}
             </a>
           </li>

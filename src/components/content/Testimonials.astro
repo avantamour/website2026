@@ -1,0 +1,41 @@
+---
+import { BRAND } from '@lib/constants';
+
+/**
+ * Third-party proof, from BRAND.testimonials. Framed around Arrpita rather than
+ * the firm, because the recommendations may predate Avant Amour and prior work
+ * must never read as Avant Amour client work.
+ *
+ * Deliberately no Review / AggregateRating JSON-LD: Google treats a business's
+ * reviews of itself, published on its own site, as "self-serving" and
+ * ineligible for review snippets.
+ *
+ * `surface` is the background the block sits on; cards take the other one.
+ */
+interface Props {
+  surface?: 'cream' | 'paper';
+  class?: string;
+}
+const { surface = 'paper', class: className = '' } = Astro.props;
+const card = surface === 'paper' ? 'bg-cream' : 'bg-paper';
+---
+<div class:list={['testimonials', className]}>
+  <div class="eyebrow">In their words</div>
+  <h2 class="mt-3 font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+    What people who've worked with {BRAND.founder.firstName} say.
+  </h2>
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+    {BRAND.testimonials.map((t) => (
+      <figure class:list={['m-0 flex flex-col justify-between border border-border p-6 md:p-8', card]}>
+        <blockquote class="font-display text-h3 leading-snug">“{t.quote}”</blockquote>
+        <figcaption class="mt-6 pt-5 border-t border-border text-small">
+          <span class="block font-medium text-ink">{t.name}</span>
+          <span class="block text-ink-soft">{t.relationship} · {t.year}</span>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+  <div class="mt-5 text-small text-ink-soft">
+    From recommendations on <a href={BRAND.founder.linkedin} rel="noopener noreferrer" target="_blank" class="underline decoration-teal">{BRAND.founder.firstName}'s LinkedIn profile</a>.
+  </div>
+</div>

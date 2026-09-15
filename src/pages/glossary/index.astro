@@ -29,7 +29,7 @@ const categoryLabel: Record<string, string> = {
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
     <Container>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]} />
-      <p class="eyebrow text-teal mt-6">Glossary</p>
+      <p class="eyebrow text-teal-700 mt-6">Glossary</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
         A working glossary of qualitative research.
       </h1>
@@ -45,7 +45,7 @@ const categoryLabel: Record<string, string> = {
       <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
         {entries.map((e) => (
           <li>
-            <a href={`/glossary/${e.slug}/`} class="text-body text-ink hover:text-teal no-underline">
+            <a href={`/glossary/${e.slug}/`} class="text-body text-ink hover:text-teal-700 no-underline">
               {e.data.title}
             </a>
           </li>
@@ -56,11 +56,11 @@ const categoryLabel: Record<string, string> = {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
         {Object.entries(byCategory).map(([cat, list]) => (
           <div>
-            <p class="eyebrow text-teal mb-3">{categoryLabel[cat] ?? cat}</p>
+            <p class="eyebrow text-teal-700 mb-3">{categoryLabel[cat] ?? cat}</p>
             <ul class="space-y-2">
               {list.map((e) => (
                 <li>
-                  <a href={`/glossary/${e.slug}/`} class="text-body text-ink hover:text-teal no-underline">
+                  <a href={`/glossary/${e.slug}/`} class="text-body text-ink hover:text-teal-700 no-underline">
                     {e.data.title}
                   </a>
                 </li>

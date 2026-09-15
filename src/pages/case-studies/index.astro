@@ -17,7 +17,7 @@ const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
     <Container>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Case Studies' }]} />
-      <p class="eyebrow text-teal mt-6">Case Studies</p>
+      <p class="eyebrow text-teal-700 mt-6">Case Studies</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
         What the work looks like, anonymised.
       </h1>
@@ -33,17 +33,17 @@ const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
         {studies.map((s) => (
           <li>
             <a href={`/case-studies/${s.slug}/`} class="block border border-border bg-paper p-8 no-underline hover:border-teal transition-colors h-full">
-              <p class="eyebrow text-teal">{s.data.industry}</p>
+              <p class="eyebrow text-teal-700">{s.data.industry}</p>
               <h2 class="mt-3 font-display font-medium text-h2 leading-[1.15] text-ink">{s.data.title}</h2>
               <p class="mt-3 text-body text-ink-soft">{s.data.description}</p>
-              <p class="mt-6 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal border border-teal/40 px-3 py-1">
+              <p class="mt-6 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
                 <span aria-hidden="true">↑</span>{s.data.metric}
               </p>
             </a>
           </li>
         ))}
         {studies.length === 0 && (
-          <li class="text-ink-soft">More case studies coming soon. <a href="/contact/">Ask for examples on a call.</a></li>
+          <li class="text-ink-soft">More case studies coming soon. <a href="/contact/" class="underline decoration-teal">Ask for examples on a call.</a></li>
         )}
       </ul>
     </Container>

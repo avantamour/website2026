@@ -39,14 +39,14 @@ const services = [
             s.featured ? 'md:col-span-12 lg:col-span-6' : 'md:col-span-6 lg:col-span-3',
           ]}
         >
-          <p class="eyebrow text-teal mb-3">{s.featured ? 'Primary method' : 'Method'}</p>
+          <p class="eyebrow text-teal-700 mb-3">{s.featured ? 'Primary method' : 'Method'}</p>
           <h3 class:list={['font-display font-medium leading-[1.1] text-ink', s.featured ? 'text-[2rem] md:text-[2.5rem]' : 'text-h2']}>
             {s.name}
           </h3>
           <p class:list={['mt-4 text-ink-soft', s.featured ? 'text-body' : 'text-small']}>
             {s.blurb}
           </p>
-          <p class="mt-6 text-small font-medium text-teal underline underline-offset-4">Learn more →</p>
+          <p class="mt-6 text-small font-medium text-teal-700 underline underline-offset-4">Learn more →</p>
         </a>
       ))}
     </div>

@@ -18,7 +18,7 @@ const posts = (await getCollection('insights', ({ data }) => !data.draft))
           Notes from the field.
         </h2>
       </div>
-      <a href="/insights/" class="text-small font-medium text-teal no-underline hover:underline underline-offset-4">All posts →</a>
+      <a href="/insights/" class="text-small font-medium text-teal-700 no-underline hover:underline underline-offset-4">All posts →</a>
     </div>
 
     <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -27,7 +27,7 @@ const posts = (await getCollection('insights', ({ data }) => !data.draft))
           <p class="eyebrow text-ink-soft">{formatDate(p.data.publishDate)}</p>
           <h3 class="mt-3 font-display font-medium text-h3 leading-[1.2] text-ink">{p.data.title}</h3>
           <p class="mt-3 text-small text-ink-soft">{p.data.description}</p>
-          <p class="mt-5 text-small font-medium text-teal underline underline-offset-4">Read →</p>
+          <p class="mt-5 text-small font-medium text-teal-700 underline underline-offset-4">Read →</p>
         </a>
       ))}
     </div>

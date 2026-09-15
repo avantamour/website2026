@@ -42,6 +42,30 @@ export const BRAND = {
     linkedin: 'https://www.linkedin.com/in/arrpita-g-hajra-a5b37857/',
   },
 
+  /**
+   * LinkedIn recommendations of Arrpita (supplied by the owner, 15 Sep 2026).
+   * Verbatim except: "Arpita" → "Arrpita" (her name's correct spelling) and
+   * "than" → "then". "…" marks where the recommendation continues on LinkedIn —
+   * never complete a sentence we have not seen. Both may predate Avant Amour, so
+   * `relationship` describes the tie to Arrpita, never to the firm.
+   */
+  testimonials: [
+    {
+      quote:
+        'Arrpita was given a research project on ethnography and she has delivered the insights in the most scientific manner. Her ability to take the project to conclusion, understand the domain, understand behaviours and then connect the dots…',
+      name: 'Farida Hussain',
+      relationship: 'Client',
+      year: 2025,
+    },
+    {
+      quote:
+        'Arrpita worked with us on contract on a couple of ethnography projects. She clearly knows her subject very well. She did her studies and brought out insights that were consistent with our understanding. It was therefore a good validation. She is a purist…',
+      name: 'Kaushik Majumder',
+      relationship: 'Managed Arrpita on contract ethnography projects',
+      year: 2018,
+    },
+  ],
+
   audience: 'D2C and digital-first brands in India',
   methodSignature: 'Ethnography',
 

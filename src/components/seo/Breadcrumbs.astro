@@ -27,7 +27,7 @@ const ld = {
     {items.map((c, i) => (
       <li class="flex items-center gap-2">
         {c.href && i < items.length - 1 ? (
-          <a href={c.href} class="text-ink-soft hover:text-teal no-underline">{c.label}</a>
+          <a href={c.href} class="text-ink-soft hover:text-teal-700 no-underline">{c.label}</a>
         ) : (
           <span aria-current="page" class="text-ink">{c.label}</span>
         )}

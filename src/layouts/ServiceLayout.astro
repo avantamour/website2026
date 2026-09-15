@@ -41,7 +41,7 @@ const relatedServices = (d.relatedServices ?? [])
         { label: 'Services', href: '/services/' },
         { label: d.title },
       ]} />
-      <p class="eyebrow text-teal mt-6">Service</p>
+      <p class="eyebrow text-teal-700 mt-6">Service</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
         {d.title}
       </h1>
@@ -66,9 +66,9 @@ const relatedServices = (d.relatedServices ?? [])
             {relatedCaseStudies.map((c) => (
               <li>
                 <a href={`/case-studies/${c.slug}/`} class="block border border-border bg-paper p-6 no-underline hover:border-teal transition-colors h-full">
-                  <p class="eyebrow text-teal">{c.data.industry}</p>
+                  <p class="eyebrow text-teal-700">{c.data.industry}</p>
                   <h3 class="mt-3 font-display font-medium text-h3 text-ink leading-snug">{c.data.title}</h3>
-                  <p class="mt-4 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal border border-teal/40 px-3 py-1">
+                  <p class="mt-4 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
                     <span aria-hidden="true">↑</span>{c.data.metric}
                   </p>
                 </a>
