@@ -4,6 +4,11 @@
 
 :root {
   --color-teal: #1a9fa5;
+  /* Teal for TEXT. The brand teal is 3.21:1 on paper and 3.03:1 on cream — below
+     WCAG AA's 4.5:1 for body-size text — so words use teal-700 (7.40 / 6.98).
+     The brand teal stays for everything that is not text: rules, borders,
+     underlines, focus rings. Owner-approved 15 Sep 2026. */
+  --color-teal-text: #105f63;
   --color-teal-soft: #c5e6e8;
   --color-yellow: #fbaa19;
   --color-ink: #0f1419;
@@ -50,7 +55,7 @@
   }
 
   a {
-    color: var(--color-teal);
+    color: var(--color-teal-text);
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
   }
@@ -99,7 +104,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--color-teal);
+    color: var(--color-teal-text);
   }
 
   .eyebrow-rule {
@@ -174,6 +179,53 @@
     color: var(--color-ink-soft);
     font-style: italic;
     margin-block: 1.5rem;
+  }
+
+  /* Testimonials render inside .prose-aa on interior pages; undo the prose
+     blockquote/heading treatment so the cards look the same everywhere. */
+  .testimonials blockquote,
+  .prose-aa .testimonials blockquote {
+    border-left: 0;
+    padding-left: 0;
+    margin: 0;
+    font-style: normal;
+    color: var(--color-ink);
+  }
+
+  .prose-aa .testimonials {
+    margin-block: 3rem;
+  }
+
+  .prose-aa .testimonials h2 {
+    margin-top: 0.75rem;
+  }
+
+  /* The prose column is 68ch, too narrow for two quote cards side by side
+     (~26 characters a line). Stack them; the homepage keeps two columns. */
+  .prose-aa .testimonials .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Links inside running text need a cue besides colour: teal-700 is only
+     2.5:1 against ink (WCAG 1.4.1 wants 3:1 or a non-colour cue), and
+     Tailwind's preflight strips the browser underline. Underline in brand
+     teal. Anchors that opt out with .no-underline keep their styling. */
+  .prose-aa a:not(.no-underline) {
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-teal);
+  }
+
+  /* Figures in content — see src/components/content/Figure.astro. */
+  .aa-figure {
+    margin-block: 2rem;
+    margin-inline: auto;
+  }
+
+  .aa-figure figcaption {
+    margin-top: 0.625rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-ink-soft);
   }
 
   .yellow-underline {

@@ -42,6 +42,37 @@ export const BRAND = {
     linkedin: 'https://www.linkedin.com/in/arrpita-g-hajra-a5b37857/',
   },
 
+  /**
+   * LinkedIn recommendations of Arrpita. Full text as supplied by the owner in
+   * "Website content_Sept 15.docx" (15 Sep 2026): quote exactly that, correcting only
+   * "Arpita" → "Arrpita" and obvious typos ("than" → "then", stray spaces). The owner's
+   * version of Kaushik's quote leaves out "on contract" from the LinkedIn original —
+   * the owner's wording stands. Both may predate Avant Amour, so `relationship` says
+   * who they are or how they know Arrpita — never a tie to the firm.
+   * Farida Hussain is CMO of USV, one of Arrpita's named prior research clients. The
+   * health & nutrition case study is deliberately anonymised, so never place her quote
+   * on that page or on the case-studies index, and never name USV there.
+   * Kaushik's caption is "Former CEO" — the doc's "EX CEO Principal Financial consultant"
+   * reads two ways, and the owner approved the short form (15 Sep 2026). The owner also
+   * confirmed Farida is happy to be quoted with her name and title. Don't re-ask.
+   */
+  testimonials: [
+    {
+      quote:
+        'Arrpita was given a research project on ethnography and she has delivered the insights in the most scientific manner. Her ability to take the project to conclusion, understand the domain, understand behaviours and then connect the dots to get unique insights was commendable.',
+      name: 'Farida Hussain',
+      relationship: 'Chief Marketing Officer, USV',
+      year: 2025,
+    },
+    {
+      quote:
+        'Arrpita worked with us on a couple of ethnography projects. She clearly knows her subject very well. She did her studies and brought out insights that were consistent with our understanding. It was therefore a good validation. She is a purist and follows methodologies and styles accordingly.',
+      name: 'Kaushik Majumder',
+      relationship: 'Former CEO',
+      year: 2018,
+    },
+  ],
+
   audience: 'D2C and digital-first brands in India',
   methodSignature: 'Ethnography',
 

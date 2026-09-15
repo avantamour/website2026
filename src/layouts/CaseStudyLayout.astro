@@ -36,14 +36,16 @@ const published = d.publishDate ? d.publishDate.toISOString() : undefined;
         { label: 'Case Studies', href: '/case-studies/' },
         { label: d.title },
       ]} />
-      <p class="eyebrow text-teal mt-6">Case study · {d.industry}</p>
+      <p class="eyebrow text-teal-700 mt-6">Case study · {d.industry}</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-4xl">
         {d.title}
       </h1>
       <p class="mt-6 text-body text-ink-soft max-w-prose">{d.description}</p>
-      <p class="mt-6 inline-flex items-center gap-3 border border-teal px-4 py-2 text-eyebrow uppercase tracking-eyebrow text-teal">
-        <span aria-hidden="true">↑</span>{d.metric}
-      </p>
+      {(d.metric || d.scope) && (
+        <p class="mt-6 inline-flex items-center gap-3 border border-teal px-4 py-2 text-eyebrow uppercase tracking-eyebrow text-teal-700">
+          {d.metric && <span aria-hidden="true">↑</span>}{d.metric ?? d.scope}
+        </p>
+      )}
     </Container>
   </section>
 
@@ -62,7 +64,7 @@ const published = d.publishDate ? d.publishDate.toISOString() : undefined;
         <ul class="mt-4 flex flex-wrap gap-3">
           {d.services.map((s) => (
             <li>
-              <a href={`/services/${s}/`} class="inline-flex items-center text-small text-teal border border-teal/40 px-3 py-1 no-underline hover:bg-teal-700 hover:text-cream">
+              <a href={`/services/${s}/`} class="inline-flex items-center text-small text-teal-700 border border-teal/40 px-3 py-1 no-underline hover:bg-teal-700 hover:text-cream">
                 {s.replace(/-/g, ' ')}
               </a>
             </li>

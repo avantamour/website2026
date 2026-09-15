@@ -1,6 +1,7 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
 import FAQ from '@components/content/FAQ.astro';
+import Testimonials from '@components/content/Testimonials.astro';
 import { BRAND } from '@lib/constants';
 
 const faqs = [
@@ -68,6 +69,10 @@ const faqs = [
   <p>
     Avant Amour is built the opposite way. One senior researcher (the founder) runs the project end-to-end. Engagements are {BRAND.engagement.typicalDuration} for a focused study, longer for multi-city fieldwork, scoped on a one-pager. The output is a point of view, not a slide template. You can ask follow-up questions on WhatsApp for thirty days after delivery.
   </p>
+
+  {/* The section above claims one senior researcher runs everything; the quotes
+      are the evidence. This is the paid-search landing page. */}
+  <Testimonials surface="paper" />
 
   <h2>Engagement models</h2>
   <p>

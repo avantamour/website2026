@@ -46,7 +46,12 @@ const caseStudies = defineCollection({
   type: 'content',
   schema: base.extend({
     industry: z.string(),
-    metric: z.string(),
+    // An outcome, shown with an ↑ arrow ("30% sales growth, year one"). Leave it out
+    // when a study has no outcome number — use `scope` instead, so the arrow never
+    // implies a result that did not happen.
+    metric: z.string().optional(),
+    // What was studied, shown without the arrow ("Six metros · In-depth interviews").
+    scope: z.string().optional(),
     services: z.array(z.string()).default([]),
     publishDate: z.coerce.date().optional(),
     summary: z.string().optional(),

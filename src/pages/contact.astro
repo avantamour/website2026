@@ -12,7 +12,7 @@ import { BRAND } from '@lib/constants';
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
     <Container>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
-      <p class="eyebrow text-teal mt-6">Get in touch</p>
+      <p class="eyebrow text-teal-700 mt-6">Get in touch</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
         Tell us about the question <span class="yellow-underline">keeping you up</span> at night.
       </h1>
@@ -56,13 +56,13 @@ import { BRAND } from '@lib/constants';
             Send →
           </button>
           <p class="text-small text-ink-soft">
-            We use your details only to respond to your enquiry. We don't share them, and we delete enquiry data once it's no longer needed. See our <a href="/privacy/">Privacy Policy</a>.
+            We use your details only to respond to your enquiry. We don't share them, and we delete enquiry data once it's no longer needed. See our <a href="/privacy/" class="underline decoration-teal">Privacy Policy</a>.
           </p>
         </form>
 
         <aside class="lg:col-span-5 space-y-8">
           <div class="border border-border bg-cream p-6 md:p-8">
-            <p class="eyebrow text-teal">Direct</p>
+            <p class="eyebrow text-teal-700">Direct</p>
             <p class="mt-3 font-display text-h2 text-ink">
               <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>
             </p>

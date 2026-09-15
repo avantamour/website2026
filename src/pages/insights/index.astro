@@ -16,7 +16,7 @@ const posts = (await getCollection('insights', ({ data }) => !data.draft))
   <section class="bg-cream pt-12 md:pt-16 pb-10 md:pb-14 border-b border-border">
     <Container>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Insights' }]} />
-      <p class="eyebrow text-teal mt-6">Insights</p>
+      <p class="eyebrow text-teal-700 mt-6">Insights</p>
       <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
         Notes from the field.
       </h1>
@@ -35,7 +35,7 @@ const posts = (await getCollection('insights', ({ data }) => !data.draft))
               <p class="text-small text-ink-soft">
                 {formatDate(p.data.publishDate)} · {readingTime(p.body)} min read
               </p>
-              <h2 class="mt-2 font-display font-medium text-h2 leading-[1.15] text-ink group-hover:text-teal transition-colors">
+              <h2 class="mt-2 font-display font-medium text-h2 leading-[1.15] text-ink group-hover:text-teal-700 transition-colors">
                 {p.data.title}
               </h2>
               <p class="mt-3 text-body text-ink-soft max-w-3xl">{p.data.description}</p>

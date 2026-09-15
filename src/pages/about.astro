@@ -1,5 +1,6 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
+import Testimonials from '@components/content/Testimonials.astro';
 import { BRAND } from '@lib/constants';
 
 const title = 'About Avant Amour';
@@ -29,7 +30,7 @@ const description = `Avant Amour is founded and led by ${BRAND.founder.fullName}
           class="block w-full aspect-[2/3] object-cover"
         />
         <figcaption class="p-6">
-          <p class="eyebrow text-teal">Founder</p>
+          <p class="eyebrow text-teal-700">Founder</p>
           <p class="mt-2 font-display text-h2 text-ink leading-tight">{BRAND.founder.fullName}</p>
           <p class="text-small text-ink-soft">{BRAND.founder.title}</p>
         </figcaption>
@@ -78,6 +79,8 @@ const description = `Avant Amour is founded and led by ${BRAND.founder.fullName}
       valid through January 2029.
     </li>
   </ul>
+
+  <Testimonials surface="paper" />
 
   <h2>Who does the work</h2>
   <p>

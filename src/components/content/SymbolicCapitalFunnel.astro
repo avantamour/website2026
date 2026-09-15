@@ -1,0 +1,51 @@
+---
+/**
+ * "Gen Z investment-to-symbolic-capital funnel", rebuilt in HTML from the image
+ * Arrpita supplied (15 Sep 2026). The source PNG had icon glyphs printed over its
+ * labels ("kincare", "ashion"). As markup it is on-palette, sharp at any size, and
+ * its words are readable by search engines and AI answer engines. Wording is the
+ * source image's, unchanged.
+ */
+const investments = [
+  { t: 'Fitness', d: 'Body & strength' },
+  { t: 'Skincare', d: 'Appearance rituals' },
+  { t: 'Learning', d: 'Skills & knowledge' },
+  { t: 'Fashion', d: 'Style identity' },
+  { t: 'Wellness', d: 'Mind & body care' },
+];
+const steps = [
+  { t: 'Self-improvement', d: 'Investing in becoming better' },
+  { t: 'Confidence', d: 'Visible self-assurance' },
+  { t: 'Trust', d: 'Earned social credibility' },
+];
+---
+<figure class="aa-figure">
+  <div class="border border-border bg-cream px-4 py-6 md:px-8 md:py-8">
+    <div class="text-center text-small text-ink-soft">Where Gen Z puts its money and energy</div>
+    <div class="mt-4 flex flex-wrap justify-center gap-2">
+      {investments.map((i) => (
+        <div class="w-[calc(50%-0.25rem)] sm:w-[calc(20%-0.4rem)] border border-border bg-paper px-2 py-3 text-center">
+          <span class="block text-small font-medium text-ink">{i.t}</span>
+          <span class="block text-[0.8125rem] leading-snug text-ink-soft">{i.d}</span>
+        </div>
+      ))}
+    </div>
+    {steps.map((s) => (
+      <>
+        <div aria-hidden="true" class="my-2 text-center text-xl leading-none text-teal">↓</div>
+        <div class="mx-auto max-w-xs border border-border bg-paper px-4 py-3 text-center">
+          <span class="block font-display text-h3 text-ink">{s.t}</span>
+          <span class="block text-small text-ink-soft">{s.d}</span>
+        </div>
+      </>
+    ))}
+    <div aria-hidden="true" class="my-2 text-center text-xl leading-none text-teal">↓</div>
+    <div class="mx-auto max-w-md border border-teal bg-paper px-4 py-4 text-center">
+      <span aria-hidden="true" class="mx-auto mb-2 block h-[3px] w-12 bg-yellow"></span>
+      <span class="block font-display text-h2 text-ink">Symbolic Capital</span>
+      <span class="block text-small text-ink-soft">Recognition · Status · Prestige · Legitimacy</span>
+    </div>
+    <div class="mt-4 text-center text-small text-ink-soft">The real currency Gen Z is accumulating</div>
+  </div>
+  <figcaption>Gen Z's investment-to-symbolic-capital funnel: from visible self-investment to recognition, status, prestige and legitimacy.</figcaption>
+</figure>

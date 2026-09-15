@@ -21,8 +21,12 @@ const normalise = (href: string) => href.replace(/\/$/, '');
           <a
             href={item.href}
             class:list={[
-              'no-underline text-ink hover:text-teal transition-colors whitespace-nowrap',
-              active ? 'text-teal' : '',
+              'hover:text-teal-700 transition-colors whitespace-nowrap',
+              // Dark teal text sits close to ink, so the active page also gets a
+              // brand-teal underline — colour alone would barely mark it.
+              active
+                ? 'text-teal-700 underline decoration-teal decoration-2 underline-offset-[6px]'
+                : 'text-ink no-underline',
             ]}
             aria-current={active ? 'page' : undefined}
           >
