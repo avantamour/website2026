@@ -52,8 +52,9 @@ export const BRAND = {
    * Farida Hussain is CMO of USV, one of Arrpita's named prior research clients. The
    * health & nutrition case study is deliberately anonymised, so never place her quote
    * on that page or on the case-studies index, and never name USV there.
-   * Kaushik's title is "Former CEO" only until the owner confirms the rest — the doc's
-   * "EX CEO Principal Financial consultant" can be read two ways.
+   * Kaushik's caption is "Former CEO" — the doc's "EX CEO Principal Financial consultant"
+   * reads two ways, and the owner approved the short form (15 Sep 2026). The owner also
+   * confirmed Farida is happy to be quoted with her name and title. Don't re-ask.
    */
   testimonials: [
     {
