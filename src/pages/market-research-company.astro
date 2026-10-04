@@ -32,7 +32,7 @@ const video = null as FounderVideo | null;
 
 const reasons = [
   {
-    t: 'We start with your business question, not our method',
+    t: 'The decision comes first, the method second',
     d: 'Before we choose a method, we pin down the decision the research has to inform. Everything else follows from that.',
   },
   {
@@ -41,7 +41,7 @@ const reasons = [
   },
   {
     t: 'Every study is built around you',
-    d: 'No off-the-shelf packages. Each project is scoped on a single page around your objectives, timeline and budget.',
+    d: 'Each project is scoped on a single page around your question, timeline and budget, and the method is chosen to fit it.',
   },
   {
     t: 'Fast, without cutting corners',
@@ -56,7 +56,7 @@ const reasons = [
     d: 'We connect what people say with what they actually do, and turn it into a clear point of view, not a pile of transcripts.',
   },
   {
-    t: 'Actionable insights, not just reports',
+    t: 'Recommendations your team can act on',
     d: 'You get a small number of clear, defensible recommendations, and we sit with your team to turn them into decisions.',
   },
   {
@@ -64,7 +64,7 @@ const reasons = [
     d: `Every engagement is led by ${BRAND.founder.fullName}, with ${BRAND.founder.yearsExperience} years in qualitative research, and a vetted network of senior specialists. Never a junior fronting the work.`,
   },
   {
-    t: 'India-wide reach, local depth',
+    t: 'Fieldwork across India, from metros to villages',
     d: `From ${BRAND.locations.join(' and ')}, we research across India: interview studies spanning six metros, and fieldwork in homes, markets and villages.`,
   },
 ];
@@ -115,28 +115,28 @@ const label = 'block text-small font-medium text-ink mb-1.5';
   noindex={true}
 >
   {/* 1. Hero + enquiry form */}
-  <section class="bg-cream pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border">
+  <section class="bg-cream pt-8 pb-16 md:pt-16 md:pb-24 border-b border-border">
     <Container>
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
         <div class="lg:col-span-6 lg:pt-6">
           <p class="eyebrow">Market research company · India</p>
-          <h1 class="mt-4 font-display font-medium text-hero md:text-[3.25rem] leading-[1.08] tracking-tightest text-ink">
+          <h1 class="mt-4 font-display font-medium text-[2.125rem] md:text-[3.25rem] leading-[1.08] tracking-tightest text-ink">
             Your <span class="yellow-underline">India partner</span> for market research and consumer insight
           </h1>
           <p class="mt-6 max-w-prose text-body text-ink-soft">
             Founder-led qualitative and mixed-method research for businesses across India, so your next decision rests on what customers actually do, not just what they say.
           </p>
-          <ul class="mt-8 space-y-2 text-small text-ink">
-            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>ISO 9001:2015 and ISO/IEC 27001:2022 certified</li>
-            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
-            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>We reply within {BRAND.replyWithin}</li>
-          </ul>
-          <div class="mt-10 flex flex-wrap items-center gap-6">
+          <div class="mt-6 flex flex-wrap items-center gap-6">
             <a href="#enquiry" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors">
               Request a proposal →
             </a>
             <a href="/case-studies/" class="text-teal-700 font-medium underline decoration-teal underline-offset-4">See our case studies</a>
           </div>
+          <ul class="mt-6 space-y-2 text-small text-ink">
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>ISO 9001:2015 and ISO/IEC 27001:2022 certified</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>We reply within {BRAND.replyWithin}</li>
+          </ul>
         </div>
 
         <div class="lg:col-span-6" id="enquiry">
@@ -150,15 +150,16 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           >
             <input type="hidden" name="form-name" value="landing-enquiry" />
             <p hidden><label>Don't fill this out: <input name="bot-field" /></label></p>
-            {/* Filled from the ad click's URL by the script below, so each lead shows which campaign and keyword brought it. */}
+            {/* Filled from the ad click's URL by the script below, so each lead shows which campaign and keyword brought it.
+                Campaign labels only — no click ID (gclid): tying an ad-click identifier to a named lead without
+                consent would sidestep the site's default-deny posture. Disclosed in the privacy policy. */}
             <input type="hidden" name="utm_source" value="" />
             <input type="hidden" name="utm_medium" value="" />
             <input type="hidden" name="utm_campaign" value="" />
             <input type="hidden" name="utm_term" value="" />
-            <input type="hidden" name="gclid" value="" />
 
             <h2 class="font-display font-medium text-h2 text-ink">Grow with research you can act on</h2>
-            <p class="mt-2 text-small text-ink-soft">Tell us your question. {BRAND.founder.firstName} replies personally within {BRAND.replyWithin}.</p>
+            <p class="mt-2 text-small text-ink-soft">Tell us your question. We reply within {BRAND.replyWithin}.</p>
 
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -198,7 +199,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
               Request a proposal →
             </button>
             <p class="mt-4 text-small text-ink-soft">
-              <span aria-hidden="true">*</span> Required. We use your details only to reply to your enquiry. See our <a href="/privacy/" class="underline decoration-teal">Privacy Policy</a>.
+              <span aria-hidden="true">*</span> Required. We use your details to reply to your enquiry and to note which of our adverts brought you here. See our <a href="/privacy/" class="underline decoration-teal">Privacy Policy</a>.
             </p>
           </form>
         </div>
@@ -245,7 +246,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
               rel="noopener noreferrer"
               class="inline-flex items-center gap-2 bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors"
             >
-              <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.04 4C9.93 4 4.98 8.95 4.98 15.06c0 1.96.51 3.87 1.49 5.56L4.9 27.1l6.64-1.55a11.04 11.04 0 0 0 4.5.96h.01c6.1 0 11.06-4.95 11.06-11.06 0-2.96-1.15-5.74-3.24-7.83A11 11 0 0 0 16.04 4Zm5.05 13.38c-.28-.14-1.64-.81-1.89-.9-.25-.09-.43-.14-.62.14-.18.27-.71.9-.87 1.08-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.22-1.37-.82-.73-1.38-1.64-1.54-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.41-.49.14-.16.18-.27.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.54-.45-.46-.62-.47-.16-.01-.34-.01-.53-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.65.21 1.25.18 1.72.11.52-.08 1.64-.67 1.87-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.53-.32Z"/></svg>
+              <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.04 4C9.93 4 4.98 8.95 4.98 15.06c0 1.96.51 3.87 1.49 5.56L4.9 27.1l6.64-1.55a11.04 11.04 0 0 0 4.5.96h.01c6.1 0 11.06-4.95 11.06-11.06 0-2.96-1.15-5.74-3.24-7.83A11 11 0 0 0 16.04 4Zm0 20.27h-.01a9.2 9.2 0 0 1-4.68-1.28l-.34-.2-3.94.92.84-3.84-.22-.36a9.16 9.16 0 0 1-1.4-4.86c0-5.07 4.13-9.2 9.2-9.2 2.46 0 4.77.96 6.5 2.7a9.13 9.13 0 0 1 2.69 6.5c0 5.07-4.12 9.2-9.2 9.2Zm5.05-6.89c-.28-.14-1.64-.81-1.89-.9-.25-.09-.43-.14-.62.14-.18.27-.71.9-.87 1.08-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.22-1.37-.82-.73-1.38-1.64-1.54-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.41-.49.14-.16.18-.27.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.54-.45-.46-.62-.47-.16-.01-.34-.01-.53-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.65.21 1.25.18 1.72.11.52-.08 1.64-.67 1.87-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.53-.32Z"/></svg>
               Talk to {BRAND.founder.firstName} on WhatsApp
             </a>
           </p>
@@ -258,13 +259,13 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           </h2>
           <div class="mt-6 space-y-4 text-body text-ink-soft max-w-prose">
             <p>
-              Avant Amour is a market research company that helps businesses make decisions with confidence. Every study is designed around your question, using qualitative and mixed-method research to show what your customers actually do, and why, so you can reduce risk, spot opportunities and grow.
+              Avant Amour is a market research company that helps businesses make decisions with confidence. Every study is designed around your question, using qualitative and mixed-method research to show what your customers actually do, and why.
             </p>
             <p>
               We help you understand how customers behave, test new products and ideas, size up new markets and track how your brand is doing, so that big decisions rest on evidence rather than guesswork.
             </p>
             <p>
-              Our clients come from healthcare and pharma, technology, BFSI, education, media, transport and government. Every engagement is led by founder {BRAND.founder.fullName}, who pairs proven research methods with deep knowledge of each sector to produce insights that change what a business does next.
+              Our clients come from healthcare and pharma, technology, BFSI, education, media, transport and government. Every engagement is led by founder {BRAND.founder.fullName}, who brings {BRAND.founder.yearsExperience} years of qualitative research to every study, so the findings change what a business does next.
             </p>
           </div>
         </div>
@@ -301,7 +302,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
         Independently certified. Professionally recognised.
       </h2>
       <p class="mt-4 max-w-prose text-body text-ink-soft">
-        Audited standards for how we run research and protect your data, and membership of the profession's international body.
+        Audited standards for how we run research and protect your data, and {BRAND.founder.firstName}'s membership of QRCA, the global association for qualitative research consultants.
       </p>
       <ul class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
         {BRAND.certifications.map((c) => (
@@ -401,7 +402,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
     (function () {
       try {
         var q = new URLSearchParams(window.location.search);
-        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'gclid'].forEach(function (k) {
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term'].forEach(function (k) {
           var v = q.get(k);
           var el = document.querySelector('form[name="landing-enquiry"] input[name="' + k + '"]');
           if (v && el) el.value = v.slice(0, 200);
