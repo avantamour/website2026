@@ -1,0 +1,412 @@
+---
+/**
+ * Google Ads landing page (owner brief, 4 Oct 2026). Section order follows the
+ * reference page the owner chose; every word is ours. The brief's About and
+ * "Why choose us" text was close to a competitor's own copy, so the owner chose
+ * to have it rewritten, keeping only claims that are true for Avant Amour.
+ *
+ * Paid traffic only: noindex, left out of NAV and the sitemap. Its "market
+ * research company" framing is broader than the rest of the site's founder-led
+ * ethnography positioning, and keeping it out of search avoids mixed signals.
+ *
+ * The form is its own Netlify form ("landing-enquiry") so leads from the ads
+ * are separable from /contact/ ones; Netlify emails connect@ for any form.
+ * It posts to /thank-you/, whose generate_lead gate accepts this path.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Section from '@components/ui/Section.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Testimonials from '@components/content/Testimonials.astro';
+import { BRAND } from '@lib/constants';
+
+const PATH = '/market-research-company/';
+
+const waOpener = `Hi ${BRAND.founder.firstName}, I'm on the Avant Amour website and I have a research question. (from ${PATH})`;
+const waHref = `${BRAND.whatsapp}?text=${encodeURIComponent(waOpener)}`;
+
+// Founder video. Until the file arrives the founder portrait stands in.
+// To switch: put the MP4 and a poster frame in public/video/ and set these.
+type FounderVideo = { src: string; poster: string; width: number; height: number };
+const video = null as FounderVideo | null;
+
+const reasons = [
+  {
+    t: 'We start with your business question, not our method',
+    d: 'Before we choose a method, we pin down the decision the research has to inform. Everything else follows from that.',
+  },
+  {
+    t: 'Deep expertise across 10+ industries',
+    d: 'Healthcare and pharma, technology, BFSI, education, media, transport, government and more. What we learn in one sector sharpens the next.',
+  },
+  {
+    t: 'Every study is built around you',
+    d: 'No off-the-shelf packages. Each project is scoped on a single page around your objectives, timeline and budget.',
+  },
+  {
+    t: 'Fast, without cutting corners',
+    d: `Most projects run ${BRAND.engagement.typicalDuration} from kick-off to findings. Larger multi-city studies take longer, and you know the timeline before we start.`,
+  },
+  {
+    t: 'Certified for quality and data security',
+    d: 'ISO 9001:2015 for how we run projects and ISO/IEC 27001:2022 for how we protect every recording, transcript and dataset.',
+  },
+  {
+    t: 'Analysis that finds the “why”',
+    d: 'We connect what people say with what they actually do, and turn it into a clear point of view, not a pile of transcripts.',
+  },
+  {
+    t: 'Actionable insights, not just reports',
+    d: 'You get a small number of clear, defensible recommendations, and we sit with your team to turn them into decisions.',
+  },
+  {
+    t: 'Senior attention from first call to debrief',
+    d: `Every engagement is led by ${BRAND.founder.fullName}, with ${BRAND.founder.yearsExperience} years in qualitative research, and a vetted network of senior specialists. Never a junior fronting the work.`,
+  },
+  {
+    t: 'India-wide reach, local depth',
+    d: `From ${BRAND.locations.join(' and ')}, we research across India: interview studies spanning six metros, and fieldwork in homes, markets and villages.`,
+  },
+];
+
+const industries = [
+  'Healthcare & pharma',
+  'Technology',
+  'BFSI',
+  'Education',
+  'Media',
+  'Transport',
+  'Government',
+];
+
+// A mix of Arrpita's clients from before Avant Amour and Avant Amour's own. The
+// heading is framed around her because it is true for every name in the list.
+// Brands without a logo file yet render as a wordmark tile.
+const brands: { name: string; logo?: string; w?: number; h?: number }[] = [
+  { name: 'ZEE5', logo: '/logos/zee5.png', w: 300, h: 168 },
+  { name: 'Rapido', logo: '/logos/rapido.png', w: 300, h: 168 },
+  { name: 'Adobe', logo: '/logos/adobe.png', w: 225, h: 225 },
+  { name: 'USV', logo: '/logos/usv.png', w: 259, h: 195 },
+  { name: 'AstraZeneca' },
+  { name: 'Autodesk' },
+  { name: 'Ameriprise Financial' },
+];
+
+const industryOptions = [
+  'Healthcare & pharma',
+  'Technology',
+  'BFSI',
+  'Education',
+  'Media',
+  'Transport & mobility',
+  'Government',
+  'Consumer goods / D2C',
+  'Other',
+];
+
+const input =
+  'w-full border border-border bg-cream px-4 py-3 text-body text-ink focus:outline-none focus:border-teal-700 focus:ring-1 focus:ring-teal-700';
+const label = 'block text-small font-medium text-ink mb-1.5';
+---
+<BaseLayout
+  title="Market research company in India"
+  seoTitle="Market Research Company in India | Avant Amour"
+  description="Founder-led market research across India: qualitative and mixed-method studies, ISO 9001 and ISO 27001 certified. Tell us your research question."
+  noindex={true}
+>
+  {/* 1. Hero + enquiry form */}
+  <section class="bg-cream pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div class="lg:col-span-6 lg:pt-6">
+          <p class="eyebrow">Market research company · India</p>
+          <h1 class="mt-4 font-display font-medium text-hero md:text-[3.25rem] leading-[1.08] tracking-tightest text-ink">
+            Your <span class="yellow-underline">India partner</span> for market research and consumer insight
+          </h1>
+          <p class="mt-6 max-w-prose text-body text-ink-soft">
+            Founder-led qualitative and mixed-method research for businesses across India, so your next decision rests on what customers actually do, not just what they say.
+          </p>
+          <ul class="mt-8 space-y-2 text-small text-ink">
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>ISO 9001:2015 and ISO/IEC 27001:2022 certified</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>We reply within {BRAND.replyWithin}</li>
+          </ul>
+          <div class="mt-10 flex flex-wrap items-center gap-6">
+            <a href="#enquiry" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors">
+              Request a proposal →
+            </a>
+            <a href="/case-studies/" class="text-teal-700 font-medium underline decoration-teal underline-offset-4">See our case studies</a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6" id="enquiry">
+          <form
+            name="landing-enquiry"
+            method="POST"
+            action="/thank-you/"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            class="border border-border bg-paper p-6 md:p-8"
+          >
+            <input type="hidden" name="form-name" value="landing-enquiry" />
+            <p hidden><label>Don't fill this out: <input name="bot-field" /></label></p>
+            {/* Filled from the ad click's URL by the script below, so each lead shows which campaign and keyword brought it. */}
+            <input type="hidden" name="utm_source" value="" />
+            <input type="hidden" name="utm_medium" value="" />
+            <input type="hidden" name="utm_campaign" value="" />
+            <input type="hidden" name="utm_term" value="" />
+            <input type="hidden" name="gclid" value="" />
+
+            <h2 class="font-display font-medium text-h2 text-ink">Grow with research you can act on</h2>
+            <p class="mt-2 text-small text-ink-soft">Tell us your question. {BRAND.founder.firstName} replies personally within {BRAND.replyWithin}.</p>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="lp-name" class={label}>Full name <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <input id="lp-name" name="name" type="text" required autocomplete="name" class={input} />
+              </div>
+              <div>
+                <label for="lp-designation" class={label}>Designation</label>
+                <input id="lp-designation" name="designation" type="text" autocomplete="organization-title" class={input} />
+              </div>
+              <div>
+                <label for="lp-email" class={label}>Work email <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <input id="lp-email" name="email" type="email" required autocomplete="email" class={input} />
+              </div>
+              <div>
+                <label for="lp-phone" class={label}>Phone / WhatsApp <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <input id="lp-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" class={input} />
+              </div>
+              <div>
+                <label for="lp-company" class={label}>Company</label>
+                <input id="lp-company" name="company" type="text" autocomplete="organization" class={input} />
+              </div>
+              <div>
+                <label for="lp-industry" class={label}>Industry</label>
+                <select id="lp-industry" name="industry" class={input}>
+                  <option value="">Select…</option>
+                  {industryOptions.map((o) => <option value={o}>{o}</option>)}
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="lp-message" class={label}>How can we help? <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <textarea id="lp-message" name="message" rows="4" required class={input}></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="mt-6 w-full sm:w-auto inline-flex justify-center items-center bg-teal-700 text-cream px-6 py-3 font-medium hover:bg-teal-900 transition-colors">
+              Request a proposal →
+            </button>
+            <p class="mt-4 text-small text-ink-soft">
+              <span aria-hidden="true">*</span> Required. We use your details only to reply to your enquiry. See our <a href="/privacy/" class="underline decoration-teal">Privacy Policy</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  {/* 2. About + founder video */}
+  <Section background="paper">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div class="lg:col-span-5">
+          {video ? (
+            <figure class="m-0 border border-border bg-cream">
+              <video
+                controls
+                playsinline
+                preload="none"
+                poster={video.poster}
+                width={video.width}
+                height={video.height}
+                class="block w-full h-auto"
+              >
+                <source src={video.src} type="video/mp4" />
+              </video>
+            </figure>
+          ) : (
+            <figure class="m-0 border border-border bg-cream max-w-sm mx-auto lg:max-w-none">
+              <img
+                src="/arrpita.jpg"
+                alt={`${BRAND.founder.fullName}, founder of Avant Amour`}
+                width="600"
+                height="900"
+                loading="lazy"
+                decoding="async"
+                class="block w-full aspect-[4/5] object-cover object-top"
+              />
+            </figure>
+          )}
+          <p class="mt-5 text-center lg:text-left">
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors"
+            >
+              <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.04 4C9.93 4 4.98 8.95 4.98 15.06c0 1.96.51 3.87 1.49 5.56L4.9 27.1l6.64-1.55a11.04 11.04 0 0 0 4.5.96h.01c6.1 0 11.06-4.95 11.06-11.06 0-2.96-1.15-5.74-3.24-7.83A11 11 0 0 0 16.04 4Zm5.05 13.38c-.28-.14-1.64-.81-1.89-.9-.25-.09-.43-.14-.62.14-.18.27-.71.9-.87 1.08-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.22-1.37-.82-.73-1.38-1.64-1.54-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.41-.49.14-.16.18-.27.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.54-.45-.46-.62-.47-.16-.01-.34-.01-.53-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.65.21 1.25.18 1.72.11.52-.08 1.64-.67 1.87-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.53-.32Z"/></svg>
+              Talk to {BRAND.founder.firstName} on WhatsApp
+            </a>
+          </p>
+        </div>
+
+        <div class="lg:col-span-7">
+          <Eyebrow>About us</Eyebrow>
+          <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink">
+            About Avant Amour
+          </h2>
+          <div class="mt-6 space-y-4 text-body text-ink-soft max-w-prose">
+            <p>
+              Avant Amour is a market research company that helps businesses make decisions with confidence. Every study is designed around your question, using qualitative and mixed-method research to show what your customers actually do, and why, so you can reduce risk, spot opportunities and grow.
+            </p>
+            <p>
+              We help you understand how customers behave, test new products and ideas, size up new markets and track how your brand is doing, so that big decisions rest on evidence rather than guesswork.
+            </p>
+            <p>
+              Our clients come from healthcare and pharma, technology, BFSI, education, media, transport and government. Every engagement is led by founder {BRAND.founder.fullName}, who pairs proven research methods with deep knowledge of each sector to produce insights that change what a business does next.
+            </p>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  {/* 3. Why choose us */}
+  <Section background="cream">
+    <Container>
+      <Eyebrow>Why choose us</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Why businesses choose Avant Amour
+      </h2>
+      <ol class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {reasons.map((r, i) => (
+          <li class="border border-border bg-paper p-6 md:p-7">
+            <span class="block font-display text-h3 text-teal-700">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="mt-2 font-display font-medium text-h3 leading-snug text-ink">{r.t}</h3>
+            <p class="mt-2 text-small text-ink-soft">{r.d}</p>
+          </li>
+        ))}
+      </ol>
+    </Container>
+  </Section>
+
+  {/* 4. Certifications. Text badges, not the ISO logo: ISO forbids certified
+      organisations from using its logo. Swap in the certification body's (EAS)
+      mark if Arrpita obtains it. MRSI to be added once membership is confirmed. */}
+  <Section background="paper">
+    <Container>
+      <Eyebrow>Certified and recognised</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Independently certified. Professionally recognised.
+      </h2>
+      <p class="mt-4 max-w-prose text-body text-ink-soft">
+        Audited standards for how we run research and protect your data, and membership of the profession's international body.
+      </p>
+      <ul class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {BRAND.certifications.map((c) => (
+          <li class="flex gap-5 border border-border bg-cream p-6">
+            <span aria-hidden="true" class="shrink-0 flex h-16 w-16 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] leading-tight text-center text-teal-700">
+              {c.standard.replace(/^ISO(\/IEC)? /, '').split(':')[0]}
+            </span>
+            <span>
+              <span class="block font-display text-h3 text-ink">{c.standard} certified</span>
+              <span class="block mt-1 text-small text-ink-soft">{c.scope}</span>
+              <span class="block mt-2 text-small text-ink-soft">Certificate {c.number} · {c.issuer} · valid to January 2029</span>
+            </span>
+          </li>
+        ))}
+        <li class="flex gap-5 border border-border bg-cream p-6">
+          <span aria-hidden="true" class="shrink-0 flex h-16 w-16 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] text-teal-700">QRCA</span>
+          <span>
+            <span class="block font-display text-h3 text-ink">QRCA member</span>
+            <span class="block mt-1 text-small text-ink-soft">Qualitative Research Consultants Association</span>
+            <span class="block mt-2 text-small text-ink-soft">{BRAND.founder.fullName} is a member of the global association for qualitative researchers.</span>
+          </span>
+        </li>
+      </ul>
+    </Container>
+  </Section>
+
+  {/* 5. Industries */}
+  <Section background="cream">
+    <Container>
+      <Eyebrow>Industries we serve</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Expertise across 10+ industries
+      </h2>
+      <ul class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {industries.map((name) => (
+          <li class="border border-border bg-paper px-5 py-5 font-display text-h3 text-ink">{name}</li>
+        ))}
+        <li class="border border-dashed border-border bg-cream px-5 py-5 font-display text-h3 text-ink-soft">And many more</li>
+      </ul>
+      <p class="mt-10">
+        <a href="#enquiry" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors">
+          Start your research →
+        </a>
+      </p>
+    </Container>
+  </Section>
+
+  {/* 6. Brands */}
+  <Section background="paper">
+    <Container>
+      <Eyebrow>Brands</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Brands {BRAND.founder.firstName} has done research for
+      </h2>
+      <ul class="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
+        {brands.map((b) => (
+          <li class="flex h-24 items-center justify-center border border-border bg-paper px-4">
+            {b.logo ? (
+              <img src={b.logo} alt={b.name} width={b.w} height={b.h} loading="lazy" decoding="async" class="max-h-14 w-auto max-w-full object-contain" />
+            ) : (
+              <span class="font-display text-h3 leading-tight text-center text-ink-soft">{b.name}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </Section>
+
+  {/* 7. Testimonials (not in the reference page; added because proof matters most on a paid landing page) */}
+  <Section background="cream">
+    <Container>
+      <Testimonials surface="cream" />
+    </Container>
+  </Section>
+
+  {/* 8. Closing ask */}
+  <section class="bg-paper py-16 md:py-24 border-t border-border">
+    <Container class="text-center">
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-3xl mx-auto">
+        Ready to see what your customers <span class="yellow-underline">actually do</span>?
+      </h2>
+      <p class="mt-4 text-body text-ink-soft">Tell us your question. We reply within {BRAND.replyWithin}.</p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#enquiry" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors">
+          Request a proposal →
+        </a>
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="text-small text-ink-soft underline decoration-teal hover:text-teal-700">
+          or message {BRAND.founder.firstName} on WhatsApp
+        </a>
+      </div>
+    </Container>
+  </section>
+
+  <script is:inline>
+    // Copy the ad click's tracking parameters into the form, so each Netlify
+    // submission shows which campaign and keyword produced the lead.
+    (function () {
+      try {
+        var q = new URLSearchParams(window.location.search);
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'gclid'].forEach(function (k) {
+          var v = q.get(k);
+          var el = document.querySelector('form[name="landing-enquiry"] input[name="' + k + '"]');
+          if (v && el) el.value = v.slice(0, 200);
+        });
+      } catch (e) {}
+    })();
+  </script>
+</BaseLayout>

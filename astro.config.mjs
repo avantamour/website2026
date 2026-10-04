@@ -14,9 +14,10 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
     mdx(),
     sitemap({
-      // /thank-you is noindex; listing it in the sitemap asks Google to index a
-      // page we have told it not to.
-      filter: (page) => !page.includes('/404') && !page.includes('/thank-you'),
+      // /thank-you and the ads landing page are noindex; listing them in the
+      // sitemap asks Google to index pages we have told it not to.
+      filter: (page) =>
+        !page.includes('/404') && !page.includes('/thank-you') && !page.includes('/market-research-company'),
     }),
   ],
   prefetch: {

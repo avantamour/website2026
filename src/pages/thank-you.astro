@@ -47,12 +47,15 @@ import { BRAND } from '@lib/constants';
         if (!ref) return;
         var url = new URL(ref);
         if (url.origin !== window.location.origin) return;
-        if (!/^\/contact\/?$/.test(url.pathname)) return;
+        // The two pages with an enquiry form: /contact/ and the Google Ads
+        // landing page. form_page tells them apart in GA4.
+        if (!/^\/(contact|market-research-company)\/?$/.test(url.pathname)) return;
+        var formPage = url.pathname;
       } catch (e) {
         return;
       }
       if (typeof gtag === 'function') {
-        gtag('event', 'generate_lead', { method: 'form' });
+        gtag('event', 'generate_lead', { method: 'form', form_page: formPage });
       }
     })();
   </script>
