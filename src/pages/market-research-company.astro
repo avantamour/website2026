@@ -17,7 +17,6 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Section from '@components/ui/Section.astro';
 import Eyebrow from '@components/ui/Eyebrow.astro';
-import Testimonials from '@components/content/Testimonials.astro';
 import { Image } from 'astro:assets';
 import { BRAND } from '@lib/constants';
 import iso9001 from '../assets/landing/iso-9001-2015.jpg';
@@ -232,10 +231,30 @@ const label = 'block text-small font-medium text-ink mb-1.5';
     </Container>
   </section>
 
-  {/* 2. About + founder video */}
+  {/* 2. About + founder video. The heading comes first and the video sits inside
+      the section (agency feedback, 4 Oct 2026): with the video first, phones showed
+      it above the "About us" heading, detached from the section it belongs to. */}
   <Section background="paper">
     <Container>
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div class="lg:col-span-7">
+          <Eyebrow>About us</Eyebrow>
+          <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink">
+            About Avant Amour
+          </h2>
+          <div class="mt-6 space-y-4 text-body text-ink-soft max-w-prose">
+            <p>
+              Avant Amour is a market research company that helps businesses make decisions with confidence. Every study is designed around your question, using qualitative and mixed-method research to show what your customers actually do, and why.
+            </p>
+            <p>
+              We help you understand how customers behave, test new products and ideas, size up new markets and track how your brand is doing, so that big decisions rest on evidence rather than guesswork.
+            </p>
+            <p>
+              Our clients come from healthcare and pharma, technology, BFSI, education, media, transport and government. Every engagement is led by founder {BRAND.founder.fullName}, who brings {BRAND.founder.yearsExperience} years of qualitative research to every study, so the findings change what a business does next.
+            </p>
+          </div>
+        </div>
+
         <div class="lg:col-span-5">
           {video ? (
             <figure class="m-0 border border-border bg-cream max-w-[21rem] mx-auto lg:mx-0">
@@ -277,24 +296,6 @@ const label = 'block text-small font-medium text-ink mb-1.5';
             </a>
           </p>
         </div>
-
-        <div class="lg:col-span-7">
-          <Eyebrow>About us</Eyebrow>
-          <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink">
-            About Avant Amour
-          </h2>
-          <div class="mt-6 space-y-4 text-body text-ink-soft max-w-prose">
-            <p>
-              Avant Amour is a market research company that helps businesses make decisions with confidence. Every study is designed around your question, using qualitative and mixed-method research to show what your customers actually do, and why.
-            </p>
-            <p>
-              We help you understand how customers behave, test new products and ideas, size up new markets and track how your brand is doing, so that big decisions rest on evidence rather than guesswork.
-            </p>
-            <p>
-              Our clients come from healthcare and pharma, technology, BFSI, education, media, transport and government. Every engagement is led by founder {BRAND.founder.fullName}, who brings {BRAND.founder.yearsExperience} years of qualitative research to every study, so the findings change what a business does next.
-            </p>
-          </div>
-        </div>
       </div>
     </Container>
   </Section>
@@ -318,54 +319,38 @@ const label = 'block text-small font-medium text-ink mb-1.5';
     </Container>
   </Section>
 
-  {/* 4. Certifications. ISO images at the owner's instruction (see isoLogo above).
-      MRSI and QRCA are Arrpita's personal memberships, not the firm's (owner,
-      4 Oct 2026), shown as text badges that name her. */}
+  {/* 4. Certifications: marks only, no descriptions (agency feedback, 4 Oct 2026);
+      certificate numbers stay in the footer and JSON-LD. ISO images at the owner's
+      instruction (see isoLogo above). MRSI and QRCA are Arrpita's personal
+      memberships, not the firm's (owner, 4 Oct 2026), so they are text badges and
+      the one line under the row says whose they are: without it, a firm page
+      would imply the firm is the member. */}
   <Section background="paper">
     <Container>
       <Eyebrow>Certified and recognised</Eyebrow>
       <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
         Independently certified. Professionally recognised.
       </h2>
-      <p class="mt-4 max-w-prose text-body text-ink-soft">
-        Audited standards for how we run research and protect your data, and {BRAND.founder.firstName}'s membership of the market research profession's associations in India and worldwide.
-      </p>
-      <ul class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <ul class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {BRAND.certifications.map((c) => (
-          <li class="flex gap-5 border border-border bg-cream p-6">
+          <li class="flex h-40 md:h-48 items-center justify-center border border-border bg-paper p-5">
             {isoLogo[c.standard] ? (
-              <span class="shrink-0 flex h-20 w-20 items-center justify-center border border-border bg-paper p-1.5">
-                <Image src={isoLogo[c.standard]} alt={`${c.standard} certification mark`} width={144} class="h-full w-full object-contain" />
-              </span>
+              <Image src={isoLogo[c.standard]} alt={`${c.standard} certified`} width={300} class="h-full w-auto max-w-full object-contain" />
             ) : (
-              <span aria-hidden="true" class="shrink-0 flex h-20 w-20 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] leading-tight text-center text-teal-700">
-                {c.standard.replace(/^ISO(\/IEC)? /, '').split(':')[0]}
+              <span class="flex h-28 w-28 md:h-32 md:w-32 items-center justify-center rounded-full border-2 border-teal px-2 font-display text-h3 leading-tight text-center text-teal-700">
+                {c.standard}
               </span>
             )}
-            <span>
-              <span class="block font-display text-h3 text-ink">{c.standard} certified</span>
-              <span class="block mt-1 text-small text-ink-soft">{c.scope}</span>
-              <span class="block mt-2 text-small text-ink-soft">Certificate {c.number} · {c.issuer} · valid to January 2029</span>
-            </span>
           </li>
         ))}
-        <li class="flex gap-5 border border-border bg-cream p-6">
-          <span aria-hidden="true" class="shrink-0 flex h-20 w-20 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] text-teal-700">MRSI</span>
-          <span>
-            <span class="block font-display text-h3 text-ink">MRSI member</span>
-            <span class="block mt-1 text-small text-ink-soft">Market Research Society of India</span>
-            <span class="block mt-2 text-small text-ink-soft">{BRAND.founder.fullName} is a member of India's professional body for market research.</span>
-          </span>
+        <li class="flex h-40 md:h-48 items-center justify-center border border-border bg-paper p-5">
+          <span role="img" aria-label="MRSI, Market Research Society of India" class="flex h-28 w-28 md:h-32 md:w-32 items-center justify-center rounded-full border-2 border-teal font-display text-h3 text-teal-700">MRSI</span>
         </li>
-        <li class="flex gap-5 border border-border bg-cream p-6">
-          <span aria-hidden="true" class="shrink-0 flex h-20 w-20 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] text-teal-700">QRCA</span>
-          <span>
-            <span class="block font-display text-h3 text-ink">QRCA member</span>
-            <span class="block mt-1 text-small text-ink-soft">Qualitative Research Consultants Association</span>
-            <span class="block mt-2 text-small text-ink-soft">{BRAND.founder.fullName} is a member of the global association for qualitative researchers.</span>
-          </span>
+        <li class="flex h-40 md:h-48 items-center justify-center border border-border bg-paper p-5">
+          <span role="img" aria-label="QRCA, Qualitative Research Consultants Association" class="flex h-28 w-28 md:h-32 md:w-32 items-center justify-center rounded-full border-2 border-teal font-display text-h3 text-teal-700">QRCA</span>
         </li>
       </ul>
+      <p class="mt-4 text-small text-ink-soft">MRSI and QRCA memberships are held by founder {BRAND.founder.fullName}.</p>
     </Container>
   </Section>
 
@@ -411,15 +396,9 @@ const label = 'block text-small font-medium text-ink mb-1.5';
     </Container>
   </Section>
 
-  {/* 7. Testimonials (not in the reference page; added because proof matters most on a paid landing page) */}
-  <Section background="cream">
-    <Container>
-      <Testimonials surface="cream" />
-    </Container>
-  </Section>
-
-  {/* 8. Closing ask */}
-  <section class="bg-paper py-16 md:py-24 border-t border-border">
+  {/* 7. Closing ask. No testimonials on this page: the agency asked for the
+      recommendations section to go (4 Oct 2026). */}
+  <section class="bg-cream py-16 md:py-24 border-t border-border">
     <Container class="text-center">
       <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-3xl mx-auto">
         Ready to see what your customers <span class="yellow-underline">actually do</span>?
