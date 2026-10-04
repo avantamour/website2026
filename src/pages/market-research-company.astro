@@ -18,17 +18,35 @@ import Container from '@components/ui/Container.astro';
 import Section from '@components/ui/Section.astro';
 import Eyebrow from '@components/ui/Eyebrow.astro';
 import Testimonials from '@components/content/Testimonials.astro';
+import { Image } from 'astro:assets';
 import { BRAND } from '@lib/constants';
+import iso9001 from '../assets/landing/iso-9001-2015.jpg';
+import iso27001 from '../assets/landing/iso-27001-2022-tight.png';
 
 const PATH = '/market-research-company/';
 
 const waOpener = `Hi ${BRAND.founder.firstName}, I'm on the Avant Amour website and I have a research question. (from ${PATH})`;
 const waHref = `${BRAND.whatsapp}?text=${encodeURIComponent(waOpener)}`;
 
-// Founder video. Until the file arrives the founder portrait stands in.
-// To switch: put the MP4 and a poster frame in public/video/ and set these.
+// Founder video, self-hosted (no Drive/YouTube embed: both are third-party players
+// that load before consent). Source: owner's "finalvideo (1).mp4" (4 Oct 2026), a
+// vertical phone video pillarboxed into 1920x1080 with blurred side bars; cropped
+// to the 604x1080 picture, scaled to 540 wide and re-encoded (95 MB -> 5.8 MB).
+// Captions are burned into the video. Set to null to fall back to the portrait.
 type FounderVideo = { src: string; poster: string; width: number; height: number };
-const video = null as FounderVideo | null;
+const video = {
+  src: '/video/arrpita-intro.mp4',
+  poster: '/video/arrpita-intro-poster.jpg',
+  width: 540,
+  height: 966,
+} as FounderVideo | null;
+
+// The ISO images the owner supplied, used at the owner's instruction (4 Oct 2026)
+// although ISO's own guidance says certified organisations should not use its logo.
+const isoLogo: Record<string, ImageMetadata> = {
+  'ISO 9001:2015': iso9001,
+  'ISO/IEC 27001:2022': iso27001,
+};
 
 const reasons = [
   {
@@ -81,16 +99,23 @@ const industries = [
 
 // A mix of Arrpita's clients from before Avant Amour and Avant Amour's own. The
 // heading is framed around her because it is true for every name in the list.
-// Brands without a logo file yet render as a wordmark tile.
+// Logos for AstraZeneca, Autodesk and Ameriprise are the official marks from
+// Wikimedia (fetched 4 Oct 2026 at the owner's request), rendered to PNG.
+// A brand without a logo file falls back to a wordmark tile.
 const brands: { name: string; logo?: string; w?: number; h?: number }[] = [
-  { name: 'ZEE5', logo: '/logos/zee5.png', w: 300, h: 168 },
-  { name: 'Rapido', logo: '/logos/rapido.png', w: 300, h: 168 },
-  { name: 'Adobe', logo: '/logos/adobe.png', w: 225, h: 225 },
+  { name: 'ZEE5', logo: '/logos/zee5-tight.png', w: 166, h: 166 },
+  { name: 'Rapido', logo: '/logos/rapido-tight.png', w: 299, h: 126 },
+  { name: 'Adobe', logo: '/logos/adobe-tight.png', w: 202, h: 50 },
   { name: 'USV', logo: '/logos/usv.png', w: 259, h: 195 },
-  { name: 'AstraZeneca' },
-  { name: 'Autodesk' },
-  { name: 'Ameriprise Financial' },
+  { name: 'AstraZeneca', logo: '/logos/astrazeneca.png', w: 446, h: 112 },
+  { name: 'Autodesk', logo: '/logos/autodesk.png', w: 560, h: 58 },
+  { name: 'Ameriprise Financial', logo: '/logos/ameriprise.png', w: 333, h: 112 },
 ];
+
+// Logos are sized by area, not height, so a square mark (ZEE5) and a long
+// wordmark (Autodesk) carry similar visual weight: height = sqrt(area / aspect).
+const LOGO_AREA = 4200;
+const logoHeight = (w: number, h: number) => Math.min(56, Math.round(Math.sqrt(LOGO_AREA / (w / h))));
 
 const industryOptions = [
   'Healthcare & pharma',
@@ -213,7 +238,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
         <div class="lg:col-span-5">
           {video ? (
-            <figure class="m-0 border border-border bg-cream">
+            <figure class="m-0 border border-border bg-cream max-w-[21rem] mx-auto lg:mx-0">
               <video
                 controls
                 playsinline
@@ -221,6 +246,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
                 poster={video.poster}
                 width={video.width}
                 height={video.height}
+                aria-label={`${BRAND.founder.fullName} introduces Avant Amour (1 minute, with captions)`}
                 class="block w-full h-auto"
               >
                 <source src={video.src} type="video/mp4" />
@@ -239,7 +265,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
               />
             </figure>
           )}
-          <p class="mt-5 text-center lg:text-left">
+          <p class="mt-5 text-center lg:text-left max-w-[21rem] mx-auto lg:mx-0">
             <a
               href={waHref}
               target="_blank"
@@ -292,9 +318,8 @@ const label = 'block text-small font-medium text-ink mb-1.5';
     </Container>
   </Section>
 
-  {/* 4. Certifications. Text badges, not the ISO logo: ISO forbids certified
-      organisations from using its logo. Swap in the certification body's (EAS)
-      mark if Arrpita obtains it. MRSI to be added once membership is confirmed. */}
+  {/* 4. Certifications. ISO images at the owner's instruction (see isoLogo above).
+      MRSI and QRCA are memberships, shown as text badges. */}
   <Section background="paper">
     <Container>
       <Eyebrow>Certified and recognised</Eyebrow>
@@ -302,14 +327,20 @@ const label = 'block text-small font-medium text-ink mb-1.5';
         Independently certified. Professionally recognised.
       </h2>
       <p class="mt-4 max-w-prose text-body text-ink-soft">
-        Audited standards for how we run research and protect your data, and {BRAND.founder.firstName}'s membership of QRCA, the global association for qualitative research consultants.
+        Audited standards for how we run research and protect your data, and membership of the market research profession's associations in India and worldwide.
       </p>
-      <ul class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <ul class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
         {BRAND.certifications.map((c) => (
           <li class="flex gap-5 border border-border bg-cream p-6">
-            <span aria-hidden="true" class="shrink-0 flex h-16 w-16 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] leading-tight text-center text-teal-700">
-              {c.standard.replace(/^ISO(\/IEC)? /, '').split(':')[0]}
-            </span>
+            {isoLogo[c.standard] ? (
+              <span class="shrink-0 flex h-20 w-20 items-center justify-center border border-border bg-paper p-1.5">
+                <Image src={isoLogo[c.standard]} alt={`${c.standard} certification mark`} width={144} class="h-full w-full object-contain" />
+              </span>
+            ) : (
+              <span aria-hidden="true" class="shrink-0 flex h-20 w-20 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] leading-tight text-center text-teal-700">
+                {c.standard.replace(/^ISO(\/IEC)? /, '').split(':')[0]}
+              </span>
+            )}
             <span>
               <span class="block font-display text-h3 text-ink">{c.standard} certified</span>
               <span class="block mt-1 text-small text-ink-soft">{c.scope}</span>
@@ -318,7 +349,15 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           </li>
         ))}
         <li class="flex gap-5 border border-border bg-cream p-6">
-          <span aria-hidden="true" class="shrink-0 flex h-16 w-16 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] text-teal-700">QRCA</span>
+          <span aria-hidden="true" class="shrink-0 flex h-20 w-20 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] text-teal-700">MRSI</span>
+          <span>
+            <span class="block font-display text-h3 text-ink">MRSI member</span>
+            <span class="block mt-1 text-small text-ink-soft">Market Research Society of India</span>
+            <span class="block mt-2 text-small text-ink-soft">India's professional body for market research.</span>
+          </span>
+        </li>
+        <li class="flex gap-5 border border-border bg-cream p-6">
+          <span aria-hidden="true" class="shrink-0 flex h-20 w-20 items-center justify-center rounded-full border-2 border-teal font-display text-[0.8125rem] text-teal-700">QRCA</span>
           <span>
             <span class="block font-display text-h3 text-ink">QRCA member</span>
             <span class="block mt-1 text-small text-ink-soft">Qualitative Research Consultants Association</span>
@@ -357,11 +396,11 @@ const label = 'block text-small font-medium text-ink mb-1.5';
       <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
         Brands {BRAND.founder.firstName} has done research for
       </h2>
-      <ul class="mt-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
+      <ul class="mt-10 flex flex-wrap justify-center gap-4">
         {brands.map((b) => (
-          <li class="flex h-24 items-center justify-center border border-border bg-paper px-4">
+          <li class="flex h-24 w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)] items-center justify-center border border-border bg-paper px-6">
             {b.logo ? (
-              <img src={b.logo} alt={b.name} width={b.w} height={b.h} loading="lazy" decoding="async" class="max-h-14 w-auto max-w-full object-contain" />
+              <img src={b.logo} alt={b.name} width={b.w} height={b.h} loading="lazy" decoding="async" style={`height:${logoHeight(b.w ?? 1, b.h ?? 1)}px`} class="w-auto max-w-full object-contain" />
             ) : (
               <span class="font-display text-h3 leading-tight text-center text-ink-soft">{b.name}</span>
             )}
