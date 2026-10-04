@@ -159,7 +159,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           </div>
           <ul class="mt-6 space-y-2 text-small text-ink">
             <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>ISO 9001:2015 and ISO/IEC 27001:2022 certified</li>
-            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, MRSI and QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
             <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>We reply within {BRAND.replyWithin}</li>
           </ul>
         </div>
@@ -319,7 +319,8 @@ const label = 'block text-small font-medium text-ink mb-1.5';
   </Section>
 
   {/* 4. Certifications. ISO images at the owner's instruction (see isoLogo above).
-      MRSI and QRCA are memberships, shown as text badges. */}
+      MRSI and QRCA are Arrpita's personal memberships, not the firm's (owner,
+      4 Oct 2026), shown as text badges that name her. */}
   <Section background="paper">
     <Container>
       <Eyebrow>Certified and recognised</Eyebrow>
@@ -327,7 +328,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
         Independently certified. Professionally recognised.
       </h2>
       <p class="mt-4 max-w-prose text-body text-ink-soft">
-        Audited standards for how we run research and protect your data, and membership of the market research profession's associations in India and worldwide.
+        Audited standards for how we run research and protect your data, and {BRAND.founder.firstName}'s membership of the market research profession's associations in India and worldwide.
       </p>
       <ul class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
         {BRAND.certifications.map((c) => (
@@ -353,7 +354,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           <span>
             <span class="block font-display text-h3 text-ink">MRSI member</span>
             <span class="block mt-1 text-small text-ink-soft">Market Research Society of India</span>
-            <span class="block mt-2 text-small text-ink-soft">India's professional body for market research.</span>
+            <span class="block mt-2 text-small text-ink-soft">{BRAND.founder.fullName} is a member of India's professional body for market research.</span>
           </span>
         </li>
         <li class="flex gap-5 border border-border bg-cream p-6">
