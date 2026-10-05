@@ -21,6 +21,10 @@ import { Image } from 'astro:assets';
 import { BRAND } from '@lib/constants';
 import iso9001 from '../assets/landing/iso-9001-2015.jpg';
 import iso27001 from '../assets/landing/iso-27001-2022-tight.png';
+// Owner-supplied stand-in (5 Oct 2026) until a real fieldwork photo arrives. The
+// original carried a red "Ethnographic Research" title; it was cropped off because
+// the H1 above already says it and the red clashed with the palette.
+import heroImage from '../assets/landing/ethnographic-research.png';
 
 const PATH = '/market-research-company/';
 
@@ -149,6 +153,16 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           </h1>
           {/* No sub-line, CTA button or case-studies link here (agency feedback, 5 Oct 2026):
               the form beside/below the heading is the call to action. */}
+          <figure class="mt-6 md:mt-8 border border-border bg-paper">
+            <Image
+              src={heroImage}
+              alt="Illustration of ethnographic research: a magnifying glass over a circle of people around a globe, beside a group of friends walking together"
+              widths={[400, 600, 800, 1024]}
+              sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
+              loading="eager"
+              class="block w-full h-auto"
+            />
+          </figure>
           <ul class="mt-6 space-y-2 text-small text-ink">
             <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>ISO 9001:2015 and ISO/IEC 27001:2022 certified</li>
             <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, MRSI and QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
