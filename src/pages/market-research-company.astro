@@ -161,6 +161,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
               widths={[400, 600, 800, 1024]}
               sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
               loading="eager"
+              fetchpriority="high"
               class="block w-full h-auto"
             />
           </figure>
@@ -433,6 +434,14 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           var v = q.get(k);
           var el = document.querySelector('form[name="landing-enquiry"] input[name="' + k + '"]');
           if (v && el) el.value = v.slice(0, 200);
+        });
+        // Netlify stores the page address (the Referer) with each submission.
+        // Drop the query first, so an ad click's gclid never lands beside a
+        // named lead; the utm values are already in the hidden fields, and the
+        // thank-you page's gate compares only the path.
+        var form = document.querySelector('form[name="landing-enquiry"]');
+        if (form) form.addEventListener('submit', function () {
+          try { if (window.location.search) history.replaceState(history.state, '', window.location.pathname + window.location.hash); } catch (e) {}
         });
       } catch (e) {}
     })();

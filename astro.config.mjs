@@ -8,7 +8,11 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'ignore',
   build: {
-    inlineStylesheets: 'auto',
+    // The whole stylesheet (~24 KB, ~6 KB gzipped) is inlined into every page:
+    // as a separate file it was a render-blocking request that PageSpeed
+    // measured at ~0.5 s on mobile (5 Oct 2026). Most visitors, and all ad
+    // clicks, land fresh, so the lost cross-page caching costs little.
+    inlineStylesheets: 'always',
   },
   integrations: [
     tailwind({ applyBaseStyles: false }),

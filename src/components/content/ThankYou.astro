@@ -13,8 +13,12 @@ interface Props {
   formPath: string;
 }
 const { formPath } = Astro.props;
+// Lead events are sent from the live site only: deploy previews load the same
+// GA4 property, and test submissions there would inflate a lead count that is
+// a handful a month.
+const liveHost = new URL(BRAND.url).hostname;
 ---
-<section data-thank-you data-form-path={formPath} class="bg-cream pt-12 md:pt-16 pb-16 md:pb-24 border-b border-border">
+<section data-thank-you data-form-path={formPath} data-live-host={liveHost} class="bg-cream pt-12 md:pt-16 pb-16 md:pb-24 border-b border-border">
   <Container>
     <p class="eyebrow text-teal-700">Message sent</p>
     <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
@@ -58,10 +62,15 @@ const { formPath } = Astro.props;
       if (url.origin !== window.location.origin) return;
       if (url.pathname.replace(/\/?$/, '/') !== expected) return;
       formPage = expected;
+      if (window.location.hostname !== el.getAttribute('data-live-host')) {
+        console.info('[lead] genuine submission from ' + formPage + '; events not sent off the live site');
+        return;
+      }
     } catch (e) {
       return;
     }
-    // GA4 (fired by gtag.js, not GTM).
+    // GA4, via gtag.js (not GTM). The same Google tag also carries the Google
+    // Ads account (AW-18442742959), so Ads receives this event too.
     if (typeof gtag === 'function') {
       gtag('event', 'generate_lead', { method: 'form', form_page: formPage });
     }
