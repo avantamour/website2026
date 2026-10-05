@@ -1,0 +1,84 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { BRAND } from '@lib/constants';
+---
+<PageLayout
+  title="Terms and Conditions"
+  description="The terms that apply when you use avantamour.in, in plain language."
+  eyebrow="Legal"
+  intro="These terms apply when you use this website. We have kept them short and in plain language."
+  breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Terms and Conditions' }]}
+  cta={false}
+>
+  <p><strong>Effective date:</strong> 5 October 2026</p>
+
+  <p>
+    These terms govern your use of avantamour.in (the "site"), run by Avant Amour ("we", "us", "our"). By using the site, you agree to them. If you do not agree, please do not use the site.
+  </p>
+
+  <h2>Who we are</h2>
+  <p>
+    Avant Amour is a founder-led qualitative research firm based in India, led by {BRAND.founder.fullName}. Avant Amour is registered in Delhi, India.
+  </p>
+
+  <h2>Using the site</h2>
+  <p>
+    The site tells you about our research services and lets you get in touch. You may use it for any lawful purpose. Please do not:
+  </p>
+  <ul>
+    <li>use the site in a way that breaks any law;</li>
+    <li>try to gain unauthorised access to the site or the systems behind it, or disrupt how it works;</li>
+    <li>send false, misleading or automated enquiries through our forms, or pretend to be someone else.</li>
+  </ul>
+
+  <h2>Our content</h2>
+  <p>
+    The text, case studies, illustrations, photographs and video on this site belong to Avant Amour or are used with permission. You are welcome to read, link to and share our pages, and to quote short extracts with credit to Avant Amour and a link back. Please ask us before republishing substantial parts of the site, or before using our name or logo in a way that suggests we endorse you.
+  </p>
+  <p>
+    Client names and logos belong to their owners. They appear because {BRAND.founder.firstName} has done research for those organisations, and do not mean those organisations endorse this site.
+  </p>
+
+  <h2>Information, not advice</h2>
+  <p>
+    The content on this site is general information about research and our work. It is not advice for your specific situation. The results described in our case studies came from particular projects with particular clients, and are not a promise of the same results for you.
+  </p>
+
+  <h2>Enquiries and research projects</h2>
+  <p>
+    Sending us an enquiry, by form, email or WhatsApp, does not create a contract. Any research project we take on is agreed in a separate written proposal or agreement, and that document, not these terms, governs the project.
+  </p>
+  <p>
+    How we use the details you send us is explained in our <a href="/privacy/">Privacy Policy</a>.
+  </p>
+
+  <h2>Other websites and services</h2>
+  <p>
+    The site links to other websites and services, such as LinkedIn and WhatsApp. We do not control them and are not responsible for their content or how they handle your data; their own terms and policies apply.
+  </p>
+
+  <h2>Availability and accuracy</h2>
+  <p>
+    We work to keep the site accurate and available, but we cannot guarantee it will always be complete, current or free of errors, or that it will be available without interruption. We may change or remove any part of the site at any time.
+  </p>
+
+  <h2>Our liability</h2>
+  <p>
+    To the extent the law allows, we are not liable for any loss or damage arising from your use of the site or your reliance on its content. Nothing in these terms limits any liability that cannot be limited under the law.
+  </p>
+
+  <h2>Changes to these terms</h2>
+  <p>
+    We may update these terms from time to time. When we do, we will revise the "Effective date" above. The terms in force when you use the site are the ones that apply.
+  </p>
+
+  <h2>Governing law</h2>
+  <p>
+    These terms are governed by the laws of India. Any dispute about them or about the site is subject to the jurisdiction of the courts in Delhi.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    For any question about these terms, contact us at <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a>.
+  </p>
+</PageLayout>

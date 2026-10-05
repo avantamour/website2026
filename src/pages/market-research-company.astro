@@ -11,7 +11,8 @@
  *
  * The form is its own Netlify form ("landing-enquiry") so leads from the ads
  * are separable from /contact/ ones; Netlify emails connect@ for any form.
- * It posts to /thank-you/, whose generate_lead gate accepts this path.
+ * It redirects to its own /market-research-company/thank-you/, which fires
+ * generate_lead (GA4) and an enquiry_submitted dataLayer event (for GTM).
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
@@ -174,7 +175,7 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           <form
             name="landing-enquiry"
             method="POST"
-            action="/thank-you/"
+            action="/market-research-company/thank-you/"
             data-netlify="true"
             netlify-honeypot="bot-field"
             class="border border-border bg-paper p-6 md:p-8"
