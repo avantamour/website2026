@@ -19,13 +19,19 @@ import Container from '@components/ui/Container.astro';
 import Section from '@components/ui/Section.astro';
 import Eyebrow from '@components/ui/Eyebrow.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import { BRAND } from '@lib/constants';
 import iso9001 from '../assets/landing/iso-9001-2015.jpg';
 import iso27001 from '../assets/landing/iso-27001-2022-tight.png';
-// Owner-supplied stand-in (5 Oct 2026) until a real fieldwork photo arrives. The
-// original carried a red "Ethnographic Research" title; it was cropped off because
-// the H1 above already says it and the red clashed with the palette.
-import heroImage from '../assets/landing/ethnographic-research.png';
+// Hero and case-study images are illustrations the owner supplied on 7 Oct 2026
+// (originals named "India Fieldwork Community Stories", "Health & Nutrition",
+// "Sleep and Wellness", "Household Finance", "Rural livelihood"). They depict
+// scenes, not real fieldwork, so their alt text says "Illustration".
+import heroImage from '../assets/landing/india-fieldwork.png';
+import csHealth from '../assets/landing/case-studies/health-nutrition-sales-lift.png';
+import csSleep from '../assets/landing/case-studies/sleep-stress-recovery-urban-india.png';
+import csSaving from '../assets/landing/case-studies/saving-behaviour-bengali-women.png';
+import csRural from '../assets/landing/case-studies/rural-livelihood-programme-rajasthan.png';
 
 const PATH = '/market-research-company/';
 
@@ -90,6 +96,32 @@ const reasons = [
     d: `From ${BRAND.locations.join(' and ')}, we research across India: interview studies spanning six metros, and fieldwork in homes, markets and villages.`,
   },
 ];
+
+// Case studies, in display order: the one with an outcome number first. Titles,
+// descriptions and badges come from the collection, so they stay in step with
+// the case-study pages they link to.
+const caseStudyImages: Record<string, { src: ImageMetadata; alt: string }> = {
+  'health-nutrition-sales-lift': {
+    src: csHealth,
+    alt: 'Illustration: a mother cooks a healthy meal with her daughter while a researcher takes notes',
+  },
+  'sleep-stress-recovery-urban-india': {
+    src: csSleep,
+    alt: 'Illustration: one woman works late at a laptop while another relaxes at sunrise, a city skyline behind them',
+  },
+  'saving-behaviour-bengali-women': {
+    src: csSaving,
+    alt: 'Illustration: a woman at home puts money into envelopes kept in a tin box',
+  },
+  'rural-livelihood-programme-rajasthan': {
+    src: csRural,
+    alt: 'Illustration: villagers make incense sticks from bamboo while a researcher takes notes in rural Rajasthan',
+  },
+};
+const allStudies = await getCollection('case-studies', ({ data }) => !data.draft);
+const caseStudies = Object.keys(caseStudyImages)
+  .map((slug) => allStudies.find((s) => s.slug === slug))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
 const industries = [
   'Healthcare & pharma',
@@ -157,9 +189,10 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           <figure class="mt-6 md:mt-8 border border-border bg-paper">
             <Image
               src={heroImage}
-              alt="Illustration of ethnographic research: a magnifying glass over a circle of people around a globe, beside a group of friends walking together"
+              alt="Illustration of fieldwork across India: a researcher takes notes with women in a village, alongside a farmer interview, a conversation at a shop and young people talking in a city"
               widths={[400, 600, 800, 1024]}
               sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
+              quality={70}
               loading="eager"
               fetchpriority="high"
               class="block w-full h-auto"
@@ -405,9 +438,66 @@ const label = 'block text-small font-medium text-ink mb-1.5';
     </Container>
   </Section>
 
-  {/* 7. Closing ask. No testimonials on this page: the agency asked for the
+  {/* 7. Case studies (owner request, 7 Oct 2026): a sideways-scrolling row. All
+      four cards are in the HTML; scrolling is native (swipe, trackpad, keyboard
+      via the links), and the arrow buttons appear only once the script runs.
+      Placed before the closing ask so the page still ends on the call to action. */}
+  <Section background="cream">
+    <Container>
+      <div class="flex items-end justify-between gap-6">
+        <div>
+          <Eyebrow>Case studies</Eyebrow>
+          <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+            Research in practice
+          </h2>
+          <p class="mt-4 max-w-prose text-body text-ink-soft">
+            Studies from homes, cities and villages across India. Clients are not named; where the work predates Avant Amour, it is {BRAND.founder.firstName}'s earlier research.
+          </p>
+        </div>
+        <div class="hidden md:block shrink-0">
+          <div data-cs-controls class="invisible flex gap-3">
+            <button type="button" data-cs-dir="-1" aria-controls="lp-case-studies" aria-label="Previous case studies" class="flex h-11 w-11 items-center justify-center border border-border bg-paper text-ink hover:border-teal-700 hover:text-teal-700 disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink transition-colors">
+              <span aria-hidden="true">←</span>
+            </button>
+            <button type="button" data-cs-dir="1" aria-controls="lp-case-studies" aria-label="Next case studies" class="flex h-11 w-11 items-center justify-center border border-border bg-paper text-ink hover:border-teal-700 hover:text-teal-700 disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink transition-colors">
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul id="lp-case-studies" aria-label="Case studies" class="mt-10 flex gap-6 overflow-x-auto snap-x snap-mandatory motion-safe:scroll-smooth pb-4 [scrollbar-width:thin]">
+        {caseStudies.map((s) => (
+          <li class="snap-start shrink-0 w-[85%] sm:w-[62%] lg:w-[calc(40%-0.9rem)]">
+            <a href={`/case-studies/${s.slug}/`} class="flex h-full flex-col border border-border bg-paper no-underline hover:border-teal transition-colors">
+              <Image
+                src={caseStudyImages[s.slug].src}
+                alt={caseStudyImages[s.slug].alt}
+                widths={[400, 640, 900]}
+                sizes="(min-width: 1024px) 460px, (min-width: 640px) 62vw, 85vw"
+                quality={70}
+                class="block w-full aspect-[16/9] object-cover"
+              />
+              <div class="flex flex-1 flex-col p-6">
+                <span class="eyebrow text-teal-700">{s.data.industry}</span>
+                <h3 class="mt-3 font-display font-medium text-h3 leading-snug text-ink">{s.data.title}</h3>
+                <span class="mt-3 text-small text-ink-soft">{s.data.description}</span>
+                {(s.data.metric || s.data.scope) && (
+                  <span class="mt-5 self-start inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
+                    {s.data.metric && <span aria-hidden="true">↑</span>}{s.data.metric ?? s.data.scope}
+                  </span>
+                )}
+                <span class="mt-auto pt-6 font-medium text-teal-700">Read the case study →</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </Section>
+
+  {/* 8. Closing ask. No testimonials on this page: the agency asked for the
       recommendations section to go (4 Oct 2026). */}
-  <section class="bg-cream py-16 md:py-24 border-t border-border">
+  <section class="bg-paper py-16 md:py-24 border-t border-border">
     <Container class="text-center">
       <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-3xl mx-auto">
         Ready to see what your customers <span class="yellow-underline">actually do</span>?
@@ -444,6 +534,42 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           try { if (window.location.search) history.replaceState(history.state, '', window.location.pathname + window.location.hash); } catch (e) {}
         });
       } catch (e) {}
+    })();
+
+    // Case-study row: previous/next buttons scroll by one card. Without this
+    // script the row still scrolls natively; the buttons just stay hidden.
+    (function () {
+      var row = document.getElementById('lp-case-studies');
+      var ctl = document.querySelector('[data-cs-controls]');
+      if (!row || !ctl) return;
+      var prev = ctl.querySelector('[data-cs-dir="-1"]');
+      var next = ctl.querySelector('[data-cs-dir="1"]');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Move to the next/previous card start. Stepping by a fixed width instead
+      // lets scroll-snap round to the wrong card near the end of the row.
+      function go(dir) {
+        var x = row.scrollLeft;
+        var max = row.scrollWidth - row.clientWidth;
+        var base = row.getBoundingClientRect().left;
+        var target = dir > 0 ? max : 0;
+        for (var i = 0; i < row.children.length; i++) {
+          var stop = Math.min(max, Math.round(row.children[i].getBoundingClientRect().left - base + x));
+          if (dir > 0 && stop > x + 2) { target = stop; break; }
+          if (dir < 0 && stop < x - 2) target = stop;
+        }
+        row.scrollTo({ left: target, behavior: reduce ? 'auto' : 'smooth' });
+      }
+      function update() {
+        prev.disabled = row.scrollLeft <= 2;
+        next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+      }
+      [prev, next].forEach(function (b) {
+        b.addEventListener('click', function () { go(Number(b.getAttribute('data-cs-dir'))); });
+      });
+      row.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+      ctl.classList.remove('invisible');
     })();
   </script>
 </BaseLayout>
