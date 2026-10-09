@@ -141,5 +141,6 @@ export const FOOTER_LINKS = {
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy/' },
+    { label: 'Terms and Conditions', href: '/terms/' },
   ],
 } as const;

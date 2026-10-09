@@ -1,0 +1,83 @@
+---
+/**
+ * Body of a post-enquiry thank-you page. Each enquiry form has its own page so
+ * its leads can be counted separately: /thank-you/ for /contact/, and
+ * /market-research-company/thank-you/ for the Google Ads landing page (a
+ * conversion URL of its own for the ads agency). `formPath` is the form page
+ * whose submissions this page counts.
+ */
+import Container from '@components/ui/Container.astro';
+import { BRAND } from '@lib/constants';
+
+interface Props {
+  formPath: string;
+}
+const { formPath } = Astro.props;
+// Lead events are sent from the live site only: deploy previews load the same
+// GA4 property, and test submissions there would inflate a lead count that is
+// a handful a month.
+const liveHost = new URL(BRAND.url).hostname;
+---
+<section data-thank-you data-form-path={formPath} data-live-host={liveHost} class="bg-cream pt-12 md:pt-16 pb-16 md:pb-24 border-b border-border">
+  <Container>
+    <p class="eyebrow text-teal-700">Message sent</p>
+    <h1 class="mt-4 font-display font-medium text-h1 md:text-[3rem] leading-[1.1] tracking-tightest text-ink max-w-3xl">
+      Thanks — we'll reply within <span class="yellow-underline">{BRAND.replyWithin}</span>.
+    </h1>
+    <p class="mt-6 text-body text-ink-soft max-w-prose">
+      Your enquiry is on its way to {BRAND.email}. If it's urgent, message {BRAND.founder.firstName} on WhatsApp using the button in the corner.
+    </p>
+    <p class="mt-4 text-small text-ink-soft max-w-prose">
+      If you don't hear from us, check your spam folder and add {BRAND.email} to your contacts.
+    </p>
+    <p class="mt-8">
+      <a href="/" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium hover:bg-teal-900 no-underline">
+        ← Back home
+      </a>
+    </p>
+  </Container>
+</section>
+
+{/*
+  The lead events fire only after a genuine submission. The page returns 200 on a
+  bare GET, so an unguarded event counted refreshes, back-button returns, bookmarks
+  and any bot that executes JS — inflating the only conversion number we have.
+  Netlify posts the form and redirects here, so the referrer is the form page.
+*/}
+<script is:inline>
+  (function () {
+    var formPage;
+    try {
+      // A referrer survives a reload — it is stored on the history entry, not
+      // recomputed — so the referrer test alone would still count refreshes and
+      // back-button returns. Only a fresh navigation counts.
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (nav && nav.type !== 'navigate') return;
+
+      var el = document.querySelector('[data-thank-you]');
+      var expected = el && el.getAttribute('data-form-path');
+      var ref = document.referrer || '';
+      if (!expected || !ref) return;
+      var url = new URL(ref);
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname.replace(/\/?$/, '/') !== expected) return;
+      formPage = expected;
+      if (window.location.hostname !== el.getAttribute('data-live-host')) {
+        console.info('[lead] genuine submission from ' + formPage + '; events not sent off the live site');
+        return;
+      }
+    } catch (e) {
+      return;
+    }
+    // GA4, via gtag.js (not GTM). The same Google tag also carries the Google
+    // Ads account (AW-18442742959), so Ads receives this event too.
+    if (typeof gtag === 'function') {
+      gtag('event', 'generate_lead', { method: 'form', form_page: formPage });
+    }
+    // For Google Tag Manager: a custom event the ads agency can use as the
+    // trigger for a Google Ads conversion tag. Named differently from the GA4
+    // event so nothing can count the same lead twice under one name.
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'enquiry_submitted', form_page: formPage });
+  })();
+</script>

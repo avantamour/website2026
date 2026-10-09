@@ -91,4 +91,16 @@ import { BRAND } from '@lib/constants';
     </Container>
   </section>
 
+  <script is:inline>
+    // Netlify stores the page address (the Referer) with each submission. Drop
+    // the query first, so an ad click's gclid never lands beside a named lead.
+    // The form still posts natively to /thank-you/, whose lead gate needs that
+    // real navigation and compares only the path: never submit it by script.
+    (function () {
+      var form = document.getElementById('contact-form');
+      if (form) form.addEventListener('submit', function () {
+        try { if (window.location.search) history.replaceState(history.state, '', window.location.pathname + window.location.hash); } catch (e) {}
+      });
+    })();
+  </script>
 </BaseLayout>

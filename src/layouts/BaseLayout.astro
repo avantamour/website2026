@@ -85,7 +85,7 @@ const {
       } catch (e) {}
     </script>
 
-    {/* Google Tag Manager (GTM-NRT6QM3S) carries the Google Ads conversion and remarketing tags. GA4 is NOT configured inside GTM; it is fired by gtag.js below. Google's <noscript> iframe is deliberately omitted because it cannot honour Consent Mode. See CLAUDE.md, "Analytics & consent". */}
+    {/* Google Tag Manager (GTM-NRT6QM3S), managed by the ads agency for any Google Ads conversion tag. Google Ads page views and remarketing do NOT run here: Ads (AW-18442742959) is a destination of the GA4 Google tag loaded by gtag.js below, so an Ads page-view or remarketing tag in GTM would double count. GA4 is NOT configured inside GTM either. Google's <noscript> iframe is deliberately omitted because it cannot honour Consent Mode. See CLAUDE.md, "Analytics & consent". */}
     <script is:inline>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
