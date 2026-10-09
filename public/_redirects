@@ -9,3 +9,7 @@
 # Old post slugs do not map one-to-one onto the current insights slugs, so send
 # them all to the index rather than to a URL that would 404 after a second hop.
 /blog/*         /insights/    301
+# These two were published under /insights/ on 15 Sep 2026 and moved to case
+# studies the same day at the owner's request; keep the old URLs working.
+/insights/gen-z-symbolic-capital                    /case-studies/gen-z-symbolic-capital/                    301
+/insights/future-of-work-signals-in-a-fish-market   /case-studies/future-of-work-signals-in-a-fish-market/   301
