@@ -1,0 +1,575 @@
+---
+/**
+ * Google Ads landing page (owner brief, 4 Oct 2026). Section order follows the
+ * reference page the owner chose; every word is ours. The brief's About and
+ * "Why choose us" text was close to a competitor's own copy, so the owner chose
+ * to have it rewritten, keeping only claims that are true for Avant Amour.
+ *
+ * Paid traffic only: noindex, left out of NAV and the sitemap. Its "market
+ * research company" framing is broader than the rest of the site's founder-led
+ * ethnography positioning, and keeping it out of search avoids mixed signals.
+ *
+ * The form is its own Netlify form ("landing-enquiry") so leads from the ads
+ * are separable from /contact/ ones; Netlify emails connect@ for any form.
+ * It redirects to its own /market-research-company/thank-you/, which fires
+ * generate_lead (GA4) and an enquiry_submitted dataLayer event (for GTM).
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Container from '@components/ui/Container.astro';
+import Section from '@components/ui/Section.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { BRAND } from '@lib/constants';
+import iso9001 from '../assets/landing/iso-9001-2015.jpg';
+import iso27001 from '../assets/landing/iso-27001-2022-tight.png';
+// Hero and case-study images are illustrations the owner supplied on 7 Oct 2026
+// (originals named "India Fieldwork Community Stories", "Health & Nutrition",
+// "Sleep and Wellness", "Household Finance", "Rural livelihood"). They depict
+// scenes, not real fieldwork, so their alt text says "Illustration".
+import heroImage from '../assets/landing/india-fieldwork.png';
+import csHealth from '../assets/landing/case-studies/health-nutrition-sales-lift.png';
+import csSleep from '../assets/landing/case-studies/sleep-stress-recovery-urban-india.png';
+import csSaving from '../assets/landing/case-studies/saving-behaviour-bengali-women.png';
+import csRural from '../assets/landing/case-studies/rural-livelihood-programme-rajasthan.png';
+
+const PATH = '/market-research-company/';
+
+const waOpener = `Hi ${BRAND.founder.firstName}, I'm on the Avant Amour website and I have a research question. (from ${PATH})`;
+const waHref = `${BRAND.whatsapp}?text=${encodeURIComponent(waOpener)}`;
+
+// Founder video, self-hosted (no Drive/YouTube embed: both are third-party players
+// that load before consent). Source: owner's "finalvideo (1).mp4" (4 Oct 2026), a
+// vertical phone video pillarboxed into 1920x1080 with blurred side bars; cropped
+// to the 604x1080 picture, scaled to 540 wide and re-encoded (95 MB -> 5.8 MB).
+// Captions are burned into the video. Set to null to fall back to the portrait.
+type FounderVideo = { src: string; poster: string; width: number; height: number };
+const video = {
+  src: '/video/arrpita-intro.mp4',
+  poster: '/video/arrpita-intro-poster.jpg',
+  width: 540,
+  height: 966,
+} as FounderVideo | null;
+
+// The ISO images the owner supplied, used at the owner's instruction (4 Oct 2026)
+// although ISO's own guidance says certified organisations should not use its logo.
+const isoLogo: Record<string, ImageMetadata> = {
+  'ISO 9001:2015': iso9001,
+  'ISO/IEC 27001:2022': iso27001,
+};
+
+const reasons = [
+  {
+    t: 'The decision comes first, the method second',
+    d: 'Before we choose a method, we pin down the decision the research has to inform. Everything else follows from that.',
+  },
+  {
+    t: 'Deep expertise across 10+ industries',
+    d: 'Healthcare and pharma, technology, BFSI, education, media, transport, government and more. What we learn in one sector sharpens the next.',
+  },
+  {
+    t: 'Every study is built around you',
+    d: 'Each project is scoped on a single page around your question, timeline and budget, and the method is chosen to fit it.',
+  },
+  {
+    t: 'Fast, without cutting corners',
+    d: `Most projects run ${BRAND.engagement.typicalDuration} from kick-off to findings. Larger multi-city studies take longer, and you know the timeline before we start.`,
+  },
+  {
+    t: 'Certified for quality and data security',
+    d: 'ISO 9001:2015 for how we run projects and ISO/IEC 27001:2022 for how we protect every recording, transcript and dataset.',
+  },
+  {
+    t: 'Analysis that finds the “why”',
+    d: 'We connect what people say with what they actually do, and turn it into a clear point of view, not a pile of transcripts.',
+  },
+  {
+    t: 'Recommendations your team can act on',
+    d: 'You get a small number of clear, defensible recommendations, and we sit with your team to turn them into decisions.',
+  },
+  {
+    t: 'Senior attention from first call to debrief',
+    d: `Every engagement is led by ${BRAND.founder.fullName}, with ${BRAND.founder.yearsExperience} years in qualitative research, and a vetted network of senior specialists. Never a junior fronting the work.`,
+  },
+  {
+    t: 'Fieldwork across India, from metros to villages',
+    d: `From ${BRAND.locations.join(' and ')}, we research across India: interview studies spanning six metros, and fieldwork in homes, markets and villages.`,
+  },
+];
+
+// Case studies, in display order: the one with an outcome number first. Titles,
+// descriptions and badges come from the collection, so they stay in step with
+// the case-study pages they link to.
+const caseStudyImages: Record<string, { src: ImageMetadata; alt: string }> = {
+  'health-nutrition-sales-lift': {
+    src: csHealth,
+    alt: 'Illustration: a mother cooks a healthy meal with her daughter while a researcher takes notes',
+  },
+  'sleep-stress-recovery-urban-india': {
+    src: csSleep,
+    alt: 'Illustration: one woman works late at a laptop while another relaxes at sunrise, a city skyline behind them',
+  },
+  'saving-behaviour-bengali-women': {
+    src: csSaving,
+    alt: 'Illustration: a woman at home puts money into envelopes kept in a tin box',
+  },
+  'rural-livelihood-programme-rajasthan': {
+    src: csRural,
+    alt: 'Illustration: villagers make incense sticks from bamboo while a researcher takes notes in rural Rajasthan',
+  },
+};
+const allStudies = await getCollection('case-studies', ({ data }) => !data.draft);
+const caseStudies = Object.keys(caseStudyImages)
+  .map((slug) => allStudies.find((s) => s.slug === slug))
+  .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+const industries = [
+  'Healthcare & pharma',
+  'Technology',
+  'BFSI',
+  'Education',
+  'Media',
+  'Transport',
+  'Government',
+];
+
+// A mix of Arrpita's clients from before Avant Amour and Avant Amour's own. The
+// heading is framed around her because it is true for every name in the list.
+// Logos for AstraZeneca, Autodesk and Ameriprise are the official marks from
+// Wikimedia (fetched 4 Oct 2026 at the owner's request), rendered to PNG.
+// A brand without a logo file falls back to a wordmark tile.
+const brands: { name: string; logo?: string; w?: number; h?: number }[] = [
+  { name: 'ZEE5', logo: '/logos/zee5-tight.png', w: 166, h: 166 },
+  { name: 'Rapido', logo: '/logos/rapido-tight.png', w: 299, h: 126 },
+  { name: 'Adobe', logo: '/logos/adobe-tight.png', w: 202, h: 50 },
+  { name: 'USV', logo: '/logos/usv.png', w: 259, h: 195 },
+  { name: 'AstraZeneca', logo: '/logos/astrazeneca.png', w: 446, h: 112 },
+  { name: 'Autodesk', logo: '/logos/autodesk.png', w: 560, h: 58 },
+  { name: 'Ameriprise Financial', logo: '/logos/ameriprise.png', w: 333, h: 112 },
+];
+
+// Logos are sized by area, not height, so a square mark (ZEE5) and a long
+// wordmark (Autodesk) carry similar visual weight: height = sqrt(area / aspect).
+const LOGO_AREA = 4200;
+const logoHeight = (w: number, h: number) => Math.min(56, Math.round(Math.sqrt(LOGO_AREA / (w / h))));
+
+const industryOptions = [
+  'Healthcare & pharma',
+  'Technology',
+  'BFSI',
+  'Education',
+  'Media',
+  'Transport & mobility',
+  'Government',
+  'Consumer goods / D2C',
+  'Other',
+];
+
+const input =
+  'w-full border border-border bg-cream px-4 py-3 text-body text-ink focus:outline-none focus:border-teal-700 focus:ring-1 focus:ring-teal-700';
+const label = 'block text-small font-medium text-ink mb-1.5';
+---
+<BaseLayout
+  title="Market research company in India"
+  seoTitle="Market Research Company in India | Avant Amour"
+  description="Founder-led market research across India: qualitative and mixed-method studies, ISO 9001 and ISO 27001 certified. Tell us your research question."
+  noindex={true}
+>
+  {/* 1. Hero + enquiry form */}
+  <section class="bg-cream pt-8 pb-16 md:pt-16 md:pb-24 border-b border-border">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div class="lg:col-span-6 lg:pt-6">
+          <p class="eyebrow">Market research company · India</p>
+          <h1 class="mt-4 font-display font-medium text-[2.125rem] md:text-[3.25rem] leading-[1.08] tracking-tightest text-ink">
+            Your <span class="yellow-underline">India partner</span> for ethnography, market research and consumer insight
+          </h1>
+          {/* No sub-line, CTA button or case-studies link here (agency feedback, 5 Oct 2026):
+              the form beside/below the heading is the call to action. */}
+          <figure class="mt-6 md:mt-8 border border-border bg-paper">
+            <Image
+              src={heroImage}
+              alt="Illustration of fieldwork across India: a researcher takes notes with women in a village, alongside a farmer interview, a conversation at a shop and young people talking in a city"
+              widths={[400, 600, 800, 1024]}
+              sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
+              quality={70}
+              loading="eager"
+              fetchpriority="high"
+              class="block w-full h-auto"
+            />
+          </figure>
+          <ul class="mt-6 space-y-2 text-small text-ink">
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>ISO 9001:2015 and ISO/IEC 27001:2022 certified</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>Led by {BRAND.founder.fullName}, MRSI and QRCA member, {BRAND.founder.yearsExperience} years in qualitative research</li>
+            <li class="flex gap-3"><span aria-hidden="true" class="text-teal">✓</span>We reply within {BRAND.replyWithin}</li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-6" id="enquiry">
+          <form
+            name="landing-enquiry"
+            method="POST"
+            action="/market-research-company/thank-you/"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            class="border border-border bg-paper p-6 md:p-8"
+          >
+            <input type="hidden" name="form-name" value="landing-enquiry" />
+            <p hidden><label>Don't fill this out: <input name="bot-field" /></label></p>
+            {/* Filled from the ad click's URL by the script below, so each lead shows which campaign and keyword brought it.
+                Campaign labels only — no click ID (gclid): tying an ad-click identifier to a named lead without
+                consent would sidestep the site's default-deny posture. Disclosed in the privacy policy. */}
+            <input type="hidden" name="utm_source" value="" />
+            <input type="hidden" name="utm_medium" value="" />
+            <input type="hidden" name="utm_campaign" value="" />
+            <input type="hidden" name="utm_term" value="" />
+
+            <h2 class="font-display font-medium text-h2 text-ink">Grow with research you can act on</h2>
+            <p class="mt-2 text-small text-ink-soft">Tell us your question. We reply within {BRAND.replyWithin}.</p>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="lp-name" class={label}>Full name <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <input id="lp-name" name="name" type="text" required autocomplete="name" class={input} />
+              </div>
+              <div>
+                <label for="lp-designation" class={label}>Designation</label>
+                <input id="lp-designation" name="designation" type="text" autocomplete="organization-title" class={input} />
+              </div>
+              <div>
+                <label for="lp-email" class={label}>Work email <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <input id="lp-email" name="email" type="email" required autocomplete="email" class={input} />
+              </div>
+              <div>
+                <label for="lp-phone" class={label}>Phone / WhatsApp <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <input id="lp-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" class={input} />
+              </div>
+              <div>
+                <label for="lp-company" class={label}>Company</label>
+                <input id="lp-company" name="company" type="text" autocomplete="organization" class={input} />
+              </div>
+              <div>
+                <label for="lp-industry" class={label}>Industry</label>
+                <select id="lp-industry" name="industry" class={input}>
+                  <option value="">Select…</option>
+                  {industryOptions.map((o) => <option value={o}>{o}</option>)}
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="lp-message" class={label}>How can we help? <span aria-hidden="true" class="text-teal-700">*</span></label>
+                <textarea id="lp-message" name="message" rows="4" required class={input}></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="mt-6 w-full sm:w-auto inline-flex justify-center items-center bg-teal-700 text-cream px-6 py-3 font-medium hover:bg-teal-900 transition-colors">
+              Request a proposal →
+            </button>
+            <p class="mt-4 text-small text-ink-soft">
+              <span aria-hidden="true">*</span> Required. We use your details to reply to your enquiry and to note which of our adverts brought you here. See our <a href="/privacy/" class="underline decoration-teal">Privacy Policy</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  {/* 2. About + founder video. The heading comes first and the video sits inside
+      the section (agency feedback, 4 Oct 2026): with the video first, phones showed
+      it above the "About us" heading, detached from the section it belongs to. */}
+  <Section background="paper">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div class="lg:col-span-7">
+          <Eyebrow>About us</Eyebrow>
+          <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink">
+            About Avant Amour
+          </h2>
+          <div class="mt-6 space-y-4 text-body text-ink-soft max-w-prose">
+            <p>
+              Avant Amour is a market research company that helps businesses make decisions with confidence. Every study is designed around your question, using qualitative and mixed-method research to show what your customers actually do, and why.
+            </p>
+            <p>
+              We help you understand how customers behave, test new products and ideas, size up new markets and track how your brand is doing, so that big decisions rest on evidence rather than guesswork.
+            </p>
+            <p>
+              Our clients come from healthcare and pharma, technology, BFSI, education, media, transport and government. Every engagement is led by founder {BRAND.founder.fullName}, who brings {BRAND.founder.yearsExperience} years of qualitative research to every study, so the findings change what a business does next.
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          {video ? (
+            <figure class="m-0 border border-border bg-cream max-w-[21rem] mx-auto lg:mx-0">
+              <video
+                controls
+                playsinline
+                preload="none"
+                poster={video.poster}
+                width={video.width}
+                height={video.height}
+                aria-label={`${BRAND.founder.fullName} introduces Avant Amour (1 minute, with captions)`}
+                class="block w-full h-auto"
+              >
+                <source src={video.src} type="video/mp4" />
+              </video>
+            </figure>
+          ) : (
+            <figure class="m-0 border border-border bg-cream max-w-sm mx-auto lg:max-w-none">
+              <img
+                src="/arrpita.jpg"
+                alt={`${BRAND.founder.fullName}, founder of Avant Amour`}
+                width="600"
+                height="900"
+                loading="lazy"
+                decoding="async"
+                class="block w-full aspect-[4/5] object-cover object-top"
+              />
+            </figure>
+          )}
+          <p class="mt-5 text-center lg:text-left max-w-[21rem] mx-auto lg:mx-0">
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors"
+            >
+              <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M16.04 4C9.93 4 4.98 8.95 4.98 15.06c0 1.96.51 3.87 1.49 5.56L4.9 27.1l6.64-1.55a11.04 11.04 0 0 0 4.5.96h.01c6.1 0 11.06-4.95 11.06-11.06 0-2.96-1.15-5.74-3.24-7.83A11 11 0 0 0 16.04 4Zm0 20.27h-.01a9.2 9.2 0 0 1-4.68-1.28l-.34-.2-3.94.92.84-3.84-.22-.36a9.16 9.16 0 0 1-1.4-4.86c0-5.07 4.13-9.2 9.2-9.2 2.46 0 4.77.96 6.5 2.7a9.13 9.13 0 0 1 2.69 6.5c0 5.07-4.12 9.2-9.2 9.2Zm5.05-6.89c-.28-.14-1.64-.81-1.89-.9-.25-.09-.43-.14-.62.14-.18.27-.71.9-.87 1.08-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.22-1.37-.82-.73-1.38-1.64-1.54-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.41-.49.14-.16.18-.27.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.54-.45-.46-.62-.47-.16-.01-.34-.01-.53-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.65.21 1.25.18 1.72.11.52-.08 1.64-.67 1.87-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.18-.53-.32Z"/></svg>
+              Talk to {BRAND.founder.firstName} on WhatsApp
+            </a>
+          </p>
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  {/* 3. Why choose us */}
+  <Section background="cream">
+    <Container>
+      <Eyebrow>Why choose us</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Why businesses choose Avant Amour
+      </h2>
+      <ol class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {reasons.map((r, i) => (
+          <li class="border border-border bg-paper p-6 md:p-7">
+            <span class="block font-display text-h3 text-teal-700">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="mt-2 font-display font-medium text-h3 leading-snug text-ink">{r.t}</h3>
+            <p class="mt-2 text-small text-ink-soft">{r.d}</p>
+          </li>
+        ))}
+      </ol>
+    </Container>
+  </Section>
+
+  {/* 4. Certifications: marks only, no descriptions (agency feedback, 4 Oct 2026);
+      certificate numbers stay in the footer and JSON-LD. ISO images at the owner's
+      instruction (see isoLogo above). MRSI and QRCA are Arrpita's personal
+      memberships, not the firm's (owner, 4 Oct 2026), so they are text badges and
+      the one line under the row says whose they are: without it, a firm page
+      would imply the firm is the member. */}
+  <Section background="paper">
+    <Container>
+      <Eyebrow>Certified and recognised</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Independently certified. Professionally recognised.
+      </h2>
+      <ul class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        {BRAND.certifications.map((c) => (
+          <li class="flex h-40 md:h-48 items-center justify-center border border-border bg-paper p-5">
+            {isoLogo[c.standard] ? (
+              <Image src={isoLogo[c.standard]} alt={`${c.standard} certified`} width={300} class="h-full w-auto max-w-full object-contain" />
+            ) : (
+              <span class="flex h-28 w-28 md:h-32 md:w-32 items-center justify-center rounded-full border-2 border-teal px-2 font-display text-h3 leading-tight text-center text-teal-700">
+                {c.standard}
+              </span>
+            )}
+          </li>
+        ))}
+        <li class="flex h-40 md:h-48 items-center justify-center border border-border bg-paper p-5">
+          <span role="img" aria-label="MRSI, Market Research Society of India" class="flex h-28 w-28 md:h-32 md:w-32 items-center justify-center rounded-full border-2 border-teal font-display text-h3 text-teal-700">MRSI</span>
+        </li>
+        <li class="flex h-40 md:h-48 items-center justify-center border border-border bg-paper p-5">
+          <span role="img" aria-label="QRCA, Qualitative Research Consultants Association" class="flex h-28 w-28 md:h-32 md:w-32 items-center justify-center rounded-full border-2 border-teal font-display text-h3 text-teal-700">QRCA</span>
+        </li>
+      </ul>
+      <p class="mt-4 text-small text-ink-soft">MRSI and QRCA memberships are held by founder {BRAND.founder.fullName}.</p>
+    </Container>
+  </Section>
+
+  {/* 5. Industries */}
+  <Section background="cream">
+    <Container>
+      <Eyebrow>Industries we serve</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Expertise across 10+ industries
+      </h2>
+      <ul class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {industries.map((name) => (
+          <li class="border border-border bg-paper px-5 py-5 font-display text-h3 text-ink">{name}</li>
+        ))}
+        <li class="border border-dashed border-border bg-cream px-5 py-5 font-display text-h3 text-ink-soft">And many more</li>
+      </ul>
+      <p class="mt-10">
+        <a href="#enquiry" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors">
+          Start your research →
+        </a>
+      </p>
+    </Container>
+  </Section>
+
+  {/* 6. Brands */}
+  <Section background="paper">
+    <Container>
+      <Eyebrow>Brands</Eyebrow>
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+        Brands {BRAND.founder.firstName} has done research for
+      </h2>
+      <ul class="mt-10 flex flex-wrap justify-center gap-4">
+        {brands.map((b) => (
+          <li class="flex h-24 w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)] items-center justify-center border border-border bg-paper px-6">
+            {b.logo ? (
+              <img src={b.logo} alt={b.name} width={b.w} height={b.h} loading="lazy" decoding="async" style={`height:${logoHeight(b.w ?? 1, b.h ?? 1)}px`} class="w-auto max-w-full object-contain" />
+            ) : (
+              <span class="font-display text-h3 leading-tight text-center text-ink-soft">{b.name}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </Section>
+
+  {/* 7. Case studies (owner request, 7 Oct 2026): a sideways-scrolling row. All
+      four cards are in the HTML; scrolling is native (swipe, trackpad, keyboard
+      via the links), and the arrow buttons appear only once the script runs.
+      Placed before the closing ask so the page still ends on the call to action. */}
+  <Section background="cream">
+    <Container>
+      <div class="flex items-end justify-between gap-6">
+        <div>
+          <Eyebrow>Case studies</Eyebrow>
+          <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-2xl">
+            Research in practice
+          </h2>
+          <p class="mt-4 max-w-prose text-body text-ink-soft">
+            Studies from homes, cities and villages across India. Clients are not named; where the work predates Avant Amour, it is {BRAND.founder.firstName}'s earlier research.
+          </p>
+        </div>
+        <div class="hidden md:block shrink-0">
+          <div data-cs-controls class="invisible flex gap-3">
+            <button type="button" data-cs-dir="-1" aria-controls="lp-case-studies" aria-label="Previous case studies" class="flex h-11 w-11 items-center justify-center border border-border bg-paper text-ink hover:border-teal-700 hover:text-teal-700 disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink transition-colors">
+              <span aria-hidden="true">←</span>
+            </button>
+            <button type="button" data-cs-dir="1" aria-controls="lp-case-studies" aria-label="Next case studies" class="flex h-11 w-11 items-center justify-center border border-border bg-paper text-ink hover:border-teal-700 hover:text-teal-700 disabled:opacity-40 disabled:hover:border-border disabled:hover:text-ink transition-colors">
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul id="lp-case-studies" aria-label="Case studies" class="mt-10 flex gap-6 overflow-x-auto snap-x snap-mandatory motion-safe:scroll-smooth pb-4 [scrollbar-width:thin]">
+        {caseStudies.map((s) => (
+          <li class="snap-start shrink-0 w-[85%] sm:w-[62%] lg:w-[calc(40%-0.9rem)]">
+            <a href={`/case-studies/${s.slug}/`} class="flex h-full flex-col border border-border bg-paper no-underline hover:border-teal transition-colors">
+              <Image
+                src={caseStudyImages[s.slug].src}
+                alt={caseStudyImages[s.slug].alt}
+                widths={[400, 640, 900]}
+                sizes="(min-width: 1024px) 460px, (min-width: 640px) 62vw, 85vw"
+                quality={70}
+                class="block w-full aspect-[16/9] object-cover"
+              />
+              <div class="flex flex-1 flex-col p-6">
+                <span class="eyebrow text-teal-700">{s.data.industry}</span>
+                <h3 class="mt-3 font-display font-medium text-h3 leading-snug text-ink">{s.data.title}</h3>
+                <span class="mt-3 text-small text-ink-soft">{s.data.description}</span>
+                {(s.data.metric || s.data.scope) && (
+                  <span class="mt-5 self-start inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
+                    {s.data.metric && <span aria-hidden="true">↑</span>}{s.data.metric ?? s.data.scope}
+                  </span>
+                )}
+                <span class="mt-auto pt-6 font-medium text-teal-700">Read the case study →</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </Section>
+
+  {/* 8. Closing ask. No testimonials on this page: the agency asked for the
+      recommendations section to go (4 Oct 2026). */}
+  <section class="bg-paper py-16 md:py-24 border-t border-border">
+    <Container class="text-center">
+      <h2 class="font-display font-medium text-h1 md:text-[2.5rem] leading-[1.1] tracking-tightest text-ink max-w-3xl mx-auto">
+        Ready to see what your customers <span class="yellow-underline">actually do</span>?
+      </h2>
+      <p class="mt-4 text-body text-ink-soft">Tell us your question. We reply within {BRAND.replyWithin}.</p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#enquiry" class="inline-flex items-center bg-teal-700 text-cream px-6 py-3 font-medium no-underline hover:bg-teal-900 transition-colors">
+          Request a proposal →
+        </a>
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="text-small text-ink-soft underline decoration-teal hover:text-teal-700">
+          or message {BRAND.founder.firstName} on WhatsApp
+        </a>
+      </div>
+    </Container>
+  </section>
+
+  <script is:inline>
+    // Copy the ad click's tracking parameters into the form, so each Netlify
+    // submission shows which campaign and keyword produced the lead.
+    (function () {
+      try {
+        var q = new URLSearchParams(window.location.search);
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term'].forEach(function (k) {
+          var v = q.get(k);
+          var el = document.querySelector('form[name="landing-enquiry"] input[name="' + k + '"]');
+          if (v && el) el.value = v.slice(0, 200);
+        });
+        // Netlify stores the page address (the Referer) with each submission.
+        // Drop the query first, so an ad click's gclid never lands beside a
+        // named lead; the utm values are already in the hidden fields, and the
+        // thank-you page's gate compares only the path.
+        var form = document.querySelector('form[name="landing-enquiry"]');
+        if (form) form.addEventListener('submit', function () {
+          try { if (window.location.search) history.replaceState(history.state, '', window.location.pathname + window.location.hash); } catch (e) {}
+        });
+      } catch (e) {}
+    })();
+
+    // Case-study row: previous/next buttons scroll by one card. Without this
+    // script the row still scrolls natively; the buttons just stay hidden.
+    (function () {
+      var row = document.getElementById('lp-case-studies');
+      var ctl = document.querySelector('[data-cs-controls]');
+      if (!row || !ctl) return;
+      var prev = ctl.querySelector('[data-cs-dir="-1"]');
+      var next = ctl.querySelector('[data-cs-dir="1"]');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Move to the next/previous card start. Stepping by a fixed width instead
+      // lets scroll-snap round to the wrong card near the end of the row.
+      function go(dir) {
+        var x = row.scrollLeft;
+        var max = row.scrollWidth - row.clientWidth;
+        var base = row.getBoundingClientRect().left;
+        var target = dir > 0 ? max : 0;
+        for (var i = 0; i < row.children.length; i++) {
+          var stop = Math.min(max, Math.round(row.children[i].getBoundingClientRect().left - base + x));
+          if (dir > 0 && stop > x + 2) { target = stop; break; }
+          if (dir < 0 && stop < x - 2) target = stop;
+        }
+        row.scrollTo({ left: target, behavior: reduce ? 'auto' : 'smooth' });
+      }
+      function update() {
+        prev.disabled = row.scrollLeft <= 2;
+        next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2;
+      }
+      [prev, next].forEach(function (b) {
+        b.addEventListener('click', function () { go(Number(b.getAttribute('data-cs-dir'))); });
+      });
+      row.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+      ctl.classList.remove('invisible');
+    })();
+  </script>
+</BaseLayout>
