@@ -18,38 +18,23 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Section from '@components/ui/Section.astro';
 import Eyebrow from '@components/ui/Eyebrow.astro';
+import FounderVideo from '@components/content/FounderVideo.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { BRAND } from '@lib/constants';
 import iso9001 from '../assets/landing/iso-9001-2015.jpg';
 import iso27001 from '../assets/landing/iso-27001-2022-tight.png';
-// Hero and case-study images are illustrations the owner supplied on 7 Oct 2026
-// (originals named "India Fieldwork Community Stories", "Health & Nutrition",
-// "Sleep and Wellness", "Household Finance", "Rural livelihood"). They depict
-// scenes, not real fieldwork, so their alt text says "Illustration".
+// The hero image is an illustration the owner supplied on 7 Oct 2026 (original
+// "India Fieldwork Community Stories"). It depicts a scene, not real fieldwork,
+// so its alt text says "Illustration". Case-study images are the studies' own
+// `cover` frontmatter.
 import heroImage from '../assets/landing/india-fieldwork.png';
-import csHealth from '../assets/landing/case-studies/health-nutrition-sales-lift.png';
-import csSleep from '../assets/landing/case-studies/sleep-stress-recovery-urban-india.png';
-import csSaving from '../assets/landing/case-studies/saving-behaviour-bengali-women.png';
-import csRural from '../assets/landing/case-studies/rural-livelihood-programme-rajasthan.png';
 
 const PATH = '/market-research-company/';
 
 const waOpener = `Hi ${BRAND.founder.firstName}, I'm on the Avant Amour website and I have a research question. (from ${PATH})`;
 const waHref = `${BRAND.whatsapp}?text=${encodeURIComponent(waOpener)}`;
 
-// Founder video, self-hosted (no Drive/YouTube embed: both are third-party players
-// that load before consent). Source: owner's "finalvideo (1).mp4" (4 Oct 2026), a
-// vertical phone video pillarboxed into 1920x1080 with blurred side bars; cropped
-// to the 604x1080 picture, scaled to 540 wide and re-encoded (95 MB -> 5.8 MB).
-// Captions are burned into the video. Set to null to fall back to the portrait.
-type FounderVideo = { src: string; poster: string; width: number; height: number };
-const video = {
-  src: '/video/arrpita-intro.mp4',
-  poster: '/video/arrpita-intro-poster.jpg',
-  width: 540,
-  height: 966,
-} as FounderVideo | null;
 
 // The ISO images the owner supplied, used at the owner's instruction (4 Oct 2026)
 // although ISO's own guidance says certified organisations should not use its logo.
@@ -98,30 +83,18 @@ const reasons = [
 ];
 
 // Case studies, in display order: the one with an outcome number first. Titles,
-// descriptions and badges come from the collection, so they stay in step with
-// the case-study pages they link to.
-const caseStudyImages: Record<string, { src: ImageMetadata; alt: string }> = {
-  'health-nutrition-sales-lift': {
-    src: csHealth,
-    alt: 'Illustration: a mother cooks a healthy meal with her daughter while a researcher takes notes',
-  },
-  'sleep-stress-recovery-urban-india': {
-    src: csSleep,
-    alt: 'Illustration: one woman works late at a laptop while another relaxes at sunrise, a city skyline behind them',
-  },
-  'saving-behaviour-bengali-women': {
-    src: csSaving,
-    alt: 'Illustration: a woman at home puts money into envelopes kept in a tin box',
-  },
-  'rural-livelihood-programme-rajasthan': {
-    src: csRural,
-    alt: 'Illustration: villagers make incense sticks from bamboo while a researcher takes notes in rural Rajasthan',
-  },
-};
+// descriptions, badges and cover images all come from the collection, so they
+// stay in step with the case-study pages they link to.
+const caseStudyOrder = [
+  'health-nutrition-sales-lift',
+  'sleep-stress-recovery-urban-india',
+  'saving-behaviour-bengali-women',
+  'rural-livelihood-programme-rajasthan',
+];
 const allStudies = await getCollection('case-studies', ({ data }) => !data.draft);
-const caseStudies = Object.keys(caseStudyImages)
+const caseStudies = caseStudyOrder
   .map((slug) => allStudies.find((s) => s.slug === slug))
-  .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  .filter((s): s is NonNullable<typeof s> => Boolean(s?.data.cover));
 
 const industries = [
   'Healthcare & pharma',
@@ -298,34 +271,9 @@ const label = 'block text-small font-medium text-ink mb-1.5';
         </div>
 
         <div class="lg:col-span-5">
-          {video ? (
-            <figure class="m-0 border border-border bg-cream max-w-[21rem] mx-auto lg:mx-0">
-              <video
-                controls
-                playsinline
-                preload="none"
-                poster={video.poster}
-                width={video.width}
-                height={video.height}
-                aria-label={`${BRAND.founder.fullName} introduces Avant Amour (1 minute, with captions)`}
-                class="block w-full h-auto"
-              >
-                <source src={video.src} type="video/mp4" />
-              </video>
-            </figure>
-          ) : (
-            <figure class="m-0 border border-border bg-cream max-w-sm mx-auto lg:max-w-none">
-              <img
-                src="/arrpita.jpg"
-                alt={`${BRAND.founder.fullName}, founder of Avant Amour`}
-                width="600"
-                height="900"
-                loading="lazy"
-                decoding="async"
-                class="block w-full aspect-[4/5] object-cover object-top"
-              />
-            </figure>
-          )}
+          <figure class="m-0 border border-border bg-cream max-w-[21rem] mx-auto lg:mx-0">
+            <FounderVideo />
+          </figure>
           <p class="mt-5 text-center lg:text-left max-w-[21rem] mx-auto lg:mx-0">
             <a
               href={waHref}
@@ -470,8 +418,8 @@ const label = 'block text-small font-medium text-ink mb-1.5';
           <li class="snap-start shrink-0 w-[85%] sm:w-[62%] lg:w-[calc(40%-0.9rem)]">
             <a href={`/case-studies/${s.slug}/`} class="flex h-full flex-col border border-border bg-paper no-underline hover:border-teal transition-colors">
               <Image
-                src={caseStudyImages[s.slug].src}
-                alt={caseStudyImages[s.slug].alt}
+                src={s.data.cover!}
+                alt={s.data.coverAlt ?? ''}
                 widths={[400, 640, 900]}
                 sizes="(min-width: 1024px) 460px, (min-width: 640px) 62vw, 85vw"
                 quality={70}

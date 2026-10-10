@@ -62,14 +62,12 @@ export const BRAND = {
         'Arrpita was given a research project on ethnography and she has delivered the insights in the most scientific manner. Her ability to take the project to conclusion, understand the domain, understand behaviours and then connect the dots to get unique insights was commendable.',
       name: 'Farida Hussain',
       relationship: 'Chief Marketing Officer, USV',
-      year: 2025,
     },
     {
       quote:
         'Arrpita worked with us on a couple of ethnography projects. She clearly knows her subject very well. She did her studies and brought out insights that were consistent with our understanding. It was therefore a good validation. She is a purist and follows methodologies and styles accordingly.',
       name: 'Kaushik Majumder',
       relationship: 'Former CEO',
-      year: 2018,
     },
   ],
 
