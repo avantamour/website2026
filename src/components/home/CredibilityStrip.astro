@@ -1,31 +1,144 @@
 ---
 import Container from '@components/ui/Container.astro';
+import { BRAND } from '@lib/constants';
 
-const priorWork = [
-  { name: 'ZEE5', src: '/logos/zee5.png' },
-  { name: 'Rapido', src: '/logos/rapido.png' },
-  { name: 'Adobe', src: '/logos/adobe.png' },
-  { name: 'USV', src: '/logos/usv.png' },
+/**
+ * "Brands that Arrpita worked with": a moving logo strip (owner request,
+ * 10 Oct 2026). Framed around Arrpita, not the firm, because the list mixes her
+ * pre-Avant Amour clients with Avant Amour's own.
+ *
+ * The resting state is static: one row of logos, wrapped and centred. That is
+ * what visitors without JavaScript and visitors who prefer reduced motion get.
+ * The script adds `is-animated` (and reveals the Pause button) only when motion
+ * is allowed. Then two identical tracks slide left together and loop, pausing on
+ * hover or via the button (WCAG 2.2.2: moving content needs a way to stop it).
+ * Each track is at least as wide as the strip, so there is no gap on very wide
+ * screens.
+ *
+ * Logos are sized by area, not height, so a square mark (ZEE5) and a long
+ * wordmark (Autodesk) carry similar visual weight. The files in
+ * public/logos/strip/ are copies at twice their display height (palette PNGs,
+ * ~36 KB for all nine); the larger originals stay in public/logos/ for the ads
+ * landing page. A brand without a logo file renders as a text wordmark.
+ * Sources (10 Oct 2026): BYJU'S from the company's own SVG on byjus.com; Save the
+ * Children from its own upload on Wikimedia Commons; AstraZeneca, Autodesk and
+ * Ameriprise from Wikimedia; the rest from the owner.
+ */
+type Brand = { name: string; logo?: string; w?: number; h?: number };
+const brands: Brand[] = [
+  { name: 'AstraZeneca', logo: '/logos/strip/astrazeneca.png', w: 215, h: 54 },
+  { name: 'USV', logo: '/logos/strip/usv.png', w: 122, h: 92 },
+  { name: 'Ameriprise Financial', logo: '/logos/strip/ameriprise.png', w: 190, h: 64 },
+  { name: 'ZEE5', logo: '/logos/strip/zee5.png', w: 92, h: 92 },
+  { name: 'Rapido', logo: '/logos/strip/rapido.png', w: 171, h: 72 },
+  { name: "BYJU'S", logo: '/logos/strip/byjus.png', w: 211, h: 58 },
+  { name: 'Autodesk', logo: '/logos/strip/autodesk.png', w: 348, h: 36 },
+  { name: 'Adobe', logo: '/logos/strip/adobe.png', w: 202, h: 50 },
+  { name: 'Save the Children', logo: '/logos/strip/save-the-children.png', w: 238, h: 50 },
+  // No logo on file yet: the owner is to supply EverYuth's.
+  { name: 'EverYuth' },
+  // Text on purpose: DST's logo carries the State Emblem of India, whose use on a
+  // business's website is restricted by the State Emblem of India (Prohibition of
+  // Improper Use) Act, 2005.
+  { name: 'Department of Science & Technology, Govt. of India' },
 ];
+
+const LOGO_AREA = 3000;
+const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(LOGO_AREA / (w / h))));
 ---
-<section class="bg-paper border-y border-border py-6">
-  <Container class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-    <span class="eyebrow text-ink-soft shrink-0">Arrpita's prior research</span>
-    <span aria-hidden="true" class="text-ink-soft">·</span>
-    <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 m-0 p-0 list-none">
-      {priorWork.map((b) => (
-        <li>
-          <img src={b.src} alt={b.name} class="prior-logo h-8 md:h-10 w-auto" loading="lazy" decoding="async" />
-        </li>
-      ))}
-    </ul>
+<section class="bg-paper border-y border-border py-8" aria-label={`Brands that ${BRAND.founder.firstName} worked with`}>
+  <Container class="flex items-center justify-between gap-4">
+    <p class="eyebrow text-ink-soft m-0">Brands that {BRAND.founder.firstName} worked with</p>
+    <button type="button" data-marquee-toggle aria-controls="brand-marquee" hidden class="shrink-0 text-small text-ink-soft underline decoration-teal underline-offset-4 hover:text-teal-700">Pause</button>
   </Container>
+  <div id="brand-marquee" class="marquee mt-6">
+    {[0, 1].map((copy) => (
+      <ul class="marquee-track" aria-hidden={copy === 1 ? 'true' : undefined}>
+        {brands.map((b) => (
+          <li class="flex items-center">
+            {b.logo ? (
+              <img
+                src={b.logo}
+                alt={copy === 0 ? b.name : ''}
+                width={b.w}
+                height={b.h}
+                loading="lazy"
+                decoding="async"
+                style={`height:${logoHeight(b.w ?? 1, b.h ?? 1)}px`}
+                class="brand-logo w-auto max-w-none"
+              />
+            ) : (
+              <span class="brand-text font-display text-h3 leading-tight text-ink-soft">{b.name}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
 </section>
-<!-- The named brands are Arrpita's prior research engagements, not current Avant Amour clients. Keep the "Prior research" label. -->
+
+<script is:inline>
+  (function () {
+    var btn = document.querySelector('[data-marquee-toggle]');
+    var strip = document.getElementById('brand-marquee');
+    if (!btn || !strip) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    strip.classList.add('is-animated');
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      var paused = strip.classList.toggle('is-paused');
+      btn.textContent = paused ? 'Play' : 'Pause';
+    });
+  })();
+</script>
+
 <style>
-  .prior-logo {
+  /* Resting state (no JS, or reduced motion): static, wrapped, each brand once. */
+  .marquee {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem 3.5rem;
+    padding: 0 1.5rem;
+    margin: 0;
+    list-style: none;
+  }
+  .marquee-track[aria-hidden='true'] { display: none; }
+  .brand-text { text-align: center; }
+
+  /* Moving state, switched on by the script. */
+  .marquee.is-animated { justify-content: flex-start; }
+  .marquee.is-animated .marquee-track {
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    min-width: 100%;
+    justify-content: space-around;
+    padding: 0 1.75rem;
+    animation: marquee 50s linear infinite;
+    will-change: transform;
+  }
+  .marquee.is-animated .marquee-track[aria-hidden='true'] { display: flex; }
+  .marquee.is-animated .brand-text { white-space: nowrap; }
+  .marquee.is-animated:hover .marquee-track,
+  .marquee.is-animated.is-paused .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    to { transform: translateX(-100%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee.is-animated .marquee-track { animation: none; }
+  }
+
+  .brand-logo {
     opacity: 0.85;
     transition: opacity 150ms ease;
   }
-  .prior-logo:hover { opacity: 1; }
+  .brand-logo:hover { opacity: 1; }
 </style>

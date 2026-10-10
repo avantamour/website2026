@@ -3,11 +3,19 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Container from '@components/ui/Container.astro';
 import Breadcrumbs from '@components/seo/Breadcrumbs.astro';
 import EnquiryCTA from '@components/content/EnquiryCTA.astro';
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { BRAND } from '@lib/constants';
 
-const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
-  .sort((a, b) => (b.data.publishDate?.getTime() ?? 0) - (a.data.publishDate?.getTime() ?? 0));
+// Featured first, then studies with a cover image, then newest first: the
+// cards without a cover (text-only covers) sit at the end so the grid opens on
+// pictures.
+const studies = (await getCollection('case-studies', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    Number(Boolean(b.data.cover)) - Number(Boolean(a.data.cover)) ||
+    (b.data.publishDate?.getTime() ?? 0) - (a.data.publishDate?.getTime() ?? 0),
+);
 ---
 <BaseLayout
   title="Case Studies"
@@ -30,17 +38,35 @@ const studies = (await getCollection('case-studies', ({ data }) => !data.draft))
   <section class="bg-paper py-12 md:py-20">
     <Container>
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-        {studies.map((s) => (
+        {studies.map((s, i) => (
           <li>
-            <a href={`/case-studies/${s.slug}/`} class="block border border-border bg-paper p-8 no-underline hover:border-teal transition-colors h-full">
-              <p class="eyebrow text-teal-700">{s.data.industry}</p>
-              <h2 class="mt-3 font-display font-medium text-h2 leading-[1.15] text-ink">{s.data.title}</h2>
-              <p class="mt-3 text-body text-ink-soft">{s.data.description}</p>
-              {(s.data.metric || s.data.scope) && (
-                <p class="mt-6 inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
-                  {s.data.metric && <span aria-hidden="true">↑</span>}{s.data.metric ?? s.data.scope}
-                </p>
+            <a href={`/case-studies/${s.slug}/`} class="flex flex-col border border-border bg-paper no-underline hover:border-teal transition-colors h-full">
+              {s.data.cover ? (
+                <Image
+                  src={s.data.cover}
+                  alt={s.data.coverAlt ?? ''}
+                  widths={[400, 640, 900]}
+                  sizes="(min-width: 768px) 560px, calc(100vw - 2rem)"
+                  quality={70}
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : 'auto'}
+                  class="block w-full aspect-[16/9] object-cover"
+                />
+              ) : (
+                <span aria-hidden="true" class="flex w-full aspect-[16/9] items-end bg-cream border-b border-border p-8">
+                  <span class="font-display font-medium text-[2rem] md:text-[2.5rem] leading-[1.05] tracking-tightest text-teal-700">{s.data.industry.split(' · ')[0]}</span>
+                </span>
               )}
+              <div class="flex flex-1 flex-col p-8">
+                <p class="eyebrow text-teal-700">{s.data.industry}</p>
+                <h2 class="mt-3 font-display font-medium text-h2 leading-[1.15] text-ink">{s.data.title}</h2>
+                <p class="mt-3 text-body text-ink-soft">{s.data.description}</p>
+                {(s.data.metric || s.data.scope) && (
+                  <p class="mt-6 self-start inline-flex items-center gap-2 text-eyebrow uppercase tracking-eyebrow text-teal-700 border border-teal/40 px-3 py-1">
+                    {s.data.metric && <span aria-hidden="true">↑</span>}{s.data.metric ?? s.data.scope}
+                  </p>
+                )}
+              </div>
             </a>
           </li>
         ))}
