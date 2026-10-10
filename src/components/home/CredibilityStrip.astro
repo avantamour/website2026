@@ -7,29 +7,34 @@ import { BRAND } from '@lib/constants';
  * 10 Oct 2026). Framed around Arrpita, not the firm, because the list mixes her
  * pre-Avant Amour clients with Avant Amour's own.
  *
- * The strip is pure CSS: two identical tracks slide left together and loop.
- * It pauses on hover and via the Pause button (WCAG 2.2.2: moving content needs
- * a way to stop it; the button appears once the script runs). With reduced
- * motion it does not move at all: one track, wrapped and centred.
+ * The resting state is static: one row of logos, wrapped and centred. That is
+ * what visitors without JavaScript and visitors who prefer reduced motion get.
+ * The script adds `is-animated` (and reveals the Pause button) only when motion
+ * is allowed. Then two identical tracks slide left together and loop, pausing on
+ * hover or via the button (WCAG 2.2.2: moving content needs a way to stop it).
+ * Each track is at least as wide as the strip, so there is no gap on very wide
+ * screens.
  *
  * Logos are sized by area, not height, so a square mark (ZEE5) and a long
- * wordmark (Autodesk) carry similar visual weight. A brand without a logo file
- * renders as a text wordmark. Sources (10 Oct 2026): BYJU'S from the company's
- * own SVG on byjus.com; Save the Children from its own upload on Wikimedia
- * Commons; AstraZeneca, Autodesk and Ameriprise from Wikimedia; the rest from
- * the owner. All live in public/logos/.
+ * wordmark (Autodesk) carry similar visual weight. The files in
+ * public/logos/strip/ are copies at twice their display height (palette PNGs,
+ * ~36 KB for all nine); the larger originals stay in public/logos/ for the ads
+ * landing page. A brand without a logo file renders as a text wordmark.
+ * Sources (10 Oct 2026): BYJU'S from the company's own SVG on byjus.com; Save the
+ * Children from its own upload on Wikimedia Commons; AstraZeneca, Autodesk and
+ * Ameriprise from Wikimedia; the rest from the owner.
  */
 type Brand = { name: string; logo?: string; w?: number; h?: number };
 const brands: Brand[] = [
-  { name: 'AstraZeneca', logo: '/logos/astrazeneca.png', w: 446, h: 112 },
-  { name: 'USV', logo: '/logos/usv.png', w: 259, h: 195 },
-  { name: 'Ameriprise Financial', logo: '/logos/ameriprise.png', w: 333, h: 112 },
-  { name: 'ZEE5', logo: '/logos/zee5-tight.png', w: 166, h: 166 },
-  { name: 'Rapido', logo: '/logos/rapido-tight.png', w: 299, h: 126 },
-  { name: "BYJU'S", logo: '/logos/byjus.png', w: 600, h: 165 },
-  { name: 'Autodesk', logo: '/logos/autodesk.png', w: 560, h: 58 },
-  { name: 'Adobe', logo: '/logos/adobe-tight.png', w: 202, h: 50 },
-  { name: 'Save the Children', logo: '/logos/save-the-children.png', w: 600, h: 126 },
+  { name: 'AstraZeneca', logo: '/logos/strip/astrazeneca.png', w: 215, h: 54 },
+  { name: 'USV', logo: '/logos/strip/usv.png', w: 122, h: 92 },
+  { name: 'Ameriprise Financial', logo: '/logos/strip/ameriprise.png', w: 190, h: 64 },
+  { name: 'ZEE5', logo: '/logos/strip/zee5.png', w: 92, h: 92 },
+  { name: 'Rapido', logo: '/logos/strip/rapido.png', w: 171, h: 72 },
+  { name: "BYJU'S", logo: '/logos/strip/byjus.png', w: 211, h: 58 },
+  { name: 'Autodesk', logo: '/logos/strip/autodesk.png', w: 348, h: 36 },
+  { name: 'Adobe', logo: '/logos/strip/adobe.png', w: 202, h: 50 },
+  { name: 'Save the Children', logo: '/logos/strip/save-the-children.png', w: 238, h: 50 },
   // No logo on file yet: the owner is to supply EverYuth's.
   { name: 'EverYuth' },
   // Text on purpose: DST's logo carries the State Emblem of India, whose use on a
@@ -63,7 +68,7 @@ const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(L
                 class="brand-logo w-auto max-w-none"
               />
             ) : (
-              <span class="font-display text-h3 leading-tight text-ink-soft whitespace-nowrap">{b.name}</span>
+              <span class="brand-text font-display text-h3 leading-tight text-ink-soft">{b.name}</span>
             )}
           </li>
         ))}
@@ -78,6 +83,7 @@ const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(L
     var strip = document.getElementById('brand-marquee');
     if (!btn || !strip) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    strip.classList.add('is-animated');
     btn.hidden = false;
     btn.addEventListener('click', function () {
       var paused = strip.classList.toggle('is-paused');
@@ -87,43 +93,52 @@ const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(L
 </script>
 
 <style>
+  /* Resting state (no JS, or reduced motion): static, wrapped, each brand once. */
   .marquee {
     display: flex;
+    justify-content: center;
     overflow: hidden;
   }
   .marquee-track {
     display: flex;
-    flex-shrink: 0;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 3.5rem;
-    padding: 0 1.75rem;
+    justify-content: center;
+    gap: 1.5rem 3.5rem;
+    padding: 0 1.5rem;
     margin: 0;
     list-style: none;
+  }
+  .marquee-track[aria-hidden='true'] { display: none; }
+  .brand-text { text-align: center; }
+
+  /* Moving state, switched on by the script. */
+  .marquee.is-animated { justify-content: flex-start; }
+  .marquee.is-animated .marquee-track {
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    min-width: 100%;
+    justify-content: space-around;
+    padding: 0 1.75rem;
     animation: marquee 50s linear infinite;
     will-change: transform;
   }
-  .marquee:hover .marquee-track,
-  .marquee.is-paused .marquee-track {
+  .marquee.is-animated .marquee-track[aria-hidden='true'] { display: flex; }
+  .marquee.is-animated .brand-text { white-space: nowrap; }
+  .marquee.is-animated:hover .marquee-track,
+  .marquee.is-animated.is-paused .marquee-track {
     animation-play-state: paused;
   }
   @keyframes marquee {
     to { transform: translateX(-100%); }
   }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee.is-animated .marquee-track { animation: none; }
+  }
+
   .brand-logo {
     opacity: 0.85;
     transition: opacity 150ms ease;
   }
   .brand-logo:hover { opacity: 1; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marquee { justify-content: center; }
-    .marquee-track {
-      flex-shrink: 1;
-      flex-wrap: wrap;
-      justify-content: center;
-      row-gap: 1.5rem;
-      animation: none;
-    }
-    .marquee-track[aria-hidden='true'] { display: none; }
-  }
 </style>

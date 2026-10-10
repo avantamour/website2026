@@ -6,7 +6,9 @@ import { BRAND } from '@lib/constants';
 ---
 {/* Founder video on the right (owner request, 10 Oct 2026). The "Ethnography."
     signature that used to fill that column now runs as a horizontal band under
-    the hero, from md up; it stays decorative (aria-hidden), as before. */}
+    the hero, from md up; it stays decorative (aria-hidden), as before. The
+    video keeps lg:mr-20 clear of the right edge so the floating WhatsApp button
+    (raised while the consent banner shows) never covers its controls. */}
 <section class="bg-cream pt-12 pb-14 md:pt-20 md:pb-16" aria-labelledby="hero-h1">
   <Container>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -24,7 +26,7 @@ import { BRAND } from '@lib/constants';
         </div>
       </div>
 
-      <figure class="lg:col-span-5 m-0 w-full max-w-[17rem] lg:max-w-[18rem] mx-auto lg:mr-0">
+      <figure class="lg:col-span-5 m-0 w-full max-w-[17rem] lg:max-w-[18rem] mx-auto lg:mr-20">
         <div class="border border-border bg-paper p-2">
           <FounderVideo />
         </div>
