@@ -24,7 +24,8 @@ import { BRAND } from '@lib/constants';
  * Children from its own upload on Wikimedia Commons; AstraZeneca, Autodesk and
  * Ameriprise from Wikimedia; the rest from the owner.
  */
-type Brand = { name: string; logo?: string; w?: number; h?: number };
+// `scale` enlarges a text-heavy mark past its area-based size so it stays legible.
+type Brand = { name: string; logo?: string; w?: number; h?: number; scale?: number };
 const brands: Brand[] = [
   { name: 'AstraZeneca', logo: '/logos/strip/astrazeneca.png', w: 215, h: 54 },
   { name: 'USV', logo: '/logos/strip/usv.png', w: 122, h: 92 },
@@ -37,10 +38,11 @@ const brands: Brand[] = [
   { name: 'Save the Children', logo: '/logos/strip/save-the-children.png', w: 238, h: 50 },
   // No logo on file yet: the owner is to supply EverYuth's.
   { name: 'EverYuth' },
-  // Text on purpose: DST's logo carries the State Emblem of India, whose use on a
-  // business's website is restricted by the State Emblem of India (Prohibition of
-  // Improper Use) Act, 2005.
-  { name: 'Department of Science & Technology, Govt. of India' },
+  // The owner's DST logo (11 Oct 2026) with the State Emblem of India cropped off:
+  // the emblem's use on a business's website is restricted by the State Emblem of
+  // India (Prohibition of Improper Use) Act, 2005. Only the bilingual wordmark is
+  // shown. Three lines of small text, so it is shown 1.5x its area-based size.
+  { name: 'Department of Science & Technology, Government of India', logo: '/logos/strip/dst.png', w: 344, h: 78, scale: 1.5 },
 ];
 
 const LOGO_AREA = 3000;
@@ -64,7 +66,7 @@ const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(L
                 height={b.h}
                 loading="lazy"
                 decoding="async"
-                style={`height:${logoHeight(b.w ?? 1, b.h ?? 1)}px`}
+                style={`height:${Math.round(logoHeight(b.w ?? 1, b.h ?? 1) * (b.scale ?? 1))}px`}
                 class="brand-logo w-auto max-w-none"
               />
             ) : (
