@@ -74,6 +74,8 @@ Five collections defined in `src/content/config.ts`:
 
 The shared base schema includes `title`, `description`, `publishDate?`, `updatedDate?`, `featured`, `draft`, `ogImage?`, **and `faqs`** (`Array<{ question; answer }>`, default `[]`). Every collection therefore supports FAQs by adding a frontmatter array.
 
+Every case study has a `cover` since 11 Oct 2026 (the Gen Z and fish-market covers came last). The `/case-studies/` index sorts featured → has a cover → newest, then by its `sameDateOrder` list: five studies share the publishDate 15 Sep 2026, and without that list ties fall back to file order, which differs between a Windows build and Netlify's Linux one. Add a new same-date study to that list.
+
 Every index/list page filters with `({ data }) => !data.draft`. New routes that list collection entries must do the same.
 
 **Internal linking is layout-enforced, not just a content rule.** The slug arrays in frontmatter are *the* source — the layouts auto-render the corresponding link blocks. Do not hand-author these blocks in MDX; populate the frontmatter and let the layout do the rest:
@@ -88,7 +90,7 @@ Spec rules to maintain in content:
 - Every service: ≥1 case study tagged with this service in its `services` array.
 - Every case study: list every service used in its `services` array.
 
-**Images in content** live under `src/assets/<collection>/<topic>/` (lowercase paths) and render through `src/components/content/Figure.astro`, imported in the MDX file. `astro:assets` resizes them to WebP at build, so drop in originals rather than hand-optimising. Pass `photo` for photographs (adds the 10% teal `.image-overlay`) and `zoom` for text-dense diagrams (adds an "Open full size" link). A diagram that arrives as a broken or unreadable image can be rebuilt in markup instead — see `SymbolicCapitalFunnel.astro`. Do not publish third-party maps or images that carry another site's watermark or copyright line, or photos of identifiable children without documented consent.
+**Images in content** live under `src/assets/<collection>/<topic>/` (lowercase paths) and render through `src/components/content/Figure.astro`, imported in the MDX file. `astro:assets` resizes them to WebP at build, so drop in originals rather than hand-optimising. Pass `photo` for photographs (adds the 10% teal `.image-overlay`), `zoom` for text-dense diagrams (adds an "Open full size" link) and `eager` for a figure near the top of a page, where it is likely the largest thing on the first screen (the diary-study illustration on `/services/whatsapp-diary-studies/`); everything else lazy-loads. A diagram that arrives as a broken or unreadable image can be rebuilt in markup instead — see `SymbolicCapitalFunnel.astro`. Do not publish third-party maps or images that carry another site's watermark or copyright line, or photos of identifiable children without documented consent.
 
 **Glossary categories are dual-edged.** The enum values (`'method' | 'concept' | 'role' | 'deliverable' | 'other'`) live in the Zod schema in `src/content/config.ts`, but their visible labels for the "By category" block (`Methods`, `Concepts`, `Roles`, `Deliverables`, `Other`) live in a separate `categoryLabel` map inside `src/pages/glossary/index.astro`. Adding a new category requires editing both files — if you forget the label map, the index page falls back to rendering the raw enum key.
 

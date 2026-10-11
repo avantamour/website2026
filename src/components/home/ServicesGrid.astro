@@ -59,7 +59,10 @@ const widthsFor = (img: ImageMetadata, wanted: number[]) => wanted.filter((w) =>
             s.featured && 'md:col-span-2 lg:grid lg:grid-cols-12',
           ]}
         >
-          <div class:list={['relative aspect-[16/9] border-b border-border overflow-hidden', s.featured && 'lg:col-span-7 lg:self-stretch lg:border-b-0 lg:border-r']}>
+          {/* lg:w-full matters: once stretched to a taller text column, an
+              aspect-ratio box with auto width grows wider than its 7 columns
+              and covers the text (seen at 1024–1110px). */}
+          <div class:list={['relative aspect-[16/9] border-b border-border overflow-hidden', s.featured && 'lg:col-span-7 lg:w-full lg:self-stretch lg:border-b-0 lg:border-r']}>
             <Image
               src={s.image}
               alt=""

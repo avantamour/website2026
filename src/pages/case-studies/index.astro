@@ -9,12 +9,27 @@ import { BRAND } from '@lib/constants';
 
 // Featured first, then studies with a cover image, then newest first: the
 // cards without a cover (text-only covers) sit at the end so the grid opens on
-// pictures.
+// pictures. Five studies share one publishDate, so `sameDateOrder` settles ties:
+// the fieldwork studies before the two shorter field essays. Without it, ties
+// fall back to file order, which differs between a Windows build and Netlify's.
+const sameDateOrder = [
+  'rural-livelihood-programme-rajasthan',
+  'saving-behaviour-bengali-women',
+  'sleep-stress-recovery-urban-india',
+  'future-of-work-signals-in-a-fish-market',
+  'gen-z-symbolic-capital',
+];
+const tieRank = (slug: string) => {
+  const i = sameDateOrder.indexOf(slug);
+  return i === -1 ? sameDateOrder.length : i;
+};
 const studies = (await getCollection('case-studies', ({ data }) => !data.draft)).sort(
   (a, b) =>
     Number(b.data.featured) - Number(a.data.featured) ||
     Number(Boolean(b.data.cover)) - Number(Boolean(a.data.cover)) ||
-    (b.data.publishDate?.getTime() ?? 0) - (a.data.publishDate?.getTime() ?? 0),
+    (b.data.publishDate?.getTime() ?? 0) - (a.data.publishDate?.getTime() ?? 0) ||
+    tieRank(a.slug) - tieRank(b.slug) ||
+    a.slug.localeCompare(b.slug),
 );
 ---
 <BaseLayout
