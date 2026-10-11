@@ -1,15 +1,30 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Container from '@components/ui/Container.astro';
 import Section from '@components/ui/Section.astro';
 import Eyebrow from '@components/ui/Eyebrow.astro';
+import ethnographyImage from '@/assets/home/ethnography.png';
+import interviewsImage from '@/assets/home/in-depth-interviews.png';
+import diaryImage from '@/assets/home/whatsapp-diary-studies.png';
 
-const services = [
+/**
+ * Each method card carries an owner-supplied illustration (11 Oct 2026). They
+ * depict scenes, not real fieldwork. The interview image is cropped to the two
+ * people: the original's step labels, charts and quotes are unreadable at card
+ * size, and its numbers and quotes are made up. The images are decorative here
+ * (alt=""): the card is a link, and its heading already names it.
+ *
+ * Ethnography spans the full width; from lg its image sits beside the text.
+ */
+const services: Array<{ slug: string; name: string; blurb: string; featured: boolean; image: ImageMetadata }> = [
   {
     slug: 'ethnography',
     name: 'Ethnography',
     blurb:
       'We sit with people in their kitchens, autos, and clinics — the rooms where your product is actually used. You see decisions get made, not just remembered.',
     featured: true,
+    image: ethnographyImage,
   },
   {
     slug: 'in-depth-interviews',
@@ -17,6 +32,7 @@ const services = [
     blurb:
       'Ninety unhurried minutes with one customer. Useful when you need to map a specific decision, an objection, or the gap between intent and behaviour.',
     featured: false,
+    image: interviewsImage,
   },
   {
     slug: 'whatsapp-diary-studies',
@@ -24,29 +40,52 @@ const services = [
     blurb:
       'Five to ten days of voice notes, photos, and screenshots from customers, on the platform they already live in. Captures the long tail of context that a one-hour interview cannot.',
     featured: false,
+    image: diaryImage,
   },
 ];
+
+// Never ask astro:assets for a width larger than the source file.
+const widthsFor = (img: ImageMetadata, wanted: number[]) => wanted.filter((w) => w < img.width).concat(img.width);
 ---
 <Section background="cream" id="services">
   <Container>
     <Eyebrow>What we do</Eyebrow>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
       {services.map((s) => (
         <a
           href={`/services/${s.slug}/`}
           class:list={[
-            'no-underline group block border border-border bg-paper p-8 md:p-10 transition-colors hover:border-teal',
-            s.featured ? 'md:col-span-12 lg:col-span-6' : 'md:col-span-6 lg:col-span-3',
+            'no-underline group flex flex-col border border-border bg-paper transition-colors hover:border-teal',
+            s.featured && 'md:col-span-2 lg:grid lg:grid-cols-12',
           ]}
         >
-          <p class="eyebrow text-teal-700 mb-3">{s.featured ? 'Primary method' : 'Method'}</p>
-          <h3 class:list={['font-display font-medium leading-[1.1] text-ink', s.featured ? 'text-[2rem] md:text-[2.5rem]' : 'text-h2']}>
-            {s.name}
-          </h3>
-          <p class:list={['mt-4 text-ink-soft', s.featured ? 'text-body' : 'text-small']}>
-            {s.blurb}
-          </p>
-          <p class="mt-6 text-small font-medium text-teal-700 underline underline-offset-4">Learn more →</p>
+          {/* lg:w-full matters: once stretched to a taller text column, an
+              aspect-ratio box with auto width grows wider than its 7 columns
+              and covers the text (seen at 1024–1110px). */}
+          <div class:list={['relative aspect-[16/9] border-b border-border overflow-hidden', s.featured && 'lg:col-span-7 lg:w-full lg:self-stretch lg:border-b-0 lg:border-r']}>
+            <Image
+              src={s.image}
+              alt=""
+              widths={widthsFor(s.image, s.featured ? [480, 720, 960, 1320] : [400, 600, 800, 1104])}
+              sizes={s.featured
+                ? '(min-width: 1200px) 663px, (min-width: 1024px) 58vw, (min-width: 768px) calc(100vw - 4rem), calc(100vw - 3rem)'
+                : '(min-width: 1200px) 552px, (min-width: 768px) calc(50vw - 3rem), calc(100vw - 3rem)'}
+              quality={70}
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          <div class:list={['flex flex-1 flex-col p-8 md:p-10', s.featured && 'lg:col-span-5 lg:justify-center']}>
+            <p class="eyebrow text-teal-700 mb-3">{s.featured ? 'Primary method' : 'Method'}</p>
+            <h3 class:list={['font-display font-medium leading-[1.1] text-ink', s.featured ? 'text-[2rem] md:text-[2.5rem]' : 'text-h2']}>
+              {s.name}
+            </h3>
+            <p class:list={['mt-4 text-ink-soft', s.featured ? 'text-body' : 'text-small']}>
+              {s.blurb}
+            </p>
+            <p class="mt-6 text-small font-medium text-teal-700 underline underline-offset-4">Learn more →</p>
+          </div>
         </a>
       ))}
     </div>

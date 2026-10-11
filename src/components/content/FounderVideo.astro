@@ -1,0 +1,30 @@
+---
+/**
+ * Arrpita's one-minute introduction, used in the homepage hero and on the Google
+ * Ads landing page. Self-hosted: no Drive/YouTube embed, since both are
+ * third-party players that load before consent.
+ *
+ * Source: the owner's "finalvideo (1).mp4" (4 Oct 2026), a vertical phone video
+ * pillarboxed into 1920x1080 with blurred side bars; cropped to the 604x1080
+ * picture, scaled to 540 wide and re-encoded (95 MB -> 5.8 MB). Captions are
+ * burned in. preload="none": nothing downloads until someone presses play.
+ */
+import { BRAND } from '@lib/constants';
+
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<video
+  controls
+  playsinline
+  preload="none"
+  poster="/video/arrpita-intro-poster.jpg"
+  width="540"
+  height="966"
+  aria-label={`${BRAND.founder.fullName} introduces Avant Amour (1 minute, with captions)`}
+  class:list={['block w-full h-auto', className]}
+>
+  <source src="/video/arrpita-intro.mp4" type="video/mp4" />
+</video>

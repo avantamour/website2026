@@ -44,7 +44,7 @@ const insights = defineCollection({
 
 const caseStudies = defineCollection({
   type: 'content',
-  schema: base.extend({
+  schema: ({ image }) => base.extend({
     industry: z.string(),
     // An outcome, shown with an ↑ arrow ("30% sales growth, year one"). Leave it out
     // when a study has no outcome number — use `scope` instead, so the arrow never
@@ -55,6 +55,13 @@ const caseStudies = defineCollection({
     services: z.array(z.string()).default([]),
     publishDate: z.coerce.date().optional(),
     summary: z.string().optional(),
+    // Card image on the case-studies index and the ads landing page. The owner's
+    // covers are illustrations, not fieldwork photos, so the alt says so.
+    cover: image().optional(),
+    coverAlt: z.string().optional(),
+  }).refine((d) => !d.cover || !!d.coverAlt, {
+    message: 'coverAlt is required when cover is set',
+    path: ['coverAlt'],
   }),
 });
 
