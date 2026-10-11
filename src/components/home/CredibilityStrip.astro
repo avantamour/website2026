@@ -9,11 +9,12 @@ import { BRAND } from '@lib/constants';
  *
  * The resting state is static: one row of logos, wrapped and centred. That is
  * what visitors without JavaScript and visitors who prefer reduced motion get.
- * The script adds `is-animated` (and reveals the Pause button) only when motion
- * is allowed. Then two identical tracks slide left together and loop, pausing on
- * hover or via the button (WCAG 2.2.2: moving content needs a way to stop it).
- * Each track is at least as wide as the strip, so there is no gap on very wide
- * screens.
+ * The script adds `is-animated` only when motion is allowed. Then two identical
+ * tracks slide left together and loop, pausing on hover. The owner removed the
+ * Pause button (11 Oct 2026), knowing that WCAG 2.2.2 asks for a way to stop
+ * moving content that touch and keyboard users can reach; do not re-add it
+ * without asking. Each track is at least as wide as the strip, so there is no
+ * gap on very wide screens.
  *
  * Logos are sized by area, not height, so a square mark (ZEE5) and a long
  * wordmark (Autodesk) carry similar visual weight. The files in
@@ -49,9 +50,8 @@ const LOGO_AREA = 3000;
 const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(LOGO_AREA / (w / h))));
 ---
 <section class="bg-paper border-y border-border py-8" aria-label={`Brands that ${BRAND.founder.firstName} worked with`}>
-  <Container class="flex items-center justify-between gap-4">
+  <Container>
     <p class="eyebrow text-ink-soft m-0">Brands that {BRAND.founder.firstName} worked with</p>
-    <button type="button" data-marquee-toggle aria-controls="brand-marquee" hidden class="shrink-0 text-small text-ink-soft underline decoration-teal underline-offset-4 hover:text-teal-700">Pause</button>
   </Container>
   <div id="brand-marquee" class="marquee mt-6">
     {[0, 1].map((copy) => (
@@ -81,16 +81,10 @@ const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(L
 
 <script is:inline>
   (function () {
-    var btn = document.querySelector('[data-marquee-toggle]');
     var strip = document.getElementById('brand-marquee');
-    if (!btn || !strip) return;
+    if (!strip) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     strip.classList.add('is-animated');
-    btn.hidden = false;
-    btn.addEventListener('click', function () {
-      var paused = strip.classList.toggle('is-paused');
-      btn.textContent = paused ? 'Play' : 'Pause';
-    });
   })();
 </script>
 
@@ -127,8 +121,7 @@ const logoHeight = (w: number, h: number) => Math.min(46, Math.round(Math.sqrt(L
   }
   .marquee.is-animated .marquee-track[aria-hidden='true'] { display: flex; }
   .marquee.is-animated .brand-text { white-space: nowrap; }
-  .marquee.is-animated:hover .marquee-track,
-  .marquee.is-animated.is-paused .marquee-track {
+  .marquee.is-animated:hover .marquee-track {
     animation-play-state: paused;
   }
   @keyframes marquee {
